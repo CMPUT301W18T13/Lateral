@@ -1,0 +1,39 @@
+Name: RequestTask (1)
+Actors: Requester
+Goal: Requester adds a task to their task list with status "Requested"
+Trig: Requester selects the "Add Task" option
+Pre-C: Requester is logged and knows what they want to request 
+Pst-C: Task has been added to tasklist with status "Requested"
+Steps:
+1) System prompts for task details
+2) User enters task details
+3) System prompts to confirm
+4) User confirms
+Exceptions:
+2) If a non-optional field is missing
+2.1) System will display an error
+2.2) System to will reprompt to enter
+
+Name: ViewTasklist
+Actors: Requester
+Goal: Requester can access the list of tasks they have requested
+Trig: Requester selects the "View My Tasks" option
+Pre-C: Requester is logged in
+Pst-C: THe list of tasks is displayed
+Steps:
+1) System displays the list of tasks the Requester 
+Exceptions:
+1) If the Requester has no tasks to display
+1.1) Show a "No tasks" message
+
+Name: EditTaskDetails
+Actors: Requester
+Goal: Change the details of a task
+Trig: Requester selects the "Edit" option on a task
+Pre-C: Requester is viewing a task
+Pst-C: Task details changed and displayed as such
+Steps:
+1)
+
+Exceptions:
+
