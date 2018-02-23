@@ -1,0 +1,44 @@
+//Class structure LATERAL
+
+
+The core classes of the application that we plan on using are:
+	-Task
+	-User
+	-Bid
+	
+There will also be the activity classes of our application, and we plan on implementing handler and interface classes for the core classes (task, user, bid) in order to abstract the methods into the handler classes, making the core classes clean and concise: only containing the data that we allow and want them to, further encapsulating and protecting this data from unwanted modification.
+
+The user class will contain all relevent information on a given user:
+	-Name
+	-Username
+	-Contact information
+	-ID
+The task class will contain all relevent information on a given task:
+	-Task name
+	-Creation date
+	-creator (user) (requester)
+	-Bids associated with this task (if they exist)
+	-Status
+	-ID
+The bid class will contain all relevent information on a specific bid:
+	-Bid amount ($)
+	-User who created the bid
+	-the task that this bid is associated with
+	-ID
+
+The user class with have a relationship of one to many for both the bid and task classes.
+The user class will be able to create tasks; associating the creating user as the tasks' requester (creator)
+The user class will also be able to place bids on a task (making them a provider), by creating a bid object, which will then be attached to a task. A user may bid on multiple tasks, and a task may have multiple bids from different users
+
+The task class will have a relationship of one to many with the bid class
+
+Bids will be associated with a task through ID
+A bid may not exist if it does not have an associated task that exists that it is associated with
+If a task is deleted the associated bids should also be deleted (Or stored if we decide in the future)
+Multiple users may create bids on the same task
+Bid existence is depedent on the existence of its related task
+
+All core classes will have their own getters and setters for their specific data, modification and handling of these classes will be done with handler classes.
+
+We forsee the creation of interface classes in the future during development, but are not entirely sure of the scope and description of these classes at this current time.
+	
