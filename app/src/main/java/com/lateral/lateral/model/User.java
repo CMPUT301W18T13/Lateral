@@ -20,7 +20,7 @@ public class User extends BaseEntity {
     private User(){}
 
     public User(String username, String phoneNumber, String emailAddress){
-        this.username = username;
+        this.setUsername(username);
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
     }
