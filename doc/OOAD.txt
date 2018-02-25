@@ -31,9 +31,11 @@ The bid class will contain all relevent information on a specific bid:
 Photo class (if needed) can indlude the following information such as:
 	-ID
 	-Size
+	-Photo blob
 
 The user class with have a relationship of one to many for both the bid and task classes.
-The user class will be able to create tasks; associating the creating user as the tasks' requester (creator)
+The user class handler will be able to create tasks; associating the creating user as the tasks' requester (creator)
+	This abstracts the ability to create tasks away from the user class.
 The user class will also be able to place bids on a task (making them a provider), by creating a bid object, which will then be attached to a task. A user may bid on multiple tasks, and a task may have multiple bids from different users
 
 The task class will have a relationship of one to many with the bid class
@@ -43,6 +45,8 @@ A bid may not exist if it does not have an associated task that exists that it i
 If a task is deleted the associated bids should also be deleted (Or stored if we decide in the future)
 Multiple users may create bids on the same task
 Bid existence is depedent on the existence of its related task
+
+Photo class will be used to handle photos, and may be attached to tasks and/or users, keeping them their own class allows manipulation.
 
 All core classes will have their own getters and setters for their specific data, modification and handling of these classes will be done with handler classes.
 
