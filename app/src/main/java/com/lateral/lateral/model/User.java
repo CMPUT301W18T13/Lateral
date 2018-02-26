@@ -30,9 +30,9 @@ public class User extends BaseEntity {
     }
 
     public void setUsername(String username) {
-        if (username.length() > Constants.MAX_USERNAME){
+        if (username.length() > Constants.USERNAME_CHAR_LIMIT){
             throw new IllegalArgumentException("Username exceeds "
-                    + Constants.MAX_USERNAME + " characters");
+                    + Constants.USERNAME_CHAR_LIMIT + " characters");
         }
         this.username = username;
     }
