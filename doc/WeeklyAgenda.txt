@@ -1,0 +1,37 @@
+Weekly Agenda:
+
+
+Week of February 26/18:
+
+*Complete XML Layouts
+	-So any modification may be done sooner rather than later
+	
+*Have user integrated within Elasticsearch
+		-Username must have a max length of at least 8 characters
+		-Username must not match any existing registered usernames
+		-Phone number must have 10 numbers
+		-Email must be a valid
+	-Be able to create, store, delete, and retrieve user class with ElasticSearch
+		-Possibly create login screen with user that queries ElasticSearch
+
+
+*Have task integrated within Elasticsearch
+		-Title
+		-Description
+		-Photograph (Optional for now, may be added later)
+		-Associate with requester (user, via ID or some other form)
+	-Be able to create, store, delete, and retrieve task class with ElasticSearch
+
+*Tuesday meeting:
+	-Assign work to inviduals (And update)
+	-Ask questions to TA about ElasticSearch, UML how interfaces will be represented
+		-ElasticSearch and how to load/store 
+		-Testing questions, while not using ElasticSearch
+		-Best practices representing, testing and storing information
+
+*Thursday
+	-5-10 mins stand up "What have you done?"
+		-Each person explains what they have completed
+	-Last 5-10 mins "What are you going to do?"
+		-Plan what tasks each individual will do
+	
