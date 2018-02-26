@@ -10,7 +10,6 @@ import java.util.Date;
 public class Task extends BaseEntity {
 
     private String title;
-    private String taskId;              // may change depending on how we store id
     private Date date;
     private int status;                 // may change depending on how we store status
     private String description;
@@ -18,8 +17,11 @@ public class Task extends BaseEntity {
     private User providingUser;         // initially set to null
     private ArrayList<Bid> bids;
 
-    // implement location variable
-    // implement photo storage allocation
+    // TODO: Implement location variable
+    // TODO: Implement photo storage allocation
+
+    // Private constructor for Jest to use
+    private Task(){}
 
     public Task (String title) {
         this.setTitle(title);
@@ -45,10 +47,6 @@ public class Task extends BaseEntity {
                     + Constants.USERNAME_CHAR_LIMIT + " characters");
         }
         this.title = newTitle;
-    }
-
-    public void setTaskId(String newTaskID) {
-        this.taskId = newTaskID;
     }
 
     public void setDate(Date newDate) {
@@ -82,10 +80,6 @@ public class Task extends BaseEntity {
         return this.title;
     }
 
-    public String getTaskId() {
-        return this.taskId;
-    }
-
     public Date getDate() {
         return this.date;
     }
@@ -105,5 +99,4 @@ public class Task extends BaseEntity {
     public ArrayList<Bid> getBids() {
         return this.bids;
     }
-
 }
