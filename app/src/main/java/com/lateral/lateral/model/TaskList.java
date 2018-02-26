@@ -6,10 +6,6 @@ public class TaskList {
     private ArrayList<Task> tasks = new ArrayList<Task>();
 
     public void add(Task task){
-        if (this.has(task)){
-            throw new IllegalArgumentException();
-        }
-
         tasks.add(task);
     }
 

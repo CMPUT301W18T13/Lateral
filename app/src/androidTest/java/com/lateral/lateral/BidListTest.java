@@ -32,12 +32,6 @@ public class BidListTest {
         assertFalse(bids.has(bid));
         bids.add(bid);
         assertTrue(bids.has(bid));
-        try {
-            bids.add(bid);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
     }
 
     @Test
@@ -59,8 +53,10 @@ public class BidListTest {
         Bid bid = new Bid(testAmount, user , task);
         bid.setId("MNM");
         bids.add(bid);
+        bid = new Bid(testAmount, user , task);
         bid.setId("ABC");
         bids.add(bid);
+        bid = new Bid(testAmount, user , task);
         bid.setId("KDH");
         bids.add(bid);
         assertEquals(3, bids.getCount());
@@ -85,8 +81,10 @@ public class BidListTest {
         Bid bid = new Bid(testAmount, user , task);
         bid.setId("MNM");
         bids.add(bid);
+        bid = new Bid(testAmount, user , task);
         bid.setId("ABC");
         bids.add(bid);
+        bid = new Bid(testAmount, user , task);
         bid.setId("KDH");
         bids.add(bid);
         bidArray = bids.getAll();

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 public class BidList {
     private ArrayList<Bid> bids = new ArrayList<Bid>();
 
-    public void add(Bid bid){ bids.add(bid); }
+    public void add(Bid bid){
+        bids.add(bid);
+    }
 
     public boolean has(Bid bid) {
         for (Bid bidInstance: bids){

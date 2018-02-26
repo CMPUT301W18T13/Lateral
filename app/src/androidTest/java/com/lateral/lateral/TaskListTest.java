@@ -23,12 +23,6 @@ public class TaskListTest {
         assertFalse(tasks.has(task));
         tasks.add(task);
         assertTrue(tasks.has(task));
-        try {
-            tasks.add(task);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
     }
 
     @Test
