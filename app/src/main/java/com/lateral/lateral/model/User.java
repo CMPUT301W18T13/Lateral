@@ -20,7 +20,7 @@ public class User extends BaseEntity {
     private User(){}
 
     public User(String username, String phoneNumber, String emailAddress){
-        this.username = username;
+        this.setUsername(username);
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
     }
@@ -30,9 +30,9 @@ public class User extends BaseEntity {
     }
 
     public void setUsername(String username) {
-        if (username.length() > Constants.MAX_USERNAME){
+        if (username.length() > Constants.USERNAME_CHAR_LIMIT){
             throw new IllegalArgumentException("Username exceeds "
-                    + Constants.MAX_USERNAME + " characters");
+                    + Constants.USERNAME_CHAR_LIMIT + " characters");
         }
         this.username = username;
     }
