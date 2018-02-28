@@ -13,6 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.ElasticSearchController;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,6 +32,11 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+
+                // example using elastic search to add a user
+                User user = new User("tlaz4", "780-555-5555", "example@.com");
+                ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
+                addUserTask.execute(user);
             }
         });
 
