@@ -3,6 +3,7 @@ package com.lateral.lateral;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -57,6 +58,27 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // retrieve user
+        User getUser = null;
+        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+        getUserTask.execute("");
+
+        try{
+            getUser = getUserTask.get();
+        }catch(Exception e){
+            Log.i("Error", "Failed to get task from async object");
+        }
+
+        // if search returned null
+        if(getUser != null) {
+            Log.i("User", getUser.getUsername() + " " + getUser.getPhoneNumber() + " " + getUser.getEmailAddress());
         }
     }
 

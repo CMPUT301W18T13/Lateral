@@ -3,17 +3,21 @@ package com.lateral.lateral.service;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.lateral.lateral.model.User;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 
 /*
 Controller to handle elasticsearch queries
@@ -54,6 +58,38 @@ public class ElasticSearchController {
                 }
             }
             return null;
+        }
+    }
+
+    /*
+    method to get users
+     */
+    public static class GetUserTask extends AsyncTask<String, Void, User>{
+
+        @Override
+        protected User doInBackground(String... search_parameters){
+            verifySettings();
+
+            User getUser = null;
+            Gson gson = new Gson();
+
+            /*
+            attempt to to build a search and execute it, creating object from returned json string
+             */
+            Search search = new Search.Builder(search_parameters[0]).addIndex("cmput301w18t13").addType("user").build();
+            try{
+                SearchResult result = jestClient.execute(search);
+                if(result.isSucceeded()){
+                    getUser = gson.fromJson(result.getSourceAsString(), User.class);
+                }else{
+                    Log.i("Error", "Search failed to return anything");
+                }
+            }catch(Exception e){
+                Log.i("Error", "Error communicating with the elasticsearch server!");
+            }
+
+            return getUser;
+
         }
     }
 
