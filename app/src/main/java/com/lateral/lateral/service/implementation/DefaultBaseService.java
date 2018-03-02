@@ -1,6 +1,6 @@
 package com.lateral.lateral.service.implementation;
 
-import com.lateral.lateral.annotation.ServiceIndex;
+import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,17 +25,17 @@ public abstract class DefaultBaseService<T extends BaseEntity> {
 
 
     /**
-     * Get the Index for elastic search from the {@link ServiceIndex}
+     * Get the Index for elastic search from the {@link ElasticSearchType}
      * annotation on the type {@link T}
      * @return index name
      */
-    protected final String getIndexName(){
-        Annotation annotation = typeArgument.getAnnotation(ServiceIndex.class);
+    protected final String getElasticSearchType(){
+        Annotation annotation = typeArgument.getAnnotation(ElasticSearchType.class);
         if (annotation == null){
             // TODO: Throw some error. Class needs annotation
         }
 
-        return ((ServiceIndex) annotation).Name();
+        return ((ElasticSearchType) annotation).Name();
     }
 
     public void save(T item){

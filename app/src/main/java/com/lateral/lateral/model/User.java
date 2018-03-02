@@ -1,17 +1,19 @@
 package com.lateral.lateral.model;
 
 import com.lateral.lateral.Constants;
-import com.lateral.lateral.annotation.ServiceIndex;
+import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.util.ArrayList;
 
-@ServiceIndex(Name = "User")
+@ElasticSearchType(Name = "user")
 public class User extends BaseEntity {
 
+    // Base fields
     private String username;
     private String phoneNumber;
     private String emailAddress;
 
+    // Extra fields
     private ArrayList<Task> requestedTasks;
     private ArrayList<Bid> bids;
     private ArrayList<Task> assignedTasks;

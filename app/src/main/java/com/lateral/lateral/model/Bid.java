@@ -1,36 +1,32 @@
 package com.lateral.lateral.model;
 
 import com.lateral.lateral.Constants;
-import com.lateral.lateral.annotation.ServiceIndex;
+import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.math.BigDecimal;
 
-@ServiceIndex(Name = "Bid")
+@ElasticSearchType(Name = "bid")
 public class Bid extends BaseEntity {
+    // TODO: Need to add more getters/setters
+    // Base fields
     private BigDecimal amount;
-    private User bidder;
-    private Task taskBidOn;
+    private String bidderId;
+    private String taskId;
     private BidStatus status;
+
+    // Extra fields
+    private User bidder;
+    private Task task;
 
     // Private constructor for Jest to use
     private Bid(){}
 
-    public Bid (BigDecimal amount, User bidder, Task taskBidOn){
+    public Bid (BigDecimal amount){
         if (amount.compareTo(new BigDecimal(Constants.MIN_BID_AMOUNT)) < 0){
             throw new IllegalArgumentException("Amount is below " + Constants.MIN_BID_AMOUNT);
         }
 
-        if (bidder == null){
-            throw new IllegalArgumentException("Must have a bidder");
-        }
-
-        if (taskBidOn == null){
-            throw new IllegalArgumentException("This bid must belong to a task");
-        }
-
         this.amount = amount;
-        this.bidder = bidder;
-        this.taskBidOn = taskBidOn;
         this.status = BidStatus.POSTED;
     }
 
@@ -38,7 +34,7 @@ public class Bid extends BaseEntity {
 
     public User getBidder() { return this.bidder; }
 
-    public Task getTaskBidOn() { return this.taskBidOn; }
+    public Task getTaskBidOn() { return this.task; }
 
     public BidStatus getStatus() {return this.status; }
 
