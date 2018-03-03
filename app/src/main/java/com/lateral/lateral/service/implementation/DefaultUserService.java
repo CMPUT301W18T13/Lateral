@@ -6,13 +6,12 @@ import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.ElasticSearchController;
 import com.lateral.lateral.service.UserService;
 
-public class DefaultUserService extends DefaultBaseService{
+public class DefaultUserService extends DefaultBaseService<User>{
 
     public String getData(){
         String type = "User";
         return super.get(type);
     }
-
 
     // TODO: Add extra methods specific to the User index
 

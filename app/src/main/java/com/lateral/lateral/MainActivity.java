@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
         String ret;
         DefaultUserService userService = new DefaultUserService();
         ret = userService.getData();
+        userService.logType();
         if(ret != null) {
             Log.i("New String", ret);
         }

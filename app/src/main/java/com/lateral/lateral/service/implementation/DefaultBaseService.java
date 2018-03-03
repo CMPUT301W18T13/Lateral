@@ -21,7 +21,7 @@ import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-public class DefaultBaseService {
+public class DefaultBaseService<T extends BaseEntity> {
     // TODO: Change to actual URL for project
     //private String URL = "temporaryURL";
 
@@ -29,6 +29,7 @@ public class DefaultBaseService {
     //private final Class<?> typeArgument;
 
     private static JestClient jestClient;
+    private final Class<?> typeArgument;
 
     public static class GetData extends AsyncTask<String, Void, String> {
         String idx;
@@ -89,6 +90,15 @@ public class DefaultBaseService {
             Log.i("Error", "Failed to get task from async object");
         }
         return data;
+    }
+
+    protected DefaultBaseService(){
+        ParameterizedType type = (ParameterizedType)getClass().getGenericSuperclass();
+        this.typeArgument = (Class<?>)type.getActualTypeArguments()[0];
+    }
+
+    public void logType(){
+        Log.i("Type", typeArgument.toString());
     }
 }
 
