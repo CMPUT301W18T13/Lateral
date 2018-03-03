@@ -16,6 +16,9 @@ import android.view.MenuItem;
 
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.ElasticSearchController;
+import com.lateral.lateral.service.UserService;
+import com.lateral.lateral.service.implementation.ChildTest;
+import com.lateral.lateral.service.implementation.DefaultUserService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +41,9 @@ public class MainActivity extends AppCompatActivity
                 User user = new User("tlaz4", "780-555-5555", "example@.com");
                 ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
                 addUserTask.execute(user);
+
+                ChildTest childTest = new ChildTest("hello", 1);
+                Log.i("This message", childTest.getOutput().toString());
             }
         });
 
@@ -66,19 +72,25 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
 
         // retrieve user
-        User getUser = null;
-        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
-        getUserTask.execute("");
+        //User getUser = null;
+        //ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
+        //getUserTask.execute("");
 
-        try{
-            getUser = getUserTask.get();
-        }catch(Exception e){
-            Log.i("Error", "Failed to get task from async object");
-        }
+        //try{
+          //  getUser = getUserTask.get();
+        //}catch(Exception e){
+          //  Log.i("Error", "Failed to get task from async object");
+        //}
 
         // if search returned null
-        if(getUser != null) {
-            Log.i("User", getUser.getUsername() + " " + getUser.getPhoneNumber() + " " + getUser.getEmailAddress());
+        //if(getUser != null) {
+          //  Log.i("User", getUser.getUsername() + " " + getUser.getPhoneNumber() + " " + getUser.getEmailAddress());
+        //}
+        String ret;
+        DefaultUserService userService = new DefaultUserService();
+        ret = userService.getData();
+        if(ret != null) {
+            Log.i("New String", ret);
         }
     }
 

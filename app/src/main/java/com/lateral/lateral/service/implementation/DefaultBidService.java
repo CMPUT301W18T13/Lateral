@@ -4,6 +4,7 @@ import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.service.BidService;
 
 
-public class DefaultBidService extends DefaultBaseService<Bid> implements BidService {
+public class DefaultBidService extends DefaultBaseService {
     // TODO: Add extra methods specific to the Bid index
+
 }

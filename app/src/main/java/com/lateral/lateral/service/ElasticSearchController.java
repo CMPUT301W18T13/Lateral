@@ -44,7 +44,7 @@ public class ElasticSearchController {
                 addUser.put("phoneNumber", user.getPhoneNumber());
                 addUser.put("emailAddress", user.getEmailAddress());
 
-                Index index = new Index.Builder(addUser).index("cmput301w18t13").type("user").build();
+                Index index = new Index.Builder(addUser).index("cmput301w18t13").type("User").build();
 
                 try{
                     DocumentResult result = jestClient.execute(index);
