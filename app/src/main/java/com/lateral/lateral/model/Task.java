@@ -25,7 +25,7 @@ public class Task extends BaseEntity {
 
     // TODO: Implement location variable
     // TODO: Implement photo storage allocation
-
+    //
     // Private constructor for Jest to use
     private Task(){}
 
