@@ -5,7 +5,7 @@ import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.util.ArrayList;
 
-@ElasticSearchType(Name = "user")
+@ElasticSearchType(Name = "User")
 public class User extends BaseEntity {
 
     // Base fields
@@ -14,9 +14,10 @@ public class User extends BaseEntity {
     private String emailAddress;
 
     // Extra fields
-    private ArrayList<Task> requestedTasks;
-    private ArrayList<Bid> bids;
-    private ArrayList<Task> assignedTasks;
+    // transient to mark as non-serializable
+    private transient ArrayList<Task> requestedTasks;
+    private transient ArrayList<Bid> bids;
+    private transient ArrayList<Task> assignedTasks;
 
     // Private constructor for Jest to use
     private User(){}
