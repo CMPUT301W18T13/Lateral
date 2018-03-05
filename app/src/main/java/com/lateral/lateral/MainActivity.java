@@ -15,9 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.ElasticSearchController;
-import com.lateral.lateral.service.UserService;
-import com.lateral.lateral.service.implementation.ChildTest;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 public class MainActivity extends AppCompatActivity
@@ -38,12 +35,11 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
 
                 // example using elastic search to add a user
-                User user = new User("tlaz4", "780-555-5555", "example@.com");
-                ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
-                addUserTask.execute(user);
+                User user = new User("klaz4", "780-555-5555", "example@.com");
+                DefaultUserService userService = new DefaultUserService();
+                userService.postUser(user);
 
-                ChildTest childTest = new ChildTest("hello", 1);
-                Log.i("This message", childTest.getOutput().toString());
+
             }
         });
 
@@ -86,12 +82,12 @@ public class MainActivity extends AppCompatActivity
         //if(getUser != null) {
           //  Log.i("User", getUser.getUsername() + " " + getUser.getPhoneNumber() + " " + getUser.getEmailAddress());
         //}
-        String ret;
+        User ret;
         DefaultUserService userService = new DefaultUserService();
-        ret = userService.getData();
-        userService.logType();
+        ret = userService.getUserById("AWHqVGJm6isPA6QkE2Ah");
+
         if(ret != null) {
-            Log.i("New String", ret);
+            Log.i("Returned User ", ret.getUsername());
         }
     }
 
