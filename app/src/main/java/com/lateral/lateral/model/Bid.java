@@ -5,7 +5,7 @@ import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.math.BigDecimal;
 
-@ElasticSearchType(Name = "bid")
+@ElasticSearchType(Name = "Bid")
 public class Bid extends BaseEntity {
     // TODO: Need to add more getters/setters
     // Base fields
@@ -15,8 +15,8 @@ public class Bid extends BaseEntity {
     private BidStatus status;
 
     // Extra fields
-    private User bidder;
-    private Task task;
+    private transient User bidder;
+    private transient Task task;
 
     // Private constructor for Jest to use
     private Bid(){}

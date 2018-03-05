@@ -6,7 +6,7 @@ import com.lateral.lateral.annotation.ElasticSearchType;
 import java.util.ArrayList;
 import java.util.Date;
 
-@ElasticSearchType(Name = "task")
+@ElasticSearchType(Name = "Task")
 public class Task extends BaseEntity {
 
     // TODO: Need to add more getters/setters
@@ -19,9 +19,9 @@ public class Task extends BaseEntity {
     private String assignedUserId;
 
     // Extra fields
-    private User requestingUser;
-    private User providingUser;         // initially set to null
-    private ArrayList<Bid> bids;
+    private transient User requestingUser;
+    private transient User providingUser;         // initially set to null
+    private transient ArrayList<Bid> bids;
 
     // TODO: Implement location variable
     // TODO: Implement photo storage allocation
