@@ -1,21 +1,27 @@
 package com.lateral.lateral.model;
 
 import com.lateral.lateral.Constants;
-import com.lateral.lateral.annotation.ServiceIndex;
+import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.util.ArrayList;
 import java.util.Date;
 
-@ServiceIndex(Name = "Task")
+@ElasticSearchType(Name = "Task")
 public class Task extends BaseEntity {
 
+    // TODO: Need to add more getters/setters
+    // Base fields
     private String title;
     private Date date;
     private int status;                 // may change depending on how we store status
     private String description;
-    private User requestingUser;
-    private User providingUser;         // initially set to null
-    private ArrayList<Bid> bids;
+    private String requestingUserId;
+    private String assignedUserId;
+
+    // Extra fields
+    private transient User requestingUser;
+    private transient User providingUser;         // initially set to null
+    private transient ArrayList<Bid> bids;
 
     // TODO: Implement location variable
     // TODO: Implement photo storage allocation
@@ -28,13 +34,8 @@ public class Task extends BaseEntity {
         date = new Date();
     }
 
-    public Task (String title, User requestingUser) {
+    public Task (String title, String description) {
         this(title);
-        this.requestingUser = requestingUser;
-    }
-
-    public Task (String title, User requestingUser, String description) {
-        this(title, requestingUser);
         this.setDescription(description);
     }
 

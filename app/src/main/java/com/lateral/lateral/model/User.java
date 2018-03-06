@@ -1,20 +1,23 @@
 package com.lateral.lateral.model;
 
 import com.lateral.lateral.Constants;
-import com.lateral.lateral.annotation.ServiceIndex;
+import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.util.ArrayList;
 
-@ServiceIndex(Name = "User")
+@ElasticSearchType(Name = "User")
 public class User extends BaseEntity {
 
+    // Base fields
     private String username;
     private String phoneNumber;
     private String emailAddress;
 
-    private ArrayList<Task> requestedTasks;
-    private ArrayList<Bid> bids;
-    private ArrayList<Task> assignedTasks;
+    // Extra fields
+    // transient to mark as non-serializable
+    private transient ArrayList<Task> requestedTasks;
+    private transient ArrayList<Bid> bids;
+    private transient ArrayList<Task> assignedTasks;
 
     // Private constructor for Jest to use
     private User(){}

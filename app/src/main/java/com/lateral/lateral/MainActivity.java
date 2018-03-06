@@ -14,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.ElasticSearchController;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
+import com.lateral.lateral.service.implementation.DefaultUserService;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,11 +35,6 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-                // example using elastic search to add a user
-                User user = new User("tlaz4", "780-555-5555", "example@.com");
-                ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
-                addUserTask.execute(user);
             }
         });
 
@@ -64,22 +61,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-
-        // retrieve user
-        User getUser = null;
-        ElasticSearchController.GetUserTask getUserTask = new ElasticSearchController.GetUserTask();
-        getUserTask.execute("");
-
-        try{
-            getUser = getUserTask.get();
-        }catch(Exception e){
-            Log.i("Error", "Failed to get task from async object");
-        }
-
-        // if search returned null
-        if(getUser != null) {
-            Log.i("User", getUser.getUsername() + " " + getUser.getPhoneNumber() + " " + getUser.getEmailAddress());
-        }
     }
 
     @Override
