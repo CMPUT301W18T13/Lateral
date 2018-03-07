@@ -33,7 +33,16 @@
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AllTasksViewActivity"
+            android:label="@string/title_activity_all_tasks_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.TaskViewActivity"
+            android:label="Task" />
+        <activity android:name=".activity.AddTaskActivity" />
+        <activity android:name=".activity.MyTaskViewActivity"></activity>
     </application>
 
 </manifest>
