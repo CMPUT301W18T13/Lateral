@@ -20,110 +20,110 @@ public class BidTest {
     private static Task task = new Task("Drive me");
     private static BigDecimal testAmount = new BigDecimal(8.2);
 
-    @Test
-    public void testBidConstructor(){
-
-        try {
-            new Bid(testAmount, user , task);
-            assertTrue(Boolean.TRUE);
-        } catch (Exception e){
-            assertTrue(Boolean.FALSE);
-            e.getClass();
-        }
-
-        try {
-            new Bid(new BigDecimal(0.0), user, task);
-            assertTrue(Boolean.TRUE);
-        } catch (Exception e){
-            assertTrue(Boolean.FALSE);
-            e.getClass();
-        }
-
-        try {
-            new Bid(new BigDecimal(598671), user, task);
-            assertTrue(Boolean.TRUE);
-        } catch (Exception e){
-            assertTrue(Boolean.FALSE);
-            e.getClass();
-        }
-
-    }
-
-    @Test
-    public void testNegativeAmount(){
-        try {
-            new Bid(new BigDecimal(-1) , user, task);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-    }
-
-    @Test
-    public void testEmptyUsername(){
-        try {
-            new Bid(testAmount, null, task);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-    }
-
-    @Test
-    public void testEmptyTaskName(){
-        try {
-            new Bid(testAmount, user, null);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-    }
-
-    @Test
-    public void  testGetters(){
-        Bid bid = new Bid(testAmount, user, task);
-        assertEquals(BidStatus.POSTED, bid.getStatus());
-        assertEquals(testAmount, bid.getAmount());
-        assertEquals(user, bid.getBidder());
-        assertEquals(task, bid.getTaskBidOn());
-    }
-
-    @Test
-    public void testStatusChange(){
-        Bid bid = new Bid(testAmount, user, task);
-        bid.setStatus(BidStatus.ACCEPTED);
-        assertEquals(BidStatus.ACCEPTED, bid.getStatus());
-
-        try {
-            bid.setStatus(BidStatus.POSTED);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-
-        try {
-            bid.setStatus(BidStatus.REJECTED);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-
-        bid = new Bid(testAmount, user, task);
-        bid.setStatus(BidStatus.REJECTED);
-        assertEquals(BidStatus.REJECTED, bid.getStatus());
-
-        try {
-            bid.setStatus(BidStatus.POSTED);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-
-        try {
-            bid.setStatus(BidStatus.ACCEPTED);
-            assertTrue(Boolean.FALSE);
-        } catch (Exception e){
-            assertEquals(IllegalArgumentException.class, e.getClass());
-        }
-    }
+//    @Test
+//    public void testBidConstructor(){
+//
+//        try {
+//            new Bid(testAmount, user , task);
+//            assertTrue(Boolean.TRUE);
+//        } catch (Exception e){
+//            assertTrue(Boolean.FALSE);
+//            e.getClass();
+//        }
+//
+//        try {
+//            new Bid(new BigDecimal(0.0), user, task);
+//            assertTrue(Boolean.TRUE);
+//        } catch (Exception e){
+//            assertTrue(Boolean.FALSE);
+//            e.getClass();
+//        }
+//
+//        try {
+//            new Bid(new BigDecimal(598671), user, task);
+//            assertTrue(Boolean.TRUE);
+//        } catch (Exception e){
+//            assertTrue(Boolean.FALSE);
+//            e.getClass();
+//        }
+//
+//    }
+//
+//    @Test
+//    public void testNegativeAmount(){
+//        try {
+//            new Bid(new BigDecimal(-1) , user, task);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//    }
+//
+//    @Test
+//    public void testEmptyUsername(){
+//        try {
+//            new Bid(testAmount, null, task);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//    }
+//
+//    @Test
+//    public void testEmptyTaskName(){
+//        try {
+//            new Bid(testAmount, user, null);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//    }
+//
+//    @Test
+//    public void  testGetters(){
+//        Bid bid = new Bid(testAmount, user, task);
+//        assertEquals(BidStatus.POSTED, bid.getStatus());
+//        assertEquals(testAmount, bid.getAmount());
+//        assertEquals(user, bid.getBidder());
+//        assertEquals(task, bid.getTaskBidOn());
+//    }
+//
+//    @Test
+//    public void testStatusChange(){
+//        Bid bid = new Bid(testAmount, user, task);
+//        bid.setStatus(BidStatus.ACCEPTED);
+//        assertEquals(BidStatus.ACCEPTED, bid.getStatus());
+//
+//        try {
+//            bid.setStatus(BidStatus.POSTED);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//
+//        try {
+//            bid.setStatus(BidStatus.REJECTED);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//
+//        bid = new Bid(testAmount, user, task);
+//        bid.setStatus(BidStatus.REJECTED);
+//        assertEquals(BidStatus.REJECTED, bid.getStatus());
+//
+//        try {
+//            bid.setStatus(BidStatus.POSTED);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//
+//        try {
+//            bid.setStatus(BidStatus.ACCEPTED);
+//            assertTrue(Boolean.FALSE);
+//        } catch (Exception e){
+//            assertEquals(IllegalArgumentException.class, e.getClass());
+//        }
+//    }
 }
