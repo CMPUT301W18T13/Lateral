@@ -34,4 +34,12 @@ Week of February 26/18:
 		-Each person explains what they have completed
 	-Last 5-10 mins "What are you going to do?"
 		-Plan what tasks each individual will do
+
+Week of March 5/18:
+
+Thursday:
+	-5-10 mins stand up
+*Get basic structure working for next Thursday, giving time for testing and any fixes.
+*Assign new tasks to individuals
+
 	
