@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.google.gson.Gson;
+import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.SearchService;
 
 import org.junit.Test;
@@ -20,32 +22,42 @@ import static org.junit.Assert.*;
  */
 
 @RunWith(AndroidJUnit4.class)
+// TODO: instantiating Search service is a problem
 public class SearchServiceTest {
 
     @Test
-    public void testInt(){
-        int shouldBe = 5;
-        SearchService testSS = new SearchService("");
-        assertEquals(testSS.testInt, shouldBe);
+    public void testInstantiation(){
+        SearchService testSS = new SearchService();
+    }
+
+
+    @Test
+    public void testGetTaskById() {
+        SearchService testSS = new SearchService();
+        Task task = testSS.getTaskById("AWH0KdC_5ShdDfA-iIUG");
+
+        assertEquals(task.getId(), "AWH0KdC_5ShdDfA-iIUG");
+
     }
 
     @Test
-    public void testExtractKeywords(){
-        String query = "Hello World This Is A Query";
-        ArrayList<String> keys;
+    public void testGetTaskByTitle(){
+        SearchService testSS = new SearchService();
 
-        SearchService testSS = new SearchService("");
-        keys = testSS.extractKeywords(query);
+        String json = "{\"query\": {\"match\": {\"title\": {\"query\" : \"Shoveling\"}}}}";
+        String returningData;
+        Gson gson = new Gson();
+        returningData = testSS.get(json);
+        Task task = gson.fromJson(returningData, Task.class);
+        assertEquals(task.getTitle(), "Shoveling");
 
-        assertEquals(keys.get(0), "Hello");
-        assertNotEquals(keys.get(0), "hello");
-        assertEquals(keys.get(1), "World");
-        assertEquals(keys.get(2), "This");
-        assertEquals(keys.get(3), "Is");
-        assertEquals(keys.get(4), "A");
-        assertEquals(keys.get(5), "Query");
+    }
 
-
+    @Test
+    public void testSearch() {
+        SearchService testSS = new SearchService();
+        Task task = testSS.Search("Shoveling sucks");
+        assertEquals(task.getTitle(), "Shoveling");
     }
 
 

@@ -42,4 +42,8 @@
     <string name="temp_date">Jun 24, 2018</string>
     <string name="temp_bid">$45.00</string>
     <string name="temp_new_bid_prompt">1 new bid!</string>
+
+    <!-- Strings related to searching -->
+    <string name="search_hint">Search all tasks</string>
+
 </resources>

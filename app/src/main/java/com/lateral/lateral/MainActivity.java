@@ -1,8 +1,13 @@
 package com.lateral.lateral;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,10 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
+import com.lateral.lateral.activity.AllTasksViewActivity;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,8 +36,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                // for Testing --> take me to allTaskViewActivity
+                Intent viewAllTasksIntent = new Intent(MainActivity.this, AllTasksViewActivity.class);
+                startActivity(viewAllTasksIntent);
             }
         });
 
@@ -67,6 +73,20 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.task_view_menu, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        // Assumes current activity is the searchable activity
+        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+        //searchView.setQuery("", false);
+        //searchView.setIconified(true);
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, AllTasksViewActivity.class)));
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+
         return true;
     }
 

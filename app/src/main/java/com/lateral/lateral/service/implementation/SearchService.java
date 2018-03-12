@@ -10,33 +10,25 @@ import java.util.List;
 import io.searchbox.core.SearchResult;
 
 public class SearchService extends DefaultTaskService {
-    //private ArrayList<String> searchKeys;
-    public int testInt = 5;
+
+    ArrayList<Task> searchResults;
 
     public SearchService() {
-        //this.searchKeys = extractKeywords(searchKeyString);
-    }
-
-    /* Main search function */
-    public void search(String searchString) {
-        ArrayList<Task> matchingTasks = null;
-        ArrayList<String> searchKeys = extractKeywords(searchString);
-
-        //Task task = get
-
-
-
 
     }
 
 
+    // for now just returns task but should return all matching tasks
+    public Task Search(String searchField) {
 
-    public ArrayList<String> extractKeywords(String searchKeyString) {
-        //ArrayList<String> keys = new ArrayList<String>();
+        // simple query which matches based on complete words in title and description
+        // TODO: modify to allow results from partial matches
+        String jsonQuery = "{\"query\": {\"multi_match\": {\"title\": {\"query\" : \"" + searchField + "\"," +
+                " \"fields\" : [\"title^3\", \"description\"]}}}}";
 
-        String[] items = searchKeyString.split("\\s+");
-        ArrayList<String> keys = new ArrayList<String>(Arrays.asList(items));
-        return keys;
+        Task task = gson.fromJson(get(jsonQuery), Task.class);;
+
+        return task;
     }
 
 }

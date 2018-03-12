@@ -15,7 +15,7 @@ public class Task extends BaseEntity {
     private Date date;
     private int status;                 // may change depending on how we store status
     private String description;
-    private String requestingUserId;
+    private String requestingUserId = "Nick";
     private String assignedUserId;
 
     // Extra fields
@@ -91,6 +91,10 @@ public class Task extends BaseEntity {
 
     public String getDescription() {
         return this.description;
+    }
+
+    public String getRequestingUserId() {
+        return this.requestingUserId;
     }
 
     public User getProvidingUser() {
