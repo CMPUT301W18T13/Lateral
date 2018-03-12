@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,9 @@ info on displaying search results in the current activity
 https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 
  */
+
+// TODO fix white bar at the top of this activity --> appeared on my original pull
+// TODO cleanup to improve readablity (including unnecessary changes in other files)
 public class AllTasksViewActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
@@ -62,44 +66,38 @@ public class AllTasksViewActivity extends AppCompatActivity {
         // makes some example tasks to put into the recycler view
         String taskName;
         String taskDescription;
-        for (int i = 0; i < 20; i++) {
-            taskName = "Task " + i;
-            taskDescription = "this is task " + i;
-            testTasks.add(new Task(taskName, taskDescription));
-        }
+//        for (int i = 0; i < 20; i++) {
+//            taskName = "Task " + i;
+//            taskDescription = "this is task " + i;
+//            testTasks.add(new Task(taskName, taskDescription));
+//        }
+
+        // Posts to our database
+//        Task t = new Task("walk my dog", "I want you to talk my doggy");
+//        DefaultTaskService taskService = new DefaultTaskService();
+//        taskService.post(t);
 
 
 
+
+        // Recycler view stuff
         mRecyclerView = (RecyclerView) findViewById(R.id.taskViewList);
-
         mRecyclerView.setHasFixedSize(true);
-
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
         mAdapter = new MyAdapter(this, testTasks);
         mRecyclerView.setAdapter(mAdapter);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
-//        // Get the intent, verify the action and get the query
-//        Intent intent = getIntent();
-//        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//            String query = intent.getStringExtra(SearchManager.QUERY);
-//            Log.d("query recieved", query);
-//            //doMySearch(query); // implement with our search service (defaultTaskService)
-//        }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //setSupportActionBar(toolbar);
-                Snackbar.make(view, "Test", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //setSupportActionBar(toolbar);
+//                Snackbar.make(view, "Test", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
     }
 
 
@@ -109,7 +107,6 @@ public class AllTasksViewActivity extends AppCompatActivity {
         // Inflate the options menu from XML
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_view_menu, menu);
-
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -130,17 +127,40 @@ public class AllTasksViewActivity extends AppCompatActivity {
         handleIntent(intent);
     }
 
+    // meat and potatoes of the search
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
+            clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
-            //Log.d("query recieved", query);
-            Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
-            //doMySearch(query); // implement with our search service (defaultTaskService)
+            returnMatchingTask(query);
+
         }
 
     }
 
+    private void addTasks(ArrayList<Task> returnedTasks) {
+        //testTasks.add(task);
+        testTasks.addAll(returnedTasks);
+        mAdapter.notifyItemInserted(testTasks.size() - 1);
 
+    }
+
+    private void clearList() {
+        final int size = testTasks.size();
+        testTasks.clear();
+        mAdapter.notifyItemRangeRemoved(0, size);
+    }
+
+    // TODO make sure you dont add empty results --> what does a search with no hits return?
+    private void returnMatchingTask(String query) {
+        DefaultTaskService taskService = new DefaultTaskService();
+        addTasks(taskService.getAllTasks(query));
+//        ArrayList<Task> returnedTasks = taskService.getAllTasks(query);
+//        testTasks.addAll(returnedTasks);
+//        mAdapter.notifyItemInserted(testTasks.size() - 1);
+        Log.d("size", "" + testTasks.size());
+    }
 
 
 }
