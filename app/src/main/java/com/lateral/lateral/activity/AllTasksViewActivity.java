@@ -4,25 +4,18 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.View;
-import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*
 Searching interface info
@@ -40,52 +33,35 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO cleanup to improve readablity (including unnecessary changes in other files)
 public class AllTasksViewActivity extends AppCompatActivity {
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private SearchView searchView;
-
-    List<Task> testTasks;
+    private ArrayList<Task> matchingTasks;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        RecyclerView mRecyclerView;
+        RecyclerView.LayoutManager mLayoutManager;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_tasks_view);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // check how we got here
         handleIntent(getIntent());
 
-        // sample tasks
-        testTasks = new ArrayList<Task>();
-
-
-        // makes some example tasks to put into the recycler view
-        String taskName;
-        String taskDescription;
-//        for (int i = 0; i < 20; i++) {
-//            taskName = "Task " + i;
-//            taskDescription = "this is task " + i;
-//            testTasks.add(new Task(taskName, taskDescription));
-//        }
-
-        // Posts to our database
-//        Task t = new Task("walk my dog", "I want you to talk my doggy");
-//        DefaultTaskService taskService = new DefaultTaskService();
-//        taskService.post(t);
+        matchingTasks = new ArrayList<Task>();
 
 
 
-
-        // Recycler view stuff
-        mRecyclerView = (RecyclerView) findViewById(R.id.taskViewList);
+        // defining recycler view
+        mRecyclerView = findViewById(R.id.taskViewList);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyAdapter(this, testTasks);
+        mAdapter = new TaskRowAdapter(matchingTasks);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -104,9 +80,11 @@ public class AllTasksViewActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
+        SearchView searchView;
+
         // Inflate the options menu from XML
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.task_view_menu, menu);
+        getMenuInflater().inflate(R.menu.task_view_menu, menu);
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -114,9 +92,7 @@ public class AllTasksViewActivity extends AppCompatActivity {
 
         // Assumes current activity is the searchable activity
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //searchView.setIconified(true);
         searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-
         return true;
     }
 
@@ -130,36 +106,30 @@ public class AllTasksViewActivity extends AppCompatActivity {
     // meat and potatoes of the search
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();     //Toast for debugging
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
             returnMatchingTask(query);
-
         }
 
     }
 
     private void addTasks(ArrayList<Task> returnedTasks) {
-        //testTasks.add(task);
-        testTasks.addAll(returnedTasks);
-        mAdapter.notifyItemInserted(testTasks.size() - 1);
+        matchingTasks.addAll(returnedTasks);
+        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
 
     }
 
     private void clearList() {
-        final int size = testTasks.size();
-        testTasks.clear();
+        final int size = matchingTasks.size();
+        matchingTasks.clear();
         mAdapter.notifyItemRangeRemoved(0, size);
     }
 
-    // TODO make sure you dont add empty results --> what does a search with no hits return?
+    // TODO make sure you don't add empty results --> what does a search with no hits return?
     private void returnMatchingTask(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
         addTasks(taskService.getAllTasks(query));
-//        ArrayList<Task> returnedTasks = taskService.getAllTasks(query);
-//        testTasks.addAll(returnedTasks);
-//        mAdapter.notifyItemInserted(testTasks.size() - 1);
-        Log.d("size", "" + testTasks.size());
     }
 
 

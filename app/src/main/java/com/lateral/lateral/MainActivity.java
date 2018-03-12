@@ -73,19 +73,16 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        getMenuInflater().inflate(R.menu.task_view_menu, menu);
 
-        // Get the SearchView and set the searchable configuration
+
+        // Add if you want to make this activity link to searchable (not working)
+        /*
+        getMenuInflater().inflate(R.menu.task_view_menu, menu);
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        // Assumes current activity is the searchable activity
-        //searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-        //searchView.setQuery("", false);
-        //searchView.setIconified(true);
-
         searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, AllTasksViewActivity.class)));
         searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        */
 
         return true;
     }

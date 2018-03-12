@@ -20,9 +20,10 @@
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
+            <!-- Not working but don't delete yet
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".AllTasksViewActivity" />
+                android:value=".AllTasksViewActivity" /> -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
