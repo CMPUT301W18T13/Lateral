@@ -64,6 +64,7 @@ public class DefaultBaseService<T extends BaseEntity> {
         return data;
     }
 
+
     public void post(T obj){
         String ElasticSearchType = getElasticSearchType();
         PostData postData = new PostData(ElasticSearchType);
@@ -158,6 +159,7 @@ public class DefaultBaseService<T extends BaseEntity> {
             return get;
         }
     }
+
 }
 
 
