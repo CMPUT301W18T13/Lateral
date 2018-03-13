@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
@@ -20,6 +19,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class TaskViewActivity extends AppCompatActivity {
 
@@ -61,7 +61,7 @@ public class TaskViewActivity extends AppCompatActivity {
         currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
         title.setText(task.getTitle());
         username.setText(task.getRequestingUser().getUsername());
-        DateFormat df = new SimpleDateFormat("MMM dd yyyy");
+        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
