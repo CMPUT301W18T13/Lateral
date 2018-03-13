@@ -6,8 +6,13 @@ import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.ElasticSearchController;
 import com.lateral.lateral.service.UserService;
 
+import org.json.JSONArray;
+
 import java.lang.reflect.Type;
 
+/*
+failure to return any results will always return null, so check accordingly
+ */
 public class DefaultUserService extends DefaultBaseService<User>{
 
     // get user by username
@@ -19,16 +24,35 @@ public class DefaultUserService extends DefaultBaseService<User>{
     // get user by id
     public User getUserById(String id){
         String json = "{\"query\": {\"match\": {\"_id\": \"" + id + "\"}}}";
+
         return gson.fromJson(get(json), User.class);
     }
 
     // retrieve a users salt and hash
     public String getSaltAndHash(String username){
-        String json = "{\"_source\": [\"saltAndHash\"] \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
-        return get(json);
+        String json = "{\"_source\": [\"saltAndHash\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
+
+        String result = get(json);
+
+        if(result.equals("")){
+            return null;
+        }else {
+            return getValueFromJson(result, "saltAndHash");
+        }
     }
 
+    public String getToken(String username){
+        String json = "{\"_source\": [\"token\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
 
+        String result = get(json);
+
+        if(result.equals("")){
+            return null;
+        }else {
+            return getValueFromJson(result, "token");
+        }
+
+    }
 
     // TODO: Add extra methods specific to the User index
 
