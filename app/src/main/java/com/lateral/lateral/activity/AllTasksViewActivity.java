@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 
 import com.lateral.lateral.R;
@@ -54,8 +55,6 @@ public class AllTasksViewActivity extends AppCompatActivity {
 
         matchingTasks = new ArrayList<Task>();
 
-
-
         // defining recycler view
         mRecyclerView = findViewById(R.id.taskViewList);
         mRecyclerView.setHasFixedSize(true);
@@ -64,16 +63,6 @@ public class AllTasksViewActivity extends AppCompatActivity {
         mAdapter = new TaskRowAdapter(matchingTasks);
         mRecyclerView.setAdapter(mAdapter);
 
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //setSupportActionBar(toolbar);
-//                Snackbar.make(view, "Test", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
     }
 
 
@@ -109,7 +98,10 @@ public class AllTasksViewActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();     //Toast for debugging
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
+            // implement some sort of exception handler (no internet access crashes app)
             returnMatchingTask(query);
+            Log.d("Search Failed", "The search failed for some reason");
+
         }
 
     }
