@@ -12,6 +12,8 @@ public class User extends BaseEntity {
     private String username;
     private String phoneNumber;
     private String emailAddress;
+    private String saltAndHash;
+    private String token;
 
     // Extra fields
     // transient to mark as non-serializable
@@ -22,10 +24,11 @@ public class User extends BaseEntity {
     // Private constructor for Jest to use
     private User(){}
 
-    public User(String username, String phoneNumber, String emailAddress){
+    public User(String username, String phoneNumber, String emailAddress, String saltAndHash){
         this.setUsername(username);
         this.phoneNumber = phoneNumber;
         this.emailAddress = emailAddress;
+        this.saltAndHash = saltAndHash;
     }
 
     public String getUsername() {
@@ -55,6 +58,14 @@ public class User extends BaseEntity {
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
+
+    public String getSaltAndHash() { return this.saltAndHash; }
+
+    public void setSaltAndHash(String saltAndHash) { this.saltAndHash = saltAndHash; }
+
+    public String getToken() { return this.token; }
+
+    public void setToken(String token) { this.token = token; }
 
     public ArrayList<Task> getRequestedTasks() {
         return requestedTasks;
