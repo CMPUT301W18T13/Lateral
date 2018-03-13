@@ -19,19 +19,25 @@ failure to return any results will always return null, so check accordingly
 public class DefaultTaskService extends DefaultBaseService<Task> {
     // TODO: Add extra methods specific to the Task index
 
-    // return task by title
+    /*
+     return task by title
+      */
     public Task getTaskByTitle(String title){
         String json = "{\"query\": {\"match\": {\"title\": \"" + title + "\"}}}";
         return gson.fromJson(get(json), Task.class);
     }
 
-    // return task by id
+    /*
+     return task by id
+      */
     public Task getTaskById(String id){
         String json = "{\"query\": {\"match\": {\"_id\": \"" + id + "\"}}}";
         return gson.fromJson(get(json), Task.class);
     }
 
-    // return a list of tasks matching the supplied query keywords
+    /*
+     return a list of tasks matching the supplied query keywords
+      */
     public ArrayList<Task> getAllTasks(String query){
         String json = "{\"query\": {\"match\": {\"title\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();

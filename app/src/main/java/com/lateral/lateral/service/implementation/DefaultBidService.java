@@ -12,4 +12,8 @@ public class DefaultBidService extends DefaultBaseService<Bid> {
         return gson.fromJson(get(json), Bid.class);
     }
 
+    //public Bid getLowestBid(){
+
+    //}
+
 }
