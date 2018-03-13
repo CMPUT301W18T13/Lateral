@@ -200,6 +200,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/green"
         android:text="@string/bid_button_label"
+        android:onClick="onBidButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
