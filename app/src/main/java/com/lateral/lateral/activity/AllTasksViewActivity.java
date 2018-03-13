@@ -30,7 +30,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
  */
 
 // TODO fix white bar at the top of this activity --> appeared on my original pull
-// TODO cleanup to improve readablity (including unnecessary changes in other files)
+// TODO remove unnecessary changes in other files)
 public class AllTasksViewActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter;
@@ -126,7 +126,6 @@ public class AllTasksViewActivity extends AppCompatActivity {
         mAdapter.notifyItemRangeRemoved(0, size);
     }
 
-    // TODO make sure you don't add empty results --> what does a search with no hits return?
     private void returnMatchingTask(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
         addTasks(taskService.getAllTasks(query));

@@ -45,5 +45,6 @@
 
     <!-- Strings related to searching -->
     <string name="search_hint">Search all tasks</string>
+    <string name="title_activity_assigned_tasks_view">AssignedTasksViewActivity</string>
 
 </resources>

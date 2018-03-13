@@ -52,6 +52,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        // need to fill more properly once big/user objects implemented on elastic search
         Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
         holder.tvUsername.setText(task.getRequestingUserId());

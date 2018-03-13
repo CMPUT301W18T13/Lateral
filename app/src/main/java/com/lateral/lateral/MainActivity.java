@@ -18,12 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
 
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,17 +33,16 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                // for Testing --> take me to allTaskViewActivity
-                Intent viewAllTasksIntent = new Intent(MainActivity.this, AllTasksViewActivity.class);
-                startActivity(viewAllTasksIntent);
-            }
-        });
+        // Define buttons
+        Button ViewRequestedTasksButton = findViewById(R.id.ViewRequestedTasksButton);
+        ViewRequestedTasksButton.setOnClickListener(this);
+
+        Button ViewAllTasksButton = findViewById(R.id.ViewAllTasksButton);
+        ViewAllTasksButton.setOnClickListener(this);
+
+        Button ViewAssignedTasksButton = findViewById(R.id.ViewAssignedTasksButton);
+        ViewAssignedTasksButton.setOnClickListener(this);
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -52,6 +52,25 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    // handles onClick events
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.ViewRequestedTasksButton:
+                break;
+
+            case R.id.ViewAllTasksButton:
+                Intent viewAllTasksIntent = new Intent(MainActivity.this, AllTasksViewActivity.class);
+                startActivity(viewAllTasksIntent);
+                break;
+
+            case R.id.ViewAssignedTasksButton:
+                break;
+        }
+
     }
 
     @Override
