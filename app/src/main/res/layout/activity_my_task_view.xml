@@ -10,7 +10,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/my_task_view_see_bids_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,7 +46,7 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/my_task_view_current_bid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/temp_bid"
@@ -79,7 +79,7 @@
                     app:layout_constraintStart_toEndOf="@+id/imageView3">
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/my_task_view_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -92,17 +92,17 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/task_view_username"
+                        android:id="@+id/my_task_assigned_to"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:text="Assigned to: "
                         android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                        app:layout_constraintTop_toBottomOf="@+id/my_task_view_title" />
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/my_task_view_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
@@ -113,25 +113,25 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/task_view_username" />
+                        app:layout_constraintTop_toBottomOf="@+id/my_task_assigned_to" />
 
                     <TextView
-                        android:id="@+id/textView6"
+                        android:id="@+id/my_text_view_username"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:text="@string/temp_username"
                         android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/task_view_username"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                        app:layout_constraintStart_toEndOf="@+id/my_task_assigned_to"
+                        app:layout_constraintTop_toBottomOf="@+id/my_task_view_title" />
 
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.constraint.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/my_task_view_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -204,11 +204,12 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/my_task_view_see_bids_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
         android:text="See Bids"
+        android:onClick="onSeeBidButtonClick"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

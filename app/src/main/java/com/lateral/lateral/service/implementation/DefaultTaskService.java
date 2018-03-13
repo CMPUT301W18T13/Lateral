@@ -6,7 +6,10 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.TaskService;
+
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
