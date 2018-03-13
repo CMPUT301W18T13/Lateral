@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.BaseService;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
@@ -27,19 +28,18 @@ import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 
-public class DefaultBaseService<T extends BaseEntity> {
-    // Stores T.class since java doesn't let you call T.class
-    //private final Class<?> typeArgument;
+public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> {
 
     private static JestClient jestClient;
-    private final Class<?> typeArgument;
+    // Stores T.class since java doesn't let you call T.class
+    private final Class<T> typeArgument;
 
     Gson gson = new Gson();
 
     protected DefaultBaseService(){
-        // https://stackoverflow.com/questions/3403909/get-generic-type-of-class-at-runtime
+        // https://stackoverflow.com/questions/3403909/
         ParameterizedType type = (ParameterizedType)getClass().getGenericSuperclass();
-        this.typeArgument = (Class<?>)type.getActualTypeArguments()[0];
+        this.typeArgument = (Class<T>)type.getActualTypeArguments()[0];
     }
 
     public static void verifySettings() {
@@ -51,6 +51,12 @@ public class DefaultBaseService<T extends BaseEntity> {
             factory.setDroidClientConfig(config);
             jestClient = (JestDroidClient) factory.getObject();
         }
+    }
+
+    // get item by id
+    public T getById(String id){
+        String json = "{\"query\": {\"match\": {\"_id\": \"" + id + "\"}}}";
+        return gson.fromJson(get(json), typeArgument);
     }
 
     public String get(String query){
@@ -66,7 +72,6 @@ public class DefaultBaseService<T extends BaseEntity> {
         }
         return data;
     }
-
 
     public void post(T obj){
         String ElasticSearchType = getElasticSearchType();

@@ -16,8 +16,7 @@ import java.util.List;
 failure to return any results will always return null, so check accordingly
  */
 
-public class DefaultTaskService extends DefaultBaseService<Task> {
-    // TODO: Add extra methods specific to the Task index
+public class DefaultTaskService extends DefaultBaseService<Task> implements TaskService {
 
     /*
      return task by title
@@ -28,16 +27,9 @@ public class DefaultTaskService extends DefaultBaseService<Task> {
     }
 
     /*
-     return task by id
-      */
-    public Task getTaskById(String id){
-        String json = "{\"query\": {\"match\": {\"_id\": \"" + id + "\"}}}";
-        return gson.fromJson(get(json), Task.class);
-    }
-
-    /*
      return a list of tasks matching the supplied query keywords
       */
+
     public ArrayList<Task> getAllTasks(String query){
         String json = "{\"query\": {\"match\": {\"title\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();

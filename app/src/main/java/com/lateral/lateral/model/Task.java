@@ -20,8 +20,10 @@ public class Task extends BaseEntity {
 
     // Extra fields
     private transient User requestingUser;
-    private transient User providingUser;         // initially set to null
+    private transient User providingUser;
     private transient ArrayList<Bid> bids;
+
+    private transient Bid lowestBid;
 
     // TODO: Implement location variable
     // TODO: Implement photo storage allocation
@@ -93,15 +95,35 @@ public class Task extends BaseEntity {
         return this.description;
     }
 
-    public String getRequestingUserId() {
-        return this.requestingUserId;
-    }
-
     public User getProvidingUser() {
         return this.providingUser;
     }
 
     public ArrayList<Bid> getBids() {
         return this.bids;
+    }
+
+    public User getRequestingUser() {
+        return requestingUser;
+    }
+
+    public void setRequestingUser(User requestingUser) {
+        this.requestingUser = requestingUser;
+    }
+
+    public String getRequestingUserId() {
+        return requestingUserId;
+    }
+
+    public void setRequestingUserId(String requestingUserId) {
+        this.requestingUserId = requestingUserId;
+    }
+
+    public Bid getLowestBid() {
+        return lowestBid;
+    }
+
+    public void setLowestBid(Bid lowestBid) {
+        this.lowestBid = lowestBid;
     }
 }

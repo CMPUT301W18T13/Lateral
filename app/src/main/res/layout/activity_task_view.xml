@@ -10,7 +10,7 @@
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/task_view_bid_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,7 +46,7 @@
                     app:layout_constraintEnd_toEndOf="parent">
 
                     <TextView
-                        android:id="@+id/textView5"
+                        android:id="@+id/task_view_current_bid"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/temp_bid"
@@ -79,7 +79,7 @@
                     app:layout_constraintStart_toEndOf="@+id/imageView3">
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/task_view_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -92,7 +92,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/textView3"
+                        android:id="@+id/task_view_username"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -101,10 +101,10 @@
                         android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                        app:layout_constraintTop_toBottomOf="@+id/task_view_title" />
 
                     <TextView
-                        android:id="@+id/textView4"
+                        android:id="@+id/task_view_date"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
@@ -115,14 +115,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                        app:layout_constraintTop_toBottomOf="@+id/task_view_username" />
 
                 </android.support.constraint.ConstraintLayout>
 
             </android.support.constraint.ConstraintLayout>
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/task_view_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
@@ -195,7 +195,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/task_view_bid_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/green"
