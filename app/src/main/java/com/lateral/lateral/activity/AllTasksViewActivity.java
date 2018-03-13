@@ -31,12 +31,10 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
  */
 
 // TODO fix white bar at the top of this activity --> appeared on my original pull
-// TODO remove unnecessary changes in other files)
 public class AllTasksViewActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +97,11 @@ public class AllTasksViewActivity extends AppCompatActivity {
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
             // implement some sort of exception handler (no internet access crashes app)
+            /*
+            Leave for now
+            String jsonQuery = "{\"query\": {\"multi_match\": {\"title\": {\"query\" : \"" + searchField + "\"," +
+                " \"fields\" : [\"title^3\", \"description\"]}}}}";
+             */
             returnMatchingTask(query);
             Log.d("Search Failed", "The search failed for some reason");
 

@@ -21,7 +21,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
-
+import android.widget.ArrayAdapter;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity
 
         Button ViewAssignedTasksButton = findViewById(R.id.ViewAssignedTasksButton);
         ViewAssignedTasksButton.setOnClickListener(this);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -92,17 +92,6 @@ public class MainActivity extends AppCompatActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-
-
-        // Add if you want to make this activity link to searchable (not working)
-        /*
-        getMenuInflater().inflate(R.menu.task_view_menu, menu);
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, AllTasksViewActivity.class)));
-        searchView.setQueryHint(getResources().getString(R.string.search_hint));
-        */
-
         return true;
     }
 

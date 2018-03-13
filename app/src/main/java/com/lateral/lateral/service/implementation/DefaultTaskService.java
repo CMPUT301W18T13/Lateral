@@ -33,3 +33,4 @@ public class DefaultTaskService extends DefaultBaseService<Task> {
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 }
+
