@@ -7,7 +7,6 @@ import org.apache.commons.lang3.NotImplementedException;
 
 
 public class DefaultBidService extends DefaultBaseService<Bid> implements BidService{
-    // TODO: Add extra methods specific to the Bid index
 
     public Bid getLowestBid(String taskID){
         throw new NotImplementedException("Implement me!");

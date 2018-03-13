@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
 import com.lateral.lateral.model.User;
@@ -13,6 +14,8 @@ import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
@@ -100,6 +103,13 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         return ((ElasticSearchType) annotation).Name();
     }
 
+    // extra values from JSON string using passed key
+    public String getValueFromJson(String json, String key){
+        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
+        return jsonObject.get(key).getAsString();
+    }
+
+    // AsyncTask class to post an object
     public static class PostData extends AsyncTask<String, Void, String> {
         String idx;
 

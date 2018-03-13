@@ -15,7 +15,7 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 public class TaskViewActivity extends AppCompatActivity {
 
-    public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASKID";
+    public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class TaskViewActivity extends AppCompatActivity {
 
     }
 
-    // TODO: Probably move to controller
+    // TODO: Probably move to a controller
     private Task loadTask(String taskID){
         TaskService taskService = new DefaultTaskService();
         UserService userService = new DefaultUserService();
