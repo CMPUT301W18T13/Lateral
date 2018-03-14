@@ -21,13 +21,14 @@ public class Bid extends BaseEntity {
     // Private constructor for Jest to use
     private Bid(){}
 
-    public Bid (BigDecimal amount){
+    public Bid (BigDecimal amount, String taskId){
         if (amount.compareTo(new BigDecimal(Constants.MIN_BID_AMOUNT)) < 0){
             throw new IllegalArgumentException("Amount is below " + Constants.MIN_BID_AMOUNT);
         }
 
         this.amount = amount;
         this.status = BidStatus.POSTED;
+        this.taskId = taskId;
     }
 
     public BigDecimal getAmount(){ return this.amount; }
@@ -37,6 +38,8 @@ public class Bid extends BaseEntity {
     public Task getTaskBidOn() { return this.task; }
 
     public BidStatus getStatus() {return this.status; }
+
+    public String getTaskId(){return this.taskId; }
 
     // If an assigned task is set to requested are all bids removed?
     public void setStatus(BidStatus status) {
