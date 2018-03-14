@@ -35,7 +35,7 @@ public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
         RecyclerView.LayoutManager mLayoutManager;
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_requested_tasks_view);
+        setContentView(R.layout.activity_assigned_and_bidded_tasks_view);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -43,7 +43,7 @@ public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
         matchingTasks = new ArrayList<Task>();
 
         // defining recycler view
-        mRecyclerView = findViewById(R.id.requestedTaskViewList);
+        mRecyclerView = findViewById(R.id.assignedTaskViewList);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
