@@ -6,13 +6,13 @@ import io.searchbox.annotations.JestId;
 public abstract class BaseEntity {
 
     @JestId
-    private String documentId;
+    private String id;
 
     public String getId() {
-        return documentId;
+        return id;
     }
 
     public void setId(String id){
-        this.documentId = id;
+        this.id = id;
     }
 }

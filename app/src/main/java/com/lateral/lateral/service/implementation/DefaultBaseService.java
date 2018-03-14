@@ -27,6 +27,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import io.searchbox.core.Update;
 
 public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> {
 
@@ -80,6 +81,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
         String json = gson.toJson(obj);
 
+
         postData.execute(json);
         try{
             id = postData.get();
@@ -87,6 +89,26 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             Log.i("Error", "Failed to get task from async object");
         }
         obj.setId(id);
+        setDocId(id);
+
+    }
+
+    //TODO instead of passing test into execute, we can pass the json query we created in the UpdateData class
+    /*
+    function to set the id of an object into its source for retrieval/deserialization purposes
+     */
+    public void setDocId(String id){
+        String ElasticSearchType = getElasticSearchType();
+        UpdateData updateData = new UpdateData(ElasticSearchType, id);
+        String testId = null;
+
+        updateData.execute("test");
+        try{
+            testId = updateData.get();
+        }catch(Exception e){
+            Log.i("Error", "Failed to get task from async object");
+        }
+
     }
 
     /**
@@ -173,6 +195,41 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
             return get;
         }
+    }
+
+    // TODO make UpdateData more generic, also doesn't need to return any type parameters, handle errors better
+    /*
+    Async task to update an item in the db
+     */
+    public static class UpdateData extends AsyncTask<String, Void, String> {
+        String idx;
+        String id;
+
+        UpdateData(String idx, String id) {
+            this.idx = idx;
+            this.id = id;
+        }
+
+        @Override
+        protected String doInBackground(String... objs) {
+            verifySettings();
+
+            Update update = new Update.Builder("{\"doc\": {\"id\": \"" + id + "\"}}").index("cmput301w18t13").type(idx).id(id).build();
+
+            try {
+                DocumentResult result = jestClient.execute(update);
+                if (result.isSucceeded()) {
+                    Log.i("Success", "Update was succesful");
+                    id = result.getId();
+                } else {
+                    Log.i("Error", "A error occured");
+                }
+            } catch (Exception e) {
+                Log.i("Error", "Application failed to send user to server");
+            }
+            return id;
+        }
+
     }
 
 }

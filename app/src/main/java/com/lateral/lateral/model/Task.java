@@ -16,13 +16,13 @@ public class Task extends BaseEntity {
     private int status;                 // may change depending on how we store status
     private String description;
     private String requestingUserId;
+
     private String assignedUserId;
 
     // Extra fields
     private transient User requestingUser;
-    private transient User providingUser;
+    private transient User assignedUser;
     private transient ArrayList<Bid> bids;
-
     private transient Bid lowestBid;
 
     // TODO: Implement location variable
@@ -69,10 +69,6 @@ public class Task extends BaseEntity {
         this.description = newDescription;
     }
 
-    public void setProvidingUser(User newProvidingUser) {
-        this.providingUser = newProvidingUser;
-    }
-
     public void setBids(ArrayList<Bid> newBids) {
         this.bids = newBids;
     }
@@ -93,10 +89,6 @@ public class Task extends BaseEntity {
 
     public String getDescription() {
         return this.description;
-    }
-
-    public User getProvidingUser() {
-        return this.providingUser;
     }
 
     public ArrayList<Bid> getBids() {
@@ -125,5 +117,21 @@ public class Task extends BaseEntity {
 
     public void setLowestBid(Bid lowestBid) {
         this.lowestBid = lowestBid;
+    }
+
+    public User getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(User assignedUser) {
+        this.assignedUser = assignedUser;
+    }
+
+    public String getAssignedUserId() {
+        return assignedUserId;
+    }
+
+    public void setAssignedUserId(String assignedUserId) {
+        this.assignedUserId = assignedUserId;
     }
 }
