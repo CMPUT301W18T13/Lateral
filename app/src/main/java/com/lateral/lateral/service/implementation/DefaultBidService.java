@@ -9,7 +9,12 @@ import org.apache.commons.lang3.NotImplementedException;
 public class DefaultBidService extends DefaultBaseService<Bid> implements BidService{
 
     public Bid getLowestBid(String taskID){
-        throw new NotImplementedException("Implement me!");
-        // TODO: Implement this
+        String json = "{\"query\": " +
+                "{\"match\": " +
+                "{\"taskId\": \"" + taskID + "\"}}, " +
+                "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}], " +
+                "\"size\" : 1}";
+
+        return gson.fromJson(get(json), Bid.class);
     }
 }

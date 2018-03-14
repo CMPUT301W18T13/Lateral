@@ -21,7 +21,14 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
+import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.implementation.DefaultBidService;
+import com.lateral.lateral.service.implementation.DefaultUserService;
+
 import android.widget.ArrayAdapter;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
@@ -87,6 +94,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+
     }
 
     @Override
