@@ -30,6 +30,7 @@
     <string name="signup_link_prompt"><u>Don\'t have an account? Sign up!</u></string>
     <string name="confirm">Confirm</string>
     <string name="title_activity_requested_tasks_view">RequestedTasksViewActivity</string>
+    <string name="title_activity_assigned_and_bidded_tasks_view">AssignedAndBiddedTasksViewActivity</string>
     <string name="filter_text">Filter</string>
     <string name="title_activity_all_tasks_view">AllTasksViewActivity</string>
     <string name="search">Search</string>
@@ -49,6 +50,4 @@
 
     <!-- Strings related to searching -->
     <string name="search_hint">Search all tasks</string>
-    <string name="title_activity_assigned_tasks_view">AssignedTasksViewActivity</string>
-
 </resources>

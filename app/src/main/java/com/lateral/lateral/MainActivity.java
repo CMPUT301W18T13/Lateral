@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
+import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
 
 import android.widget.ArrayAdapter;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.ViewAssignedTasksButton:
+                Intent AssignedAndBiddedTasksViewActivity = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
+                startActivity(AssignedAndBiddedTasksViewActivity);
                 break;
         }
 

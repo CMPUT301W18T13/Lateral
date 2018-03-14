@@ -43,6 +43,17 @@
 
         </activity>
 
+        <activity
+            android:name=".activity.AssignedAndBiddedTasksViewActivity"
+            android:label="@string/title_activity_assigned_and_bidded_tasks_view"
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- Just added this -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activity.AllTasksViewActivity" />
+
+        </activity>
+
 
         <activity
             android:exported="true"
