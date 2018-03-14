@@ -35,7 +35,14 @@
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <!-- Just added this -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activity.AllTasksViewActivity" />
+
+        </activity>
+
 
         <activity
             android:exported="true"
@@ -45,6 +52,7 @@
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data android:name="android.app.searchable"

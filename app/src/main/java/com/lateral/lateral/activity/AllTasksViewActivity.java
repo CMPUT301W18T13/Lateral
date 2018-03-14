@@ -48,9 +48,6 @@ public class AllTasksViewActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        // check how we got here
-        handleIntent(getIntent());
-
         matchingTasks = new ArrayList<Task>();
 
         // defining recycler view
@@ -60,6 +57,9 @@ public class AllTasksViewActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new TaskRowAdapter(matchingTasks);
         mRecyclerView.setAdapter(mAdapter);
+
+        // check how we got here
+        handleIntent(getIntent());
 
     }
 
@@ -93,9 +93,11 @@ public class AllTasksViewActivity extends AppCompatActivity {
     // meat and potatoes of the search
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            //Log.d("SEARCH", "Inside AllTasksViewActivity");
             //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();     //Toast for debugging
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
+            //Log.d("QUERY", "" + query);
             // implement some sort of exception handler (no internet access crashes app)
             /*
             Leave for now
@@ -103,7 +105,7 @@ public class AllTasksViewActivity extends AppCompatActivity {
                 " \"fields\" : [\"title^3\", \"description\"]}}}}";
              */
             returnMatchingTask(query);
-            Log.d("Search Failed", "The search failed for some reason");
+
 
         }
 

@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
+import com.lateral.lateral.activity.RequestedTasksViewActivity;
+
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
 
@@ -61,6 +63,8 @@ public class MainActivity extends AppCompatActivity
 
         switch (view.getId()) {
             case R.id.ViewRequestedTasksButton:
+                Intent ViewRequestedTasksIntent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
+                startActivity(ViewRequestedTasksIntent);
                 break;
 
             case R.id.ViewAllTasksButton:
