@@ -1,6 +1,7 @@
 package com.lateral.lateral.activity;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
         TextView tvTitle;
@@ -34,6 +35,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             tvDate = itemView.findViewById(R.id.dateTextView);
             tvCurBid = itemView.findViewById(R.id.bidTextView);
         }
+
     }
 
     public TaskRowAdapter(ArrayList<Task> mTasks) {

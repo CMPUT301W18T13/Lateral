@@ -11,9 +11,11 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.service.ItemClickSupport;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
  */
 
 // TODO fix white bar at the top of this activity --> appeared on my original pull
+// TODO clicking seems to work but test more --> pass intents
 public class AllTasksViewActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter;
@@ -53,6 +56,15 @@ public class AllTasksViewActivity extends AppCompatActivity {
         // defining recycler view
         mRecyclerView = findViewById(R.id.taskViewList);
         mRecyclerView.setHasFixedSize(true);
+
+        ItemClickSupport.addTo(mRecyclerView)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Log.d("ITEM CLICKED", "AN ITEM WAS CLICKED");
+                    }
+                });
+
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new TaskRowAdapter(matchingTasks);

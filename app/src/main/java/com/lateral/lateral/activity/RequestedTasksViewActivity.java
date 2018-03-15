@@ -18,6 +18,7 @@ import android.view.View;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.service.ItemClickSupport;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
@@ -45,6 +46,15 @@ public class RequestedTasksViewActivity extends AppCompatActivity {
         // defining recycler view
         mRecyclerView = findViewById(R.id.requestedTaskViewList);
         mRecyclerView.setHasFixedSize(true);
+
+        ItemClickSupport.addTo(mRecyclerView)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Log.d("ITEM CLICKED", "AN ITEM WAS CLICKED");
+                    }
+                });
+
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new TaskRowAdapter(matchingTasks);

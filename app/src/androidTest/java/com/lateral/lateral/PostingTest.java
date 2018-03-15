@@ -1,6 +1,7 @@
 package com.lateral.lateral;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
@@ -13,6 +14,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import static org.junit.Assert.*;
 
@@ -54,5 +56,13 @@ public class PostingTest {
         //DefaultUserService defaultUserService = new DefaultUserService();
         //defaultUserService.post(testUser);
 
+    }
+
+    @Test
+    public void testGetBidsByTaskID() {
+//        ArrayList<Bid> returnedBids;
+//        DefaultBidService defaultBidService = new DefaultBidService();
+//        returnedBids = defaultBidService.getAllBidsByTaskID("AWIn9KMR-p3BIk3Z2HhS");
+//        assertEquals("tlaz", returnedBids.get(0).getBidder());
     }
 }
