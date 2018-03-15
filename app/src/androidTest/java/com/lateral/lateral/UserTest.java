@@ -1,3 +1,4 @@
+/*
 package com.lateral.lateral;
 
 import android.support.test.runner.AndroidJUnit4;
@@ -81,3 +82,4 @@ public class UserTest {
         assertEquals(user.getAssignedTasks(), tasks);
     }
 }
+*/

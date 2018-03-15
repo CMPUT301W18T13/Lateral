@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class RequestedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-    private String thisUserID = "nick";          // for testing
+    private String thisUserID = "npwhite";          // for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
