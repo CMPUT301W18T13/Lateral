@@ -39,5 +39,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
         return gson.fromJson("[" + get(json) + "]", listType);
     }
+
+    //TODO delete all bids asssociated with a deleted task
 }
 
