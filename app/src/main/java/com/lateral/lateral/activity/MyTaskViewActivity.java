@@ -3,6 +3,9 @@ package com.lateral.lateral.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -34,6 +37,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private TextView date;
     private TextView description;
     private TextView assignedToUsername;
+
+    TaskService taskService = new DefaultTaskService();
+    UserService userService = new DefaultUserService();
+    BidService bidService = new DefaultBidService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,17 +77,39 @@ public class MyTaskViewActivity extends AppCompatActivity {
     }
 
     private Task loadTask(String taskID){
-        TaskService taskService = new DefaultTaskService();
-        UserService userService = new DefaultUserService();
-        BidService bidService = new DefaultBidService();
         Task task = taskService.getById(taskID);
         task.setLowestBid(bidService.getLowestBid(task.getId()));
         if (task.getAssignedUserId() != null)
             task.setAssignedUser(userService.getById(task.getAssignedUserId()));
         return task;
+        // TODO: Handle null task
     }
 
     public void onSeeBidButtonClick(View v){
         // TODO: View bids in new activity
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_task_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.action_edit_task){
+            // Edit the task
+            Intent intent = new Intent(this, AddEditTaskActivity.class);
+            intent.putExtra(AddEditTaskActivity.EXTRA_TASK_ID, taskID);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.action_delete_task){
+            taskService.delete(taskID);
+            // TODO: Navigate back
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

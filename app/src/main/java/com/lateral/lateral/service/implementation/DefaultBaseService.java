@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.searchbox.client.JestClient;
+import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
@@ -93,7 +94,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
-    //TODO instead of passing test into execute, we can pass the json query we created in the UpdateData class
     /*
     function to set the id of an object into its source for retrieval/deserialization purposes
      */
@@ -101,14 +101,30 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         String ElasticSearchType = getElasticSearchType();
         UpdateData updateData = new UpdateData(ElasticSearchType, id);
         String testId = null;
+        String getIdJson = "{\"doc\": {\"id\": \"" + id + "\"}}";
 
-        updateData.execute("test");
+        updateData.execute(getIdJson);
         try{
             testId = updateData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
         }
 
+    }
+
+    /*
+    delete an item by its id
+     */
+    public void delete(String id){
+        String ElasticSearchType = getElasticSearchType();
+        DeleteData deleteData = new DeleteData(ElasticSearchType);
+
+        deleteData.execute(id);
+        try{
+            String success = deleteData.get();
+        }catch(Exception e){
+            Log.i("Error", "Failed to get task from async object");
+        }
     }
 
     /**
@@ -197,7 +213,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         }
     }
 
-    // TODO make UpdateData more generic, also doesn't need to return any type parameters, handle errors better
     /*
     Async task to update an item in the db
      */
@@ -211,10 +226,10 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         }
 
         @Override
-        protected String doInBackground(String... objs) {
+        protected String doInBackground(String... updateJson) {
             verifySettings();
 
-            Update update = new Update.Builder("{\"doc\": {\"id\": \"" + id + "\"}}").index("cmput301w18t13").type(idx).id(id).build();
+            Update update = new Update.Builder(updateJson[0]).index("cmput301w18t13").type(idx).id(id).build();
 
             try {
                 DocumentResult result = jestClient.execute(update);
@@ -230,6 +245,35 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             return id;
         }
 
+    }
+
+    // asynctask to delete an item by id
+    public static class DeleteData extends AsyncTask<String, Void, String> {
+        String idx;
+
+        DeleteData(String idx){
+            this.idx = idx;
+        }
+
+
+        @Override
+        protected String doInBackground(String... obj) {
+            verifySettings();
+
+                Delete delete = new Delete.Builder(obj[0]).index("cmput301w18t13").type(idx).build();
+
+                try {
+                    DocumentResult result = jestClient.execute(delete);
+                    if (result.isSucceeded()) {
+                        Log.i("Success", "Delete was succesful");
+                    } else {
+                        Log.i("Error", "A error occured");
+                    }
+                } catch (Exception e) {
+                    Log.i("Error", "Application failed to send user to server");
+                }
+            return "Success";
+        }
     }
 
 }

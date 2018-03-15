@@ -48,6 +48,14 @@
     <string name="temp_bid">$45.00</string>
     <string name="temp_new_bid_prompt">1 new bid!</string>
 
+    <!-- Strings for tasks -->
+    <string name="add_task_confirm">Post Task</string>
+    <string name="edit_task_confirm">Confirm Changes</string>
+    <string name="add_task_title">Add Task</string>
+    <string name="edit_task_title">Edit Task</string>
+    <string name="delete_button_text">Delete Task</string>
+    <string name="edit_button_text">Edit Task</string>
+
     <!-- Strings related to searching -->
     <string name="search_hint">Search all tasks</string>
 </resources>

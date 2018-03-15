@@ -74,6 +74,7 @@ public class TaskViewActivity extends AppCompatActivity {
         Task task = taskService.getById(taskID);
         task.setRequestingUser(userService.getById(task.getRequestingUserId()));
         task.setLowestBid(bidService.getLowestBid(task.getId()));
+        // TODO: Handle null task
         return task;
     }
 

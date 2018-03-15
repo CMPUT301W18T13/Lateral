@@ -11,4 +11,6 @@ public interface BaseService<T extends BaseEntity> {
     T getById(String id);
 
     void post(T obj);
+
+    public void delete(String id);
 }

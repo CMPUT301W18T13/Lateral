@@ -24,8 +24,10 @@ import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import android.widget.ArrayAdapter;
