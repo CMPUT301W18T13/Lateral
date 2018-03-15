@@ -61,7 +61,7 @@ public class AllTasksViewActivity extends AppCompatActivity {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Log.d("ITEM CLICKED", "AN ITEM WAS CLICKED");
+                        Log.d("ITEM CLICKED", "item " + position + " clicked");
                     }
                 });
 
