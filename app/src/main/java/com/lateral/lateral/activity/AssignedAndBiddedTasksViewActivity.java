@@ -22,11 +22,11 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
-
+// Just ignore this activity for now
 public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-    private String thisUserID = "nick";          // for testing
+    private String thisUserID = "npwhite";          // for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,9 @@ public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         // for now just display requested tasks from this user
-        returnMatchingTasks(thisUserID);
+        // returnMatchingTasks(thisUserID);
+        // if we continue to go down the "display tasks" route, need to get
+        returnMatchingTasks("XXXX");
 
     }
 

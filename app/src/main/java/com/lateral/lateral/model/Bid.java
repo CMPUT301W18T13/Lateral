@@ -10,7 +10,7 @@ public class Bid extends BaseEntity {
     // TODO: Need to add more getters/setters
     // Base fields
     private BigDecimal amount;
-    private String bidderId;
+    private String bidderId = "npwhite";
     private String taskId;
     private BidStatus status;
 
