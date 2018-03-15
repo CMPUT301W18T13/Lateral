@@ -45,9 +45,9 @@ public class Task extends BaseEntity {
     /* Setters */
     public void setTitle(String newTitle) {
 
-        if (newTitle.length() > Constants.USERNAME_CHAR_LIMIT){
+        if (newTitle.length() > Constants.TITLE_CHAR_LIMIT){
             throw new IllegalArgumentException("Username exceeds "
-                    + Constants.USERNAME_CHAR_LIMIT + " characters");
+                    + Constants.TITLE_CHAR_LIMIT + " characters");
         }
         this.title = newTitle;
     }

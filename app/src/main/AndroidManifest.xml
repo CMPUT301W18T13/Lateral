@@ -55,7 +55,7 @@
             android:name=".activity.TaskViewActivity"
             android:label="Task" />
 
-        <activity android:name=".activity.AddTaskActivity" />
+        <activity android:name=".activity.AddEditTaskActivity" />
 
         <activity android:name=".activity.MyTaskViewActivity"></activity>
     </application>

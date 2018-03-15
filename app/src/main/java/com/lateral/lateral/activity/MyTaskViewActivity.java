@@ -3,6 +3,9 @@ package com.lateral.lateral.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -78,9 +81,34 @@ public class MyTaskViewActivity extends AppCompatActivity {
         if (task.getAssignedUserId() != null)
             task.setAssignedUser(userService.getById(task.getAssignedUserId()));
         return task;
+        // TODO: Handle null task
     }
 
     public void onSeeBidButtonClick(View v){
         // TODO: View bids in new activity
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.my_task_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.action_edit_task){
+            // Edit the task
+            Intent intent = new Intent(this, AddEditTaskActivity.class);
+            intent.putExtra(AddEditTaskActivity.EXTRA_TASK_ID, taskID);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == R.id.action_delete_task){
+            // TODO: Delete from elasticsearch
+            // TODO: Navigate back
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }
