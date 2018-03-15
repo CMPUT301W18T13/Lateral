@@ -81,6 +81,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
                 service.post(newTask);
             }
             else{
+                // TODO: Post or update???
                 service.post(editTask);
             }
 

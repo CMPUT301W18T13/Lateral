@@ -38,6 +38,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private TextView description;
     private TextView assignedToUsername;
 
+    TaskService taskService = new DefaultTaskService();
+    UserService userService = new DefaultUserService();
+    BidService bidService = new DefaultBidService();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,9 +77,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
     }
 
     private Task loadTask(String taskID){
-        TaskService taskService = new DefaultTaskService();
-        UserService userService = new DefaultUserService();
-        BidService bidService = new DefaultBidService();
         Task task = taskService.getById(taskID);
         task.setLowestBid(bidService.getLowestBid(task.getId()));
         if (task.getAssignedUserId() != null)
@@ -105,7 +106,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else if (item.getItemId() == R.id.action_delete_task){
-            // TODO: Delete from elasticsearch
+            taskService.delete(taskID);
             // TODO: Navigate back
         }
         return super.onOptionsItemSelected(item);
