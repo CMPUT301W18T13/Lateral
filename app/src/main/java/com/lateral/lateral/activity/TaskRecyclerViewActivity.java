@@ -24,10 +24,10 @@ import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
 public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
-    public RecyclerView.Adapter mAdapter;
-    public ArrayList<Task> matchingTasks;
+    private RecyclerView.Adapter mAdapter;
+    private ArrayList<Task> matchingTasks;
 
-
+    /*
     public RecyclerView.Adapter getmAdapter(){
         return this.mAdapter;
     }
@@ -43,6 +43,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     public void setMatchingTasks(ArrayList<Task> newMatchingTasks) {
         this.matchingTasks = newMatchingTasks;
     }
+    */
 
     protected abstract int getResourceLayoutID();
     protected abstract int getRecyclerListID();
