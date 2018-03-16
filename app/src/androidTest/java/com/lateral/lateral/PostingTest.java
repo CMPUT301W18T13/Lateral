@@ -24,9 +24,11 @@ public class PostingTest {
 
     @Test
     public void testPostTask() {
-        /*
+
         DefaultTaskService defaultTaskService = new DefaultTaskService();
-        Task testTask = new Task("Garbage Pickup", "Picking up roadside garbage, $15/h");
+        Task testTask;
+
+        testTask = new Task("Garbage Pickup", "Picking up roadside garbage, $15/h");
         defaultTaskService.post(testTask);
         testTask = new Task("Snow Removal", "Would like someone to help shovel my driveway");
         defaultTaskService.post(testTask);
@@ -34,7 +36,18 @@ public class PostingTest {
         defaultTaskService.post(testTask);
         testTask = new Task("Math Tutor needed", "I need someone to teach me math");
         defaultTaskService.post(testTask);
-        */
+        testTask = new Task("Dog walker", "I need a dog walker");
+        defaultTaskService.post(testTask);
+
+//        testTask = new Task("deliver food", "bring food to a place");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Volunteer job", "Work for a day as a volunteer");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Photographer needed", "Photographer needed for 2-day shoot");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Paint a picture", "Need an artist to make a painting for me");
+//        defaultTaskService.post(testTask);
+
 //        DefaultTaskService defaultTaskService = new DefaultTaskService();
 //        Task testTask = new Task("safe walker needed", "walker to walk people home");
 //        defaultTaskService.post(testTask);

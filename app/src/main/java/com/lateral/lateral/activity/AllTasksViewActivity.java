@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
@@ -19,6 +20,8 @@ import com.lateral.lateral.service.ItemClickSupport;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
+
+import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
 /*
 Searching interface info
@@ -38,6 +41,7 @@ public class AllTasksViewActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
+    //private int count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +65,10 @@ public class AllTasksViewActivity extends AppCompatActivity {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Log.d("ITEM CLICKED", "item " + position + " clicked");
+                        Log.d("ITEM CLICKED", "item " + (matchingTasks.get(position).getId()));
+                        Intent viewTaskIntent = new Intent(AllTasksViewActivity.this, TaskViewActivity.class);
+                        viewTaskIntent.putExtra(EXTRA_TASK_ID, (matchingTasks.get(position).getId()));
+                        startActivity(viewTaskIntent);
                     }
                 });
 
@@ -106,7 +113,7 @@ public class AllTasksViewActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             //Log.d("SEARCH", "Inside AllTasksViewActivity");
-            //Toast.makeText(getApplicationContext(), query, Toast.LENGTH_LONG).show();     //Toast for debugging
+            //Toast.makeText(getApplicationContext(), Integer.toString(count), Toast.LENGTH_LONG).show();     //Toast for debugging
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
             //Log.d("QUERY", "" + query);
@@ -117,6 +124,7 @@ public class AllTasksViewActivity extends AppCompatActivity {
                 " \"fields\" : [\"title^3\", \"description\"]}}}}";
              */
             returnMatchingTask(query);
+            //count ++;
 
 
         }

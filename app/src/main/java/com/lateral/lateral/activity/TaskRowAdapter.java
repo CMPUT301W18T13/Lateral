@@ -9,10 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.implementation.DefaultUserService;
+
 import java.util.ArrayList;
 
 public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHolder> {
     private ArrayList<Task> mTasks;
+    DefaultUserService defaultUserService = new DefaultUserService();
 
 
     // Provide a reference to the views for each data item
@@ -57,7 +61,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // need to fill more properly once big/user objects implemented on elastic search
         Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
-        holder.tvUsername.setText(task.getRequestingUserId());
+        holder.tvUsername.setText((defaultUserService.getUserByID(task.getRequestingUserId())).getUsername());
         holder.tvDate.setText((task.getDate()).toString() );
     }
 

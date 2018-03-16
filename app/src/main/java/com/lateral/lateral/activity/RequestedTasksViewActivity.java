@@ -23,11 +23,13 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
+import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
+
 
 public class RequestedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-    private String thisUserID = "npwhite";          // for testing
+    private String thisUserID = "AWIjITT14-hmkvYTCt4N";          // for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,9 @@ public class RequestedTasksViewActivity extends AppCompatActivity {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Log.d("ITEM CLICKED", "AN ITEM WAS CLICKED");
+                        Intent viewTaskIntent = new Intent(RequestedTasksViewActivity.this, MyTaskViewActivity.class);
+                        viewTaskIntent.putExtra(EXTRA_TASK_ID, (matchingTasks.get(position).getId()));
+                        startActivity(viewTaskIntent);
                     }
                 });
 

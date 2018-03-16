@@ -3,6 +3,7 @@ package com.lateral.lateral.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ public class TaskViewActivity extends AppCompatActivity {
         // Get the task id
         Intent taskIntent = getIntent();
         this.taskID = taskIntent.getStringExtra(EXTRA_TASK_ID);
+        //Log.d("TASKVIEWACTIVITY", "id = " + this.taskID);
         // TODO: Handle null id
 
         currentBid = findViewById(R.id.task_view_current_bid);
@@ -57,8 +59,9 @@ public class TaskViewActivity extends AppCompatActivity {
 
         Task task = loadTask(taskID);
 
-        BigDecimal lowest = task.getLowestBid().getAmount();
-        currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
+        //BigDecimal lowest = task.getLowestBid().getAmount();
+        //currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
+        //currentBid.setText("test empty");
         title.setText(task.getTitle());
         username.setText(task.getRequestingUser().getUsername());
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);

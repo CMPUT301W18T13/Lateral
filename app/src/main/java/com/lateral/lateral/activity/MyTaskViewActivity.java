@@ -3,6 +3,7 @@ package com.lateral.lateral.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -50,12 +51,13 @@ public class MyTaskViewActivity extends AppCompatActivity {
         // Get the task id
         Intent taskIntent = getIntent();
         this.taskID = taskIntent.getStringExtra(EXTRA_TASK_ID);
+        Log.d("MYTASKVIEWACTIVITY", "id = " + this.taskID);
         // TODO: Handle null id
 
-        currentBid = findViewById(R.id.task_view_current_bid);
-        title = findViewById(R.id.task_view_title);
-        date = findViewById(R.id.task_view_date);
-        description = findViewById(R.id.task_view_description);
+        currentBid = findViewById(R.id.my_task_view_current_bid);
+        title = findViewById(R.id.my_task_view_title);
+        date = findViewById(R.id.my_task_view_date);
+        description = findViewById(R.id.my_task_view_description);
         assignedToUsername = findViewById(R.id.my_text_view_username);
     }
 
@@ -64,9 +66,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
         super.onStart();
 
         Task task = loadTask(taskID);
-
-        BigDecimal lowest = task.getLowestBid().getAmount();
-        currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
+//        BigDecimal lowest = task.getLowestBid().getAmount();
+//        currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
         title.setText(task.getTitle());
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
@@ -78,9 +79,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
     private Task loadTask(String taskID){
         Task task = taskService.getById(taskID);
+        //task.setLowestBid(bidService.getLowestBid(task.getId()));
         task.setLowestBid(bidService.getLowestBid(task.getId()));
-        if (task.getAssignedUserId() != null)
+        if (task.getAssignedUserId() != null) {
             task.setAssignedUser(userService.getById(task.getAssignedUserId()));
+        }
         return task;
         // TODO: Handle null task
     }
