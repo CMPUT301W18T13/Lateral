@@ -26,38 +26,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".activity.SignUpActivity" />
-
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
-            android:exported="true"
-            android:launchMode="singleTop"
             android:name=".activity.AllTasksViewActivity"
+            android:exported="true"
             android:label="@string/title_activity_all_tasks_view"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
 
-            <meta-data android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
-
         <activity
             android:name=".activity.TaskViewActivity"
             android:label="Task" />
-
         <activity android:name=".activity.AddEditTaskActivity" />
-
-        <activity android:name=".activity.MyTaskViewActivity"></activity>
+        <activity android:name=".activity.MyTaskViewActivity" />
     </application>
 
 </manifest>

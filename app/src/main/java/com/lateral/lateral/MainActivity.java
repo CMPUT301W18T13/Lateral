@@ -67,8 +67,10 @@ public class MainActivity extends AppCompatActivity
     // handles onClick events
     @Override
     public void onClick(View view) {
-
-        switch (view.getId()) {
+        BidDialog cdd=new BidDialog(MainActivity.this);
+        cdd.show();
+        // TODO: uncomment this
+        /*switch (view.getId()) {
             case R.id.ViewRequestedTasksButton:
                 break;
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.ViewAssignedTasksButton:
                 break;
-        }
+        }*/
 
     }
 
