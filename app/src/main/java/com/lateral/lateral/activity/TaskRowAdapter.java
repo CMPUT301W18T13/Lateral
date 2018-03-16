@@ -61,7 +61,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // need to fill more properly once big/user objects implemented on elastic search
         Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
-        //TODO error handleb
+        //TODO error handle
         holder.tvUsername.setText((defaultUserService.getUserByID(task.getRequestingUserId())).getUsername());
         holder.tvDate.setText((task.getDate()).toString() );
     }
