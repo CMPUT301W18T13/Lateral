@@ -28,16 +28,16 @@ public class PostingTest {
         DefaultTaskService defaultTaskService = new DefaultTaskService();
         Task testTask;
 
-        testTask = new Task("Garbage Pickup", "Picking up roadside garbage, $15/h");
-        defaultTaskService.post(testTask);
-        testTask = new Task("Snow Removal", "Would like someone to help shovel my driveway");
-        defaultTaskService.post(testTask);
-        testTask = new Task("Babysitter Wanted", "URGENT: need a babysitter for tonight");
-        defaultTaskService.post(testTask);
-        testTask = new Task("Math Tutor needed", "I need someone to teach me math");
-        defaultTaskService.post(testTask);
-        testTask = new Task("Dog walker", "I need a dog walker");
-        defaultTaskService.post(testTask);
+//        testTask = new Task("Garbage Pickup", "Picking up roadside garbage");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Snow Removal", "Would like someone to help shovel my driveway");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Babysitter Wanted", "URGENT: need a babysitter for tonight");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Math Tutor needed", "I need someone to teach me math");
+//        defaultTaskService.post(testTask);
+//        testTask = new Task("Dog walker", "I need a dog walker");
+//        defaultTaskService.post(testTask);
 
 //        testTask = new Task("deliver food", "bring food to a place");
 //        defaultTaskService.post(testTask);
@@ -65,10 +65,12 @@ public class PostingTest {
 
     @Test
     public void testCreateUser() {
-        //User testUser = new User("tlaz", "555-555-5555", "email@gmail.ca", "idkl");
-        //DefaultUserService defaultUserService = new DefaultUserService();
-        //defaultUserService.post(testUser);
-
+//        User testUser;
+//        DefaultUserService defaultUserService = new DefaultUserService();
+//        testUser = new User("tlaz", "555-555-5555", "email@gmail.ca", "idkl");
+//        defaultUserService.post(testUser);
+//        testUser = new User("npwhite", "555-555-5555", "coolguy@gmail.ca", "bhbt");
+//        defaultUserService.post(testUser);
     }
 
     @Test

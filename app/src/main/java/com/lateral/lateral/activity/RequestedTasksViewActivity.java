@@ -29,7 +29,7 @@ import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 public class RequestedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-    private String thisUserID = "AWIjITT14-hmkvYTCt4N";          // for testing
+    private String thisUserID = "AWItlpZ842PX8bQQT0oq";          // for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
