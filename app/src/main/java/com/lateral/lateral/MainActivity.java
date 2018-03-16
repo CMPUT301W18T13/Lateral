@@ -38,7 +38,8 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public static final String CURRENT_USER_ID= "AWItlpRj42PX8bQQT0op";
+
+    public static final String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +57,6 @@ public class MainActivity extends AppCompatActivity
 
         Button ViewAssignedTasksButton = findViewById(R.id.ViewAssignedTasksButton);
         ViewAssignedTasksButton.setOnClickListener(this);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

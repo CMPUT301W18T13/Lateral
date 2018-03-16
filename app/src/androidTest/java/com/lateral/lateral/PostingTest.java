@@ -1,5 +1,6 @@
 package com.lateral.lateral;
 
+import android.support.test.espresso.base.Default;
 import android.support.test.runner.AndroidJUnit4;
 import android.util.Log;
 
@@ -25,8 +26,8 @@ public class PostingTest {
     @Test
     public void testPostTask() {
 
-        DefaultTaskService defaultTaskService = new DefaultTaskService();
-        Task testTask;
+//        DefaultTaskService defaultTaskService = new DefaultTaskService();
+//        Task testTask;
 
 //        testTask = new Task("Garbage Pickup", "Picking up roadside garbage");
 //        defaultTaskService.post(testTask);
@@ -79,5 +80,13 @@ public class PostingTest {
 //        DefaultBidService defaultBidService = new DefaultBidService();
 //        returnedBids = defaultBidService.getAllBidsByTaskID("AWIn9KMR-p3BIk3Z2HhS");
 //        assertEquals("tlaz", returnedBids.get(0).getBidder());
+    }
+
+    @Test
+    public void testGetSaltAndHash() {
+        String mUsername = "tlaz";
+        DefaultUserService defaultUserService = new DefaultUserService();
+        String result = defaultUserService.getSaltAndHash(mUsername);
+        assertEquals("idkl", result);
     }
 }
