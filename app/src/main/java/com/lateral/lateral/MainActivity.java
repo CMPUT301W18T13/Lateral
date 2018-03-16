@@ -38,7 +38,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-    public static final String CURRENT_USER_ID= "AWItlpZ842PX8bQQT0oq";
+    public static final String CURRENT_USER_ID= "AWItlpRj42PX8bQQT0op";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
