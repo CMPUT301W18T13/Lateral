@@ -23,13 +23,14 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
+import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
 
 public class RequestedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-    private String thisUserID = "AWItlpZ842PX8bQQT0oq";          // for testing
+    private String thisUserID = LOGGED_IN_USER;          // for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,17 @@ public class RequestedTasksViewActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new TaskRowAdapter(matchingTasks);
         mRecyclerView.setAdapter(mAdapter);
+
+
+        // Move to create new task activity when fab pressed
+        FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
+        addNewTaskFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent AddTaskIntent = new Intent(RequestedTasksViewActivity.this, AddEditTaskActivity.class);
+                startActivity(AddTaskIntent);
+            }
+        });
 
         // display requested tasks from this user
         returnMatchingTasks(thisUserID);

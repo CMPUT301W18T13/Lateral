@@ -15,7 +15,7 @@ public class Task extends BaseEntity {
     private Date date;
     private int status;                 // may change depending on how we store status
     private String description;
-    private String requestingUserId = "AWItlpZ842PX8bQQT0oq"; // tyler AWItlpRj42PX8bQQT0op // nick AWItlpZ842PX8bQQT0oq
+    private String requestingUserId; // tyler AWItlpRj42PX8bQQT0op // nick AWItlpZ842PX8bQQT0oq
     private String assignedUserId;
 
     // Extra fields
