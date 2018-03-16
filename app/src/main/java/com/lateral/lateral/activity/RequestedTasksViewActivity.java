@@ -23,13 +23,14 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
+import static com.lateral.lateral.MainActivity.CURRENT_USER_ID;
 import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
 
 public class RequestedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
-    private String thisUserID = "AWItlpZ842PX8bQQT0oq";          // for testing
+    private String thisUserID = CURRENT_USER_ID;          // for testing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
