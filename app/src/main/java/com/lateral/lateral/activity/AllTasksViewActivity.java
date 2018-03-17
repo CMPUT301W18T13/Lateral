@@ -9,10 +9,6 @@ import android.view.Menu;
 import com.lateral.lateral.R;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
-import java.util.ArrayList;
-
-import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
-
 /*
 Searching interface info
 https://developer.android.com/guide/topics/search/search-dialog.html#UsingSearchWidget
