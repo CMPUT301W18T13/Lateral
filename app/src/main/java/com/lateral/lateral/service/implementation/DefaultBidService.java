@@ -23,7 +23,9 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
         return gson.fromJson(get(json), Bid.class);
     }
 
-    // TODO last thing I was doing, does not work
+    /*
+    get all bids with specified taskID
+     */
     public ArrayList<Bid> getAllBidsByTaskID(String taskID) {
         String json = "{\"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();

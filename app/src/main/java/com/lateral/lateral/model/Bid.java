@@ -10,7 +10,7 @@ public class Bid extends BaseEntity {
     // TODO: Need to add more getters/setters
     // Base fields
     private BigDecimal amount;
-    private String bidderId = "npwhite";
+    private String bidderId;
     private String taskId;
     private BidStatus status;
 
@@ -21,7 +21,7 @@ public class Bid extends BaseEntity {
     // Private constructor for Jest to use
     private Bid(){}
 
-    public Bid (BigDecimal amount, String taskId){
+    public Bid (BigDecimal amount, String taskId, String bidderId){
         if (amount.compareTo(new BigDecimal(Constants.MIN_BID_AMOUNT)) < 0){
             throw new IllegalArgumentException("Amount is below " + Constants.MIN_BID_AMOUNT);
         }
@@ -29,6 +29,7 @@ public class Bid extends BaseEntity {
         this.amount = amount;
         this.status = BidStatus.POSTED;
         this.taskId = taskId;
+        this.bidderId = bidderId;
     }
 
     public BigDecimal getAmount(){ return this.amount; }

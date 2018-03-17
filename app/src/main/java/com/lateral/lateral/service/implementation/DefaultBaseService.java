@@ -263,7 +263,10 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
-    // asynctask to delete an item by id
+    /*
+     asynctask to delete an item by id
+      */
+    // TODO allow multidelete for faster mass deletion
     public static class DeleteData extends AsyncTask<String, Void, String> {
         String idx;
 
@@ -276,6 +279,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... obj) {
             verifySettings();
 
+                //TODO change to a for loop for mulidelete
                 Delete delete = new Delete.Builder(obj[0]).index("cmput301w18t13").type(idx).build();
 
                 try {
