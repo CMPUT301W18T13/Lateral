@@ -24,6 +24,8 @@ import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
 public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
+    // test
+
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
 
