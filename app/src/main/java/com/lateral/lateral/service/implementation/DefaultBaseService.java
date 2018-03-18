@@ -94,6 +94,22 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
+    public void update(T obj){
+        String ElasticSearchType = getElasticSearchType();
+        UpdateData updateData = new UpdateData(ElasticSearchType, obj.getId());
+        String id = null;
+
+        String json = gson.toJson(obj);
+
+        updateData.execute("{\"doc\": " + json + "}");
+
+        try{
+            id = updateData.get();
+        } catch (Exception e){
+            Log.i("Error", "Failed to get task from async object");
+        }
+    }
+
     /*
     function to set the id of an object into its source for retrieval/deserialization purposes
      */

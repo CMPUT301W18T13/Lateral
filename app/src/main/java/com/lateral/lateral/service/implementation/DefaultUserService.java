@@ -25,6 +25,14 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
     }
 
     /*
+    get user by user id (the one created by elastic search)
+     */
+    public User getUserByID(String ID){
+        String json = "{\"query\": {\"match\": {\"id\": \"" + ID + "\"}}}";
+        return gson.fromJson(get(json), User.class);
+    }
+
+    /*
      retrieve a users salt and hash
       */
     public String getSaltAndHash(String username){

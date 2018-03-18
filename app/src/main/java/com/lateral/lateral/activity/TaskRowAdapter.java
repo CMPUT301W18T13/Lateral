@@ -1,6 +1,7 @@
 package com.lateral.lateral.activity;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,16 +9,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.implementation.DefaultUserService;
+
 import java.util.ArrayList;
 
 public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHolder> {
     private ArrayList<Task> mTasks;
+    DefaultUserService defaultUserService = new DefaultUserService();
 
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
         TextView tvTitle;
@@ -34,6 +39,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             tvDate = itemView.findViewById(R.id.dateTextView);
             tvCurBid = itemView.findViewById(R.id.bidTextView);
         }
+
     }
 
     public TaskRowAdapter(ArrayList<Task> mTasks) {
@@ -55,7 +61,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // need to fill more properly once big/user objects implemented on elastic search
         Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
-        holder.tvUsername.setText(task.getRequestingUserId());
+        //TODO error handle
+        holder.tvUsername.setText((defaultUserService.getUserByID(task.getRequestingUserId())).getUsername());
         holder.tvDate.setText((task.getDate()).toString() );
     }
 

@@ -21,6 +21,10 @@ import android.view.MenuItem;
 import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
+import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
+import com.lateral.lateral.activity.MyTaskViewActivity;
+import com.lateral.lateral.activity.RequestedTasksViewActivity;
+import com.lateral.lateral.activity.TaskViewActivity;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
@@ -35,6 +39,9 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+
+    public static final String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +60,6 @@ public class MainActivity extends AppCompatActivity
         Button ViewAssignedTasksButton = findViewById(R.id.ViewAssignedTasksButton);
         ViewAssignedTasksButton.setOnClickListener(this);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -67,11 +73,18 @@ public class MainActivity extends AppCompatActivity
     // handles onClick events
     @Override
     public void onClick(View view) {
-        BidDialog cdd=new BidDialog(MainActivity.this);
-        cdd.show();
-        // TODO: uncomment this
+        // TODO: >>>>>>>>>>test>>>>>>>>>>>>
+        Intent intent = new Intent(this, MyTaskViewActivity.class);
+        startActivity(intent);
+
+        //BidDialog cdd=new BidDialog(MainActivity.this);
+        //cdd.show();
+        // TODO: <<<<<<<<<<test<<<<<<<<<<<<
+        // TODO: vvvvvv uncomment out vvvvvv
         /*switch (view.getId()) {
             case R.id.ViewRequestedTasksButton:
+                Intent ViewRequestedTasksIntent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
+                startActivity(ViewRequestedTasksIntent);
                 break;
 
             case R.id.ViewAllTasksButton:
@@ -80,6 +93,8 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.ViewAssignedTasksButton:
+                Intent AssignedAndBiddedTasksViewActivity = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
+                startActivity(AssignedAndBiddedTasksViewActivity);
                 break;
         }*/
 

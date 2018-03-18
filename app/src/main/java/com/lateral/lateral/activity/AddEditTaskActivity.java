@@ -75,14 +75,18 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     public void onAddEditConfirmClick(View v){
         try{
+            // TODO: Trim the title and desc??
+            String title = this.title.getText().toString();
+            String desc = this.description.getText().toString();
+
             if (editTask == null){
-                // TODO: Trim the title and desc??
-                Task newTask = new Task(title.getText().toString(), description.getText().toString());
+                Task newTask = new Task(title, desc);
                 service.post(newTask);
             }
             else{
-                // TODO: Post or update???
-                service.post(editTask);
+                editTask.setTitle(title);
+                editTask.setDescription(desc);
+                // TODO: Need to call service.update()
             }
 
             // TODO: Navigate back on success

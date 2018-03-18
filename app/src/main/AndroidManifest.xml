@@ -33,7 +33,23 @@
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Just added this -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activity.AllTasksViewActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AssignedAndBiddedTasksViewActivity"
+            android:label="@string/title_activity_assigned_and_bidded_tasks_view"
+            android:theme="@style/AppTheme.NoActionBar">
+
+            <!-- Just added this -->
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value=".activity.AllTasksViewActivity" />
+        </activity>
         <activity
             android:name=".activity.AllTasksViewActivity"
             android:exported="true"
@@ -42,6 +58,8 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
             <meta-data
@@ -53,6 +71,11 @@
             android:label="Task" />
         <activity android:name=".activity.AddEditTaskActivity" />
         <activity android:name=".activity.MyTaskViewActivity" />
+        <activity android:name=".activity.BidListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MyTaskViewActivity"/>
+        </activity>
     </application>
 
 </manifest>

@@ -40,6 +40,14 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
+    public ArrayList<Task> getAllTasksByRequesterID(String requesterID){
+        String json = "{\"query\":{\"match\":{\"requestingUserId\":{\"query\":\"" + requesterID + "\"}}}}";
+        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+
+        return gson.fromJson("[" + get(json) + "]", listType);
+    }
+
     //TODO delete all bids asssociated with a deleted task
+
 }
 

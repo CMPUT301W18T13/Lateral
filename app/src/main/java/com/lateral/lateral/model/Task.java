@@ -15,8 +15,7 @@ public class Task extends BaseEntity {
     private Date date;
     private int status;                 // may change depending on how we store status
     private String description;
-    private String requestingUserId;
-
+    private String requestingUserId; // tyler AWItlpRj42PX8bQQT0op // nick AWItlpZ842PX8bQQT0oq
     private String assignedUserId;
 
     // Extra fields
@@ -93,6 +92,13 @@ public class Task extends BaseEntity {
 
     public ArrayList<Bid> getBids() {
         return this.bids;
+    }
+
+    public void addBid(Bid bid){
+        if (bids == null) {
+            bids = new ArrayList<>();
+        }
+        bids.add(bid);
     }
 
     public User getRequestingUser() {

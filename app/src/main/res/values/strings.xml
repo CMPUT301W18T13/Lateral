@@ -30,6 +30,7 @@
     <string name="signup_link_prompt"><u>Don\'t have an account? Sign up!</u></string>
     <string name="confirm">Confirm</string>
     <string name="title_activity_requested_tasks_view">RequestedTasksViewActivity</string>
+    <string name="title_activity_assigned_and_bidded_tasks_view">AssignedAndBiddedTasksViewActivity</string>
     <string name="filter_text">Filter</string>
     <string name="title_activity_all_tasks_view">AllTasksViewActivity</string>
     <string name="search">Search</string>
@@ -67,4 +68,12 @@
     <string name="bid_dialog_bid_button_text">Bid</string>
     <string name="bid_dialog_cancel_button_text">Cancel</string>
 
+    <!-- Strings for Bid Card -->
+    <string name="bid_card_accept_button">Accept</string>
+    <string name="bid_card_decline_button">Decline</string>
+    <string name="bid_card_username_text_field">Username: %1s</string>
+    <string name="bid_card_amount_text_field">Amount: $%1s</string>
+
+    <!-- Project wide strings-->
+    <string name="dollar_amount_display">$%1$s</string>
 </resources>

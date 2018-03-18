@@ -1,8 +1,10 @@
 package com.lateral.lateral.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -10,6 +12,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.BidEvent;
+import com.lateral.lateral.model.BidList;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
@@ -25,11 +30,17 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+import static com.lateral.lateral.model.BidEvent.*;
+
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    public static final String BID_EVENT = "com.lateral.lateral.BID_EVENT";
+    public static final String ACCEPTED_BID_ID = "com.lateral.lateral.ACCEPTED_BID_ID";
 
     private String taskID;
+
+    private Task task;
 
     // UI elements
     private TextView currentBid;
@@ -38,9 +49,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private TextView description;
     private TextView assignedToUsername;
 
-    TaskService taskService = new DefaultTaskService();
-    UserService userService = new DefaultUserService();
-    BidService bidService = new DefaultBidService();
+    private TaskService taskService = new DefaultTaskService();
+    private UserService userService = new DefaultUserService();
+    private BidService bidService = new DefaultBidService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +61,13 @@ public class MyTaskViewActivity extends AppCompatActivity {
         // Get the task id
         Intent taskIntent = getIntent();
         this.taskID = taskIntent.getStringExtra(EXTRA_TASK_ID);
+        Log.d("MYTASKVIEWACTIVITY", "id = " + this.taskID);
         // TODO: Handle null id
 
-        currentBid = findViewById(R.id.task_view_current_bid);
-        title = findViewById(R.id.task_view_title);
-        date = findViewById(R.id.task_view_date);
-        description = findViewById(R.id.task_view_description);
+        currentBid = findViewById(R.id.my_task_view_current_bid);
+        title = findViewById(R.id.my_task_view_title);
+        date = findViewById(R.id.my_task_view_date);
+        description = findViewById(R.id.my_task_view_description);
         assignedToUsername = findViewById(R.id.my_text_view_username);
     }
 
@@ -63,10 +75,17 @@ public class MyTaskViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        Task task = loadTask(taskID);
+        //TODO: <<<<<<<< TEST <<<<<<<<
+        String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
+                "You have a green light to use deadly force. Canada future will be in your hands";
+        task = new Task("Secure The Hostages", des);
+        User user = new User("Malcolm", "78012345678", "m@gmail.com", "bla");
+        task.setRequestingUser(user);
+        //TODO: <<<<<<<< TEST <<<<<<<<
 
-        BigDecimal lowest = task.getLowestBid().getAmount();
-        currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
+        // task = loadTask(taskID); //TODO: uncomment
+//        BigDecimal lowest = task.getLowestBid().getAmount();
+//        currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
         title.setText(task.getTitle());
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
@@ -78,15 +97,19 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
     private Task loadTask(String taskID){
         Task task = taskService.getById(taskID);
+        //task.setLowestBid(bidService.getLowestBid(task.getId()));
         task.setLowestBid(bidService.getLowestBid(task.getId()));
-        if (task.getAssignedUserId() != null)
+        if (task.getAssignedUserId() != null) {
             task.setAssignedUser(userService.getById(task.getAssignedUserId()));
+        }
         return task;
         // TODO: Handle null task
     }
 
     public void onSeeBidButtonClick(View v){
-        // TODO: View bids in new activity
+        Intent intent = new Intent(this, BidListActivity.class);
+        intent.putExtra(BidListActivity.TASK_ID, taskID);
+        startActivityForResult(intent, 1);
     }
 
 
@@ -110,6 +133,25 @@ public class MyTaskViewActivity extends AppCompatActivity {
             // TODO: Navigate back
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("Test", "Final test");
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK ){
+            //int test = data.getSerializableExtra(BID_EVENT);
+            BidEvent bidEvent = (BidEvent) data.getSerializableExtra(BID_EVENT);
+            if (bidEvent == BID_DECLINED) {
+                //Check if the lowest bid has been declined
+                task.setLowestBid(bidService.getLowestBid(task.getId()));
+                // TODO: handle null value
+            } else if (bidEvent == BID_ACCEPTED){
+                String bidID = data.getStringExtra(ACCEPTED_BID_ID);
+                //Tyler TODO: getBidByBidId(String bidID);
+                //Devon TODO: handle that a bid has been accepted ---------------------------------------------
+            }
+
+        }
     }
 
 }

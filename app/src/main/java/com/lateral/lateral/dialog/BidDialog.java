@@ -1,4 +1,4 @@
-package com.lateral.lateral;
+package com.lateral.lateral.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,35 +11,45 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.lateral.lateral.R;
+import com.lateral.lateral.model.Bid;
+
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 import static java.lang.Character.isDigit;
 
-//TODO: have the task view activity call this
-//TODO: set functionality of buttons
+
+//TODO: change input validation
 
 /*Heavy influence from https://stackoverflow.com/a/13342157/5262028*/
 public class BidDialog extends Dialog implements android.view.View.OnClickListener {
     private boolean defaultAmountCleared = false;
+    private boolean dismissed = false;
     private Button bidButton;
-    private Button cancel_button;
+    private Button cancelButton;
     private Activity activity;
     private EditText amountPlainText;
+    private Bid newBid;
 
     public BidDialog(Activity activity) {
         super(activity);
         this.activity = activity;
     }
 
+    //TODO: change to onStart()
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        newBid = null;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.bid_dialog);
         bidButton = (Button) findViewById(R.id.bid_btn);
-        cancel_button = (Button) findViewById(R.id.cancel_btn);
+        cancelButton = (Button) findViewById(R.id.cancel_btn);
         bidButton.setOnClickListener(this);
-        cancel_button.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
 
         amountPlainText = findViewById(R.id.amount_pt);
         amountPlainText.setOnClickListener(this);
@@ -122,10 +132,15 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bid_btn:
-                dismiss();
+                createNewBid();
+                if (newBid != null) {
+                    dismiss();
+                    dismissed = true;
+                }
                 break;
             case R.id.cancel_btn:
                 dismiss();
+                dismissed = true;
                 break;
             case R.id.amount_pt:
                 if (!defaultAmountCleared){
@@ -138,14 +153,20 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         }
     }
 
-    public void CreateBid(){
+    public void createNewBid(){
         String[] newValueSplit = amountPlainText.getText().toString().split("\\.");
         if (amountPlainText.getText().toString().split("\\.").length < 0) {
-            return;
+
         }
 
-
+        BigDecimal amount = new BigDecimal(amountPlainText.getText().toString());
+        amount = amount.setScale(2, RoundingMode.CEILING); //Needed to keep precision
+        newBid = new Bid(amount);
     }
 
+    public Bid getNewBid(){
+        return newBid;
+    }
 
+    public boolean Dismissed() {return dismissed; }
 }
