@@ -64,5 +64,20 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         delete(taskID);
     }
 
+    public ArrayList<Task> getAllTasksByDistance(Double latitude, Double longitude, Double distance){
+        String json = "{" +
+                "\"query\" : { " +
+                "\"filtered\" : { " +
+                "\"filter\" : { " +
+                "\"geo_distance\" : { " +
+                "\"distance\": \"" + Double.toString(distance) + "km\", " +
+                "\"geo_location\" : { " +
+                "\"lat\": " + Double.toString(latitude) + "," +
+                "\"lon\": " + Double.toString(longitude) + "}}}}}}";
+        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+
+        return gson.fromJson("[" + get(json) + "]", listType);
+    }
+
 }
 

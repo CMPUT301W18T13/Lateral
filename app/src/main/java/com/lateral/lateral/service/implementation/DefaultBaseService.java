@@ -82,7 +82,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
         String json = gson.toJson(obj);
 
-
         postData.execute(json);
         try{
             id = postData.get();

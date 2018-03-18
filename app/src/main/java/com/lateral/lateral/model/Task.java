@@ -17,6 +17,7 @@ public class Task extends BaseEntity {
     private String description;
     private String requestingUserId; // tyler AWItlpRj42PX8bQQT0op // nick AWItlpZ842PX8bQQT0oq
     private String assignedUserId;
+    private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
 
     // Extra fields
     private transient User requestingUser;
@@ -26,6 +27,8 @@ public class Task extends BaseEntity {
 
     // TODO: Implement location variable
     // TODO: Implement photo storage allocation
+    private transient double latitude;
+    private transient double longitude;
     //
     // Private constructor for Jest to use
     private Task(){}
@@ -39,7 +42,6 @@ public class Task extends BaseEntity {
         this(title);
         this.setDescription(description);
     }
-
 
     /* Setters */
     public void setTitle(String newTitle) {
@@ -132,5 +134,12 @@ public class Task extends BaseEntity {
 
     public void setAssignedUserId(String assignedUserId) {
         this.assignedUserId = assignedUserId;
+    }
+
+    // set geolocation of this task for searching
+    public void setLocation(double latitude, double longitude){
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
     }
 }

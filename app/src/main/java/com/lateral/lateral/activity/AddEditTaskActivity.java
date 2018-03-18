@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -16,6 +17,7 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
+import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 
 public class AddEditTaskActivity extends AppCompatActivity {
 
@@ -80,7 +82,11 @@ public class AddEditTaskActivity extends AppCompatActivity {
             String desc = this.description.getText().toString();
 
             if (editTask == null){
+                // I have posted an object with lat and long, posted by user set in LOGGED_IN_USER
+                // can be changed to reflect design
                 Task newTask = new Task(title, desc);
+                newTask.setRequestingUserId(LOGGED_IN_USER);
+                newTask.setLocation(53.644250, -113.652206);
                 service.post(newTask);
             }
             else{
