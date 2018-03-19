@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.service.implementation;
 
 import android.util.Log;
@@ -16,24 +22,28 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-failure to return any results will always return null, so check accordingly
+
+/**
+ * Service for interfacing with Tasks on the ElasticSearch server
+ * Note; any failure to return results will return null, so check accordingly
  */
-
 public class DefaultTaskService extends DefaultBaseService<Task> implements TaskService {
-
-    /*
-     return task by title
-      */
+    /**
+     * Returns the Task based on the title
+     * @param title Title to use in query
+     * @return The associated task if it exists; null otherwise
+     */
     public Task getTaskByTitle(String title){
         String json = "{\"query\": {\"match\": {\"title\": \"" + title + "\"}}}";
         return gson.fromJson(get(json), Task.class);
     }
 
-    /*
-     return a list of tasks matching the supplied query keywords
-      */
 
+    /**
+     * Returns the list of tasks matching the supplied query keywords
+     * @param query The keywords to get tasks from
+     * @return List of tasks matching query
+     */
     public ArrayList<Task> getAllTasks(String query){
         String json = "{\"query\": {\"match\": {\"title\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
@@ -41,6 +51,11 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
+    /**
+     * Returns the list of all the tasks requested by a certain user
+     * @param requesterID The ID of the requester
+     * @return The list associated tasks
+     */
     public ArrayList<Task> getAllTasksByRequesterID(String requesterID){
         String json = "{\"query\":{\"match\":{\"requestingUserId\":{\"query\":\"" + requesterID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
@@ -50,6 +65,11 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
     /*
     deletes task and all associated bids
+     */
+
+    /**
+     * Deletes the task and all associated bids
+     * @param taskID The ID of the task
      */
     public void deleteTask(String taskID){
         DefaultBidService defaultBidService = new DefaultBidService();
@@ -64,6 +84,13 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         delete(taskID);
     }
 
+    /**
+     * Gets all the tasks within a certain distance of given coordinates
+     * @param latitude Latitude of specified location
+     * @param longitude Longitude of specified location
+     * @param distance Distance from specified location
+     * @return The list of all Tasks within distance of location
+     */
     public ArrayList<Task> getAllTasksByDistance(Double latitude, Double longitude, Double distance){
         String json = "{" +
                 "\"query\" : { " +

@@ -10,4 +10,8 @@ public final class Constants {
     public static int PHOTOGRAPH_MAX_BYTES = 65536;
 
     public static int MIN_BID_AMOUNT = 0;
+
+    // Warning - changing these will make the currently stored passwords invalid!
+    public static int PBKDF2_ITERATIONS_COUNT = 10000;
+    public static int PBKDF2_KEY_LENGTH = 256;
 }

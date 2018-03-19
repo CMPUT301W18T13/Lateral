@@ -27,13 +27,11 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import static com.lateral.lateral.service.UserLoginTools.hashPassword;
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
 public class LoginActivity extends AppCompatActivity{
 
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
+    // Keep track of the login task to ensure we can cancel it if requested.
     private UserLoginTask mAuthTask = null;
 
     // UI references.
@@ -42,6 +40,10 @@ public class LoginActivity extends AppCompatActivity{
     private View mProgressView;
     private View mLoginFormView;
 
+    /**
+     * Called when the activity is started
+     * @param savedInstanceState The saved instance to run from
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +86,7 @@ public class LoginActivity extends AppCompatActivity{
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
@@ -144,16 +146,30 @@ public class LoginActivity extends AppCompatActivity{
         }
     }
 
+
+    /**
+     * Validates whether the username matches the complexity requirements
+     * @param username Username to validate
+     * @return True if it matches requirements; false otherwise
+     */
     private boolean isUsernameValid(String username) {
-        return username.length() > 4;
+        return username.length() >= 4;
     }
 
+
+    /**
+     * Validates whether the password matches the complexity requirements
+     * @param password Password to validate
+     * @return True if it matches requirements; false otherwise
+     */
     private boolean isPasswordValid(String password) {
-        return password.length() > 4;
+        return password.length() >= 4;
     }
+
 
     /**
      * Shows the progress UI and hides the login form.
+     * @param show Whether to show or hide the progress wheel
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
@@ -192,12 +208,23 @@ public class LoginActivity extends AppCompatActivity{
         private final String mSaltAndHash;
         private final String mId;
 
+        /**
+         * Constructor for the UserLoginTask
+         * @param password The typed password
+         * @param saltAndHash The stored salt, and hashed password, concatenated by ':'
+         * @param id The corresponding user's ID
+         */
         UserLoginTask(String password, String saltAndHash, String id) {
             mPassword = password;
             mSaltAndHash = saltAndHash;
             mId = id;
         }
 
+        /**
+         * Done in the background during AsyncTask
+         * @param params parameters to take - should be void
+         * @return true if successful; false otherwise
+         */
         @Override
         protected Boolean doInBackground(Void... params) {
 
@@ -210,9 +237,14 @@ public class LoginActivity extends AppCompatActivity{
 
                 return storedPassword.equals(hashedEnteredPassword);
             }
+            Log.i("UserLoginTask", "");
             return false;
         }
 
+        /**
+         * Called after the background task is done - starts off the main instance
+         * @param success Taken from the result of doInBackground
+         */
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
@@ -228,6 +260,9 @@ public class LoginActivity extends AppCompatActivity{
             }
         }
 
+        /**
+         * Called if method is cancelled
+         */
         @Override
         protected void onCancelled() {
             mAuthTask = null;
