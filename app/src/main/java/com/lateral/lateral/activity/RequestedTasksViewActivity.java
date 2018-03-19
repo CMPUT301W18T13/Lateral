@@ -38,7 +38,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
     @Override
     protected Class targetClass() {
-        return TaskViewActivity.class;
+        return MyTaskViewActivity.class;
     }
 
 

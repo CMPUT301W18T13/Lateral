@@ -9,19 +9,18 @@ import java.util.Date;
 @ElasticSearchType(Name = "Task")
 public class Task extends BaseEntity {
 
-    // TODO: Need to add more getters/setters
     // Base fields
     private String title;
     private Date date;
-    private int status;                 // may change depending on how we store status
+    private TaskStatus status;
     private String description;
-    private String requestingUserId; // tyler AWItlpRj42PX8bQQT0op // nick AWItlpZ842PX8bQQT0oq
-    private String assignedUserId;
+    private String requestingUserId;
+    private String assignedBidId;
     private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
 
     // Extra fields
     private transient User requestingUser;
-    private transient User assignedUser;
+    private transient Bid assignedBid;
     private transient ArrayList<Bid> bids;
     private transient Bid lowestBid;
 
@@ -57,7 +56,7 @@ public class Task extends BaseEntity {
         this.date = newDate;
     }
 
-    public void setStatus(int newStatus) {
+    public void setStatus(TaskStatus newStatus) {
         this.status = newStatus;
     }
 
@@ -84,7 +83,7 @@ public class Task extends BaseEntity {
         return this.date;
     }
 
-    public int getStatus() {
+    public TaskStatus getStatus() {
         return this.status;
     }
 
@@ -127,20 +126,20 @@ public class Task extends BaseEntity {
         this.lowestBid = lowestBid;
     }
 
-    public User getAssignedUser() {
-        return assignedUser;
+    public Bid getAssignedBid() {
+        return assignedBid;
     }
 
-    public void setAssignedUser(User assignedUser) {
-        this.assignedUser = assignedUser;
+    public void setAssignedBid(Bid bid) {
+        this.assignedBid = assignedBid;
     }
 
-    public String getAssignedUserId() {
-        return assignedUserId;
+    public String getAssignedBidId() {
+        return assignedBidId;
     }
 
-    public void setAssignedUserId(String assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public void setAssignedBidId(String bidId) {
+        this.assignedBidId = bidId;
     }
 
     // set geolocation of this task for searching

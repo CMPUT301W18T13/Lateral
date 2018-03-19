@@ -13,6 +13,8 @@ import android.widget.TextView;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.BidEvent;
+import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 
@@ -27,15 +29,16 @@ public class BidRowAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Bid> bids;
-    private BidEvent bidEvent = NO_EVENT;
+    private Task task;
     private static LayoutInflater inflater = null;
     private Activity BidListActivtyClass;
     private String usernameFormat;
     private String amountFormat;
 
-    public BidRowAdapter(Context context, ArrayList<Bid> bids, Activity BidListActivtyClass) {
+    public BidRowAdapter(Context context, ArrayList<Bid> bids, Task task, Activity BidListActivtyClass) {
         this.context = context;
         this.bids = bids;
+        this.task =task;
         this.BidListActivtyClass = BidListActivtyClass;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -91,12 +94,10 @@ public class BidRowAdapter extends BaseAdapter {
                     }
                 }
 
-                //send back to myTaskActivity, the bid that has been accepted and its id
-                Intent returnIntent = new Intent();
-                bidEvent = BID_ACCEPTED;
-                returnIntent.putExtra(MyTaskViewActivity.BID_EVENT, BID_ACCEPTED);
-                returnIntent.putExtra(MyTaskViewActivity.ACCEPTED_BID_ID, bid.getId());
-                BidListActivtyClass.setResult(Activity.RESULT_OK, returnIntent);
+                task.setAssignedBidId(bid.getId());
+                task.setStatus(TaskStatus.Assigned);
+
+                BidListActivtyClass.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
             }
         });
@@ -109,7 +110,6 @@ public class BidRowAdapter extends BaseAdapter {
                 BidService bidService = new DefaultBidService();
                 bidService.delete(bid.getId());
                 notifyDataSetChanged();
-                bidEvent = BID_DECLINED;
             }
         });
 
@@ -121,6 +121,4 @@ public class BidRowAdapter extends BaseAdapter {
     public void setAmountFormat(String amountFormat){
         this.amountFormat = amountFormat;
     }
-
-    public BidEvent getBidEvent(){return bidEvent;}
 }
