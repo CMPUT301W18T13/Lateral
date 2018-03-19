@@ -38,7 +38,7 @@ public class BidListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String taskID = intent.getStringExtra(TASK_ID);
-        BidService bidService = new DefaultBidService();
+        DefaultBidService bidService = new DefaultBidService();
         ArrayList<Bid> bids = bidService.getAllBidsByTaskID(taskID);
 
         UserService userService = new DefaultUserService();

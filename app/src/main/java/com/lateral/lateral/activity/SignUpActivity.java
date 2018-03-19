@@ -4,27 +4,21 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.ElasticSearchController;
 import com.lateral.lateral.service.implementation.DefaultUserService;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 
 import static com.lateral.lateral.service.UserLoginTools.hashPassword;
 import static com.lateral.lateral.service.UserLoginTools.randomBytes;
@@ -42,19 +36,37 @@ public class SignUpActivity extends AppCompatActivity {
     private View mProgressBar;
 
 
+    /**
+     * Called when the activity is started
+     * @param savedInstanceState The saved instance to run from
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
-        mUsername = (EditText) findViewById(R.id.usernameSignUpForm);
-        mPhoneNumber = (EditText) findViewById(R.id.phoneSignUpForm);
-        mEmail = (EditText) findViewById(R.id.emailSignUpForm);
-        mConfirmEmail = (EditText) findViewById(R.id.emailConfirmSignUpForm);
-        mPassword = (EditText) findViewById(R.id.passwordSignUpForm);
-        mConfirmPassword = (EditText) findViewById(R.id.passwordConfirmSignUpForm);
+        // Set up form views
+        mUsername = findViewById(R.id.usernameSignUpForm);
+        mPhoneNumber = findViewById(R.id.phoneSignUpForm);
+        mEmail = findViewById(R.id.emailSignUpForm);
+        mConfirmEmail = findViewById(R.id.emailConfirmSignUpForm);
+        mPassword = findViewById(R.id.passwordSignUpForm);
+        mConfirmPassword = findViewById(R.id.passwordConfirmSignUpForm);
 
-        Button confirmButton = (Button) findViewById(R.id.confirmButton);
+        // Watch for "Enter" click on the keyboard
+        mConfirmPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
+                    validateForm();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        // Set up button
+        Button confirmButton = findViewById(R.id.confirmButton);
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,9 +76,11 @@ public class SignUpActivity extends AppCompatActivity {
 
         mSignUpForm = findViewById(R.id.signUpFormView);
         mProgressBar = findViewById(R.id.signUpProgress);
-
     }
 
+    /**
+     * Validates the info entered, and creates and uploads the user if everything checks out
+     */
     private void validateForm(){
         String username = mUsername.getText().toString();
         String phoneNumber = mPhoneNumber.getText().toString();
@@ -150,74 +164,109 @@ public class SignUpActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
+            // Generate secure salt, and hash the password with it
             String salt = randomBytes(64);
-
             String saltAndHash = salt + ':' + hashPassword(password, salt);
-            User user = new User(username, phoneNumber, email, saltAndHash);
 
+            // Create and store the user
+            User user = new User(username, phoneNumber, email, saltAndHash);
             DefaultUserService defaultUserService = new DefaultUserService();
             defaultUserService.post(user);
-            String id = defaultUserService.getIdByUsername(username);
 
+            // Start the next activity with the user logged in
+            String id = defaultUserService.getIdByUsername(username);
             Intent mainActivityIntent = new Intent(SignUpActivity.this, MainActivity.class);
             mainActivityIntent.putExtra("userId", id);
             startActivity(mainActivityIntent);
         }
     }
 
+    /**
+     * Verifies that the username matches complexity requirements
+     * @param username Username to verify
+     * @return True if requirements met; false otherwise
+     */
     private boolean isUsernameValid(String username){
         return username.length() > 4 && !username.contains("@");
     }
 
+    /**
+     * Verifies that the username isn't used by another user
+     * @param username Username to verify
+     * @return True if requirement met; false otherwise
+     */
     private boolean isUsernameTaken(String username){
         DefaultUserService defaultUserService = new DefaultUserService();
         User user = defaultUserService.getUserByUsername(username);
         return user == null;
     }
 
+    /**
+     * Verifies that the phone number matches a certain format
+     * @param phoneNumber Phone number to verify
+     * @return True if requirements met; false otherwise
+     */
     private boolean isPhoneNumberValid(String phoneNumber) {
+        /*
+        Regex matches on any 1 or digit country code, area code in or out of brackets
+        and the rest of the digits separated by ".", "-", " ", or nothing
+        Note: doesn't work on non-Canadian/American phone number formats
+         */
         return phoneNumber.matches("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
     }
 
+    /**
+     * Verifies that the email matches a certain format
+     * @param email Email to verify
+     * @return True if requirements met; false otherwise
+     */
     private boolean isEmailValid(String email) {
+        /*
+        Regex matches on any string of the form "username@website.tld",
+         */
         return email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
     }
 
+    /**
+     * Verifies that the password meets certain complexity requirements
+     * @param password Password to verify
+     * @return True if requirements met; false otherwise
+     */
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 4;
     }
 
+    /**
+     * Shows the progress UI and hides the signup form.
+     * @param show Whether to show or hide the progress wheel
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
-            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
-            mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
-            mSignUpForm.animate().setDuration(shortAnimTime).alpha(
-                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
-                }
-            });
+        mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
+        mSignUpForm.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
 
-            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-            mProgressBar.animate().setDuration(shortAnimTime).alpha(
-                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-                }
-            });
-        } else {
-            // The ViewPropertyAnimator APIs are not available, so simply show
-            // and hide the relevant UI components.
-            mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
-            mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mProgressBar.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+        // The ViewPropertyAnimator APIs are not available, so simply show
+        // and hide the relevant UI components.
+        mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
+        mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
     }
 }

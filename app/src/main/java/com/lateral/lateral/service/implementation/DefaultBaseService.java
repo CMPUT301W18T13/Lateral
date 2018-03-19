@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.service.implementation;
 
 import android.os.AsyncTask;
@@ -30,6 +36,10 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
+/**
+ * Represents a service class to handle a specified type of object
+ * @param <T> The type of the object handled.
+ */
 public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> {
 
     private static JestClient jestClient;
@@ -38,12 +48,18 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     Gson gson = new Gson();
 
+    /**
+     * Constructor for the service
+     */
     protected DefaultBaseService(){
         // https://stackoverflow.com/questions/3403909/
         ParameterizedType type = (ParameterizedType)getClass().getGenericSuperclass();
         this.typeArgument = (Class<T>)type.getActualTypeArguments()[0];
     }
 
+    /**
+     * Verifies that the connection settings are correct
+     */
     public static void verifySettings() {
         if (jestClient == null) {
             DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
@@ -55,12 +71,24 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         }
     }
 
-    // get item by id
+
+    /**
+     * Get the an item by the Jest ID of the object
+     * @param id The Jest ID of the object
+     * @return The object from the database
+     */
+    @Override
     public T getById(String id){
         String json = "{\"query\": {\"match\": {\"_id\": \"" + id + "\"}}}";
         return gson.fromJson(get(json), typeArgument);
     }
 
+    /**
+     * Gets the server's response based on the supplied query
+     * @param query The query for the server
+     * @return The server's response
+     */
+    @Override
     public String get(String query){
         String data = null;
         String ElasticSearchType = getElasticSearchType();
@@ -75,6 +103,11 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         return data;
     }
 
+    /**
+     * Pushes a new object to the database
+     * @param obj Object to push
+     */
+    @Override
     public void post(T obj){
         String ElasticSearchType = getElasticSearchType();
         PostData postData = new PostData(ElasticSearchType);
@@ -94,6 +127,11 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
+    /**
+     * Updates an object currently in the database
+     * @param obj Object to be updated
+     */
+    @Override
     public void update(T obj){
         String ElasticSearchType = getElasticSearchType();
         UpdateData updateData = new UpdateData(ElasticSearchType, obj.getId());
@@ -110,8 +148,10 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         }
     }
 
-    /*
-    function to set the id of an object into its source for retrieval/deserialization purposes
+
+    /**
+     * Sets the ID of the object into its source for retrieval/deserialization purposes
+     * @param id The ID to set
      */
     public void setDocId(String id){
         String ElasticSearchType = getElasticSearchType();
@@ -128,9 +168,11 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
-    /*
-    delete an item by its id
+    /**
+     * Deletes an object based on its Jest ID
+     * @param id The Jest ID of the object to be deleted
      */
+    @Override
     public void delete(String id){
         String ElasticSearchType = getElasticSearchType();
         DeleteData deleteData = new DeleteData(ElasticSearchType);
@@ -157,21 +199,37 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         return ((ElasticSearchType) annotation).Name();
     }
 
-    // extra values from JSON string using passed key
+    /**
+     * Gets extra value from JSON string based on the passed key
+     * @param json The JSON string
+     * @param key The key corresponding to the value
+     * @return The value associated with the key
+     */
     public String getValueFromJson(String json, String key){
         JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
         return jsonObject.get(key).getAsString();
     }
 
-    // AsyncTask class to post an object
+    /**
+     * AsyncTask to post an object
+     */
     public static class PostData extends AsyncTask<String, Void, String> {
         String idx;
 
+        /**
+         * Constructor for the task
+         * @param idx Type of the object
+         */
         PostData(String idx){
             this.idx = idx;
         }
 
 
+        /**
+         * To do in the background of the AsyncTask
+         * @param objs Objects to be posted
+         * @return The ID of the posted object
+         */
         @Override
         protected String doInBackground(String... objs) {
             verifySettings();
@@ -197,13 +255,25 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         }
     }
 
+    /**
+     * AsyncTask to get data from the server
+     */
     public static class GetData extends AsyncTask<String, Void, String> {
         String idx;
 
+        /**
+         * Constructor for the task
+         * @param idx Type of the object
+         */
         GetData(String idx){
             this.idx = idx;
         }
 
+        /**
+         * To do in the background of the AsyncTask
+         * @param search_parameters Parameters for the search
+         * @return The response of the server
+         */
         @Override
         protected String doInBackground(String... search_parameters) {
             verifySettings();
@@ -229,18 +299,29 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         }
     }
 
-    /*
-    Async task to update an item in the db
+
+    /**
+     * Async task to update an item in the database
      */
     public static class UpdateData extends AsyncTask<String, Void, String> {
         String idx;
         String id;
 
+        /**
+         * Constructor for the task
+         * @param idx Type of the object
+         * @param id ID of the object to updated
+         */
         UpdateData(String idx, String id) {
             this.idx = idx;
             this.id = id;
         }
 
+        /**
+         * To do in the background of the AsyncTask
+         * @param updateJson JSON query to perform the update
+         * @return The ID of updated object
+         */
         @Override
         protected String doInBackground(String... updateJson) {
             verifySettings();
@@ -263,15 +344,25 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
-    // asynctask to delete an item by id
+    /**
+     * AsyncTask to delete an item by ID
+     */
     public static class DeleteData extends AsyncTask<String, Void, String> {
         String idx;
 
+        /**
+         * Constructor
+         * @param idx Type of the object
+         */
         DeleteData(String idx){
             this.idx = idx;
         }
 
-
+        /**
+         * To do in the background of the AsyncTask
+         * @param obj Object to be deleted
+         * @return Always returns "Success"
+         */
         @Override
         protected String doInBackground(String... obj) {
             verifySettings();
