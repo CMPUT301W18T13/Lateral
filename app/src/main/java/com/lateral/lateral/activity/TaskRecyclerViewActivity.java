@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
 /**
- * Activity for dealing with the Task RecyclerView
+ * Base activity for dealing with TaskRecyclerViews
  */
 public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
