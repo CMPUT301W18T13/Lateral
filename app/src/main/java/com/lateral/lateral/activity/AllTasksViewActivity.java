@@ -35,6 +35,8 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO clicking seems to work but test more --> pass intents
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
+    DefaultTaskService defaultTaskService = new DefaultTaskService();
+
     /**
      * Gets the layout ID of the activity
      * @return The R-id of the activity
@@ -124,6 +126,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             returnMatchingTask(query);
         } else {
             Log.d("ALL TASKS", "Got here via button, load all");
+            addTasks(defaultTaskService.getEveryTask());
         }
 
     }

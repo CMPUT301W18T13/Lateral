@@ -106,5 +106,13 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
+    public ArrayList<Task> getEveryTask(){
+        String json = "{ \"query\" : { \"match_all\" : {}}}";
+
+        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+        return gson.fromJson("[" + get(json) + "]", listType);
+
+    }
+
 }
 

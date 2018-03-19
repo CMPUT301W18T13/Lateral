@@ -69,6 +69,10 @@ public class Bid extends BaseEntity {
      */
     public User getBidder() { return this.bidder; }
 
+    /**
+     * Sets the bidder on this object
+     * @param bidder the associated bidder to set
+     */
     public void setBidder(User bidder) {this.bidder = bidder;}
 
     /**
