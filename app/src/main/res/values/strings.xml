@@ -30,12 +30,13 @@
     </string>
     <string name="signup_link_prompt"><u>Don\'t have an account? Sign up!</u></string>
     <string name="confirm">Confirm</string>
-    <string name="title_activity_requested_tasks_view">RequestedTasksViewActivity</string>
-    <string name="title_activity_assigned_and_bidded_tasks_view">AssignedAndBiddedTasksViewActivity</string>
+    <string name="title_activity_requested_tasks_view">My Requested Tasks</string>
+    <string name="title_activity_assigned_and_bidded_tasks_view">My Assigned Tasks</string>
     <string name="filter_text">Filter</string>
-    <string name="title_activity_all_tasks_view">AllTasksViewActivity</string>
+    <string name="title_activity_all_tasks_view">All Tasks</string>
     <string name="search">Search</string>
-    <string name="title_activity_task_view">taskViewActivity</string>
+    <string name="title_activity_task_view">All Tasks</string>
+    <string name="title_activity_my_task_view">My Requested Tasks</string>
     <string name="large_text">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis massa quam, ut accumsan purus facilisis a. Suspendisse a accumsan risus. Curabitur et mollis augue, laoreet semper ante. Vestibulum pulvinar, ipsum non scelerisque egestas, ligula magna blandit felis, at placerat nunc ligula sit amet urna. Suspendisse aliquet lectus sapien, eget dignissim sem semper ac. Mauris vehicula purus mi. Nulla ac pretium tortor, vitae mattis velit. Sed arcu erat, posuere eget ipsum id, condimentum bibendum dolor.\n\n
         Vivamus et auctor est. Nulla rutrum eget diam non tincidunt. Suspendisse potenti. Nunc eleifend, mi imperdiet molestie ultrices, felis felis aliquam lacus, at ullamcorper sapien nisl nec enim. Aenean vehicula sem mi, quis ultricies ante interdum a. Vestibulum vitae metus eleifend, dapibus leo id, condimentum tellus. Integer ac nibh ac orci vulputate viverra. Integer a gravida massa. Sed elementum blandit posuere. Phasellus sed nisl dignissim purus ultricies consequat. Proin vel arcu lorem. Maecenas quis tellus hendrerit, mollis risus ut, pulvinar massa. Mauris imperdiet odio sed elit aliquam, quis congue enim mattis. Nunc consequat quis dui vel tristique. Curabitur semper suscipit ligula semper faucibus. Vestibulum vel faucibus est.\n\n
