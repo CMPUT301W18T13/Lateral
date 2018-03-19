@@ -94,6 +94,10 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
 
+    /**
+     * When an intent is received, handle it
+     * @param intent Intent to Handle
+     */
     @Override
     protected void onNewIntent(Intent intent){
         setIntent(intent);
@@ -101,6 +105,11 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
     // meat and potatoes of the search
+
+    /**
+     * Handles any search intents
+     * @param intent Intent and handles
+     */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             clearList();
@@ -117,8 +126,8 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
     /**
-     * Returns
-     * @param query
+     * Returns any tasks matching the given query
+     * @param query Query to check on
      */
     private void returnMatchingTask(String query) {
         DefaultTaskService taskService = new DefaultTaskService();

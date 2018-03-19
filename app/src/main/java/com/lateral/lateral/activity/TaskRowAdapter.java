@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +20,19 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter for the TaskRow RecyclerView
+ */
 public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHolder> {
     private ArrayList<Task> mTasks;
     DefaultUserService defaultUserService = new DefaultUserService();
 
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
+    /**
+     * Provide a reference to the views for each data item
+     * Complex data items may need more than one view per item, and
+     * you provide access to all the views for a data item in a view holder
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView imageView;
@@ -30,6 +41,10 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         TextView tvDate;
         TextView tvCurBid;
 
+        /**
+         * Constructor for the ViewHolder
+         * @param itemView View for the Item
+         */
         public ViewHolder(View itemView) {
             super(itemView);
 
@@ -42,12 +57,22 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
     }
 
+    /**
+     * Sets the list of tasks
+     * @param mTasks List of tasks to set
+     */
     public TaskRowAdapter(ArrayList<Task> mTasks) {
         //this.context = context;
         this.mTasks = mTasks;
     }
 
-    // Create new views (invoked by the layout manager)
+
+    /**
+     * Create new views (invoked by the layout manager)
+     * @param parent Parent view
+     * @param viewType Type of view
+     * @return The created ViewHolder
+     */
     @Override
     public TaskRowAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -55,7 +80,11 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         return new ViewHolder(view);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    /**
+     * Replace the contents of a view (invoked by the layout manager)
+     * @param holder The ViewHolder for the Item
+     * @param position The position of the Item in the List
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // need to fill more properly once big/user objects implemented on elastic search
@@ -66,7 +95,10 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         holder.tvDate.setText((task.getDate()).toString() );
     }
 
-    // Return the size of dataset
+    /**
+     * Return the size of the dataset
+     * @return List of tasks
+     */
     @Override
     public int getItemCount() {
         return mTasks.size();

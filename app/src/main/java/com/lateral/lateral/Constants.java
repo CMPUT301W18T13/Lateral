@@ -1,6 +1,8 @@
 package com.lateral.lateral;
 
-
+/**
+ * Constants for use in the app
+ */
 public final class Constants {
     public static int USERNAME_CHAR_LIMIT = 16;
     public static int PHONE_NUMBER_CHAR_SIZE = 10;
