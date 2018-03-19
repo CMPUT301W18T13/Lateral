@@ -15,12 +15,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.BidEvent;
+import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
+import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
@@ -36,7 +41,7 @@ public class BidRowAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Bid> bids;
-    private BidEvent bidEvent = NO_EVENT;
+    private Task task;
     private static LayoutInflater inflater = null;
     private Activity BidListActivtyClass;
     private String usernameFormat;
@@ -46,11 +51,14 @@ public class BidRowAdapter extends BaseAdapter {
      * Constructor for the adapter
      * @param context The current context
      * @param bids The list of bids to add
+     * @param task the task to watch
      * @param BidListActivtyClass The activity to use this in
      */
-    public BidRowAdapter(Context context, ArrayList<Bid> bids, Activity BidListActivtyClass) {
+    public BidRowAdapter(Context context, ArrayList<Bid> bids, Task task, Activity BidListActivtyClass) {
+
         this.context = context;
         this.bids = bids;
+        this.task = task;
         this.BidListActivtyClass = BidListActivtyClass;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -127,12 +135,18 @@ public class BidRowAdapter extends BaseAdapter {
                     }
                 }
 
-                //send back to myTaskActivity, the bid that has been accepted and its id
-                Intent returnIntent = new Intent();
-                bidEvent = BID_ACCEPTED;
-                returnIntent.putExtra(MyTaskViewActivity.BID_EVENT, BID_ACCEPTED);
-                returnIntent.putExtra(MyTaskViewActivity.ACCEPTED_BID_ID, bid.getId());
-                BidListActivtyClass.setResult(Activity.RESULT_OK, returnIntent);
+                task.setAssignedBidId(bid.getId());
+                task.setStatus(TaskStatus.Assigned);
+                TaskService taskService = new DefaultTaskService();
+                try{
+                    taskService.update(task);
+                } catch(Exception e){
+                    Toast errorToast = Toast.makeText(context,
+                            "Failed to update task", Toast.LENGTH_SHORT);
+                    errorToast.show();
+                }
+
+                BidListActivtyClass.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
             }
         });
@@ -145,7 +159,6 @@ public class BidRowAdapter extends BaseAdapter {
                 BidService bidService = new DefaultBidService();
                 bidService.delete(bid.getId());
                 notifyDataSetChanged();
-                bidEvent = BID_DECLINED;
             }
         });
 
@@ -165,10 +178,4 @@ public class BidRowAdapter extends BaseAdapter {
     public void setAmountFormat(String amountFormat){
         this.amountFormat = amountFormat;
     }
-
-    /**
-     * Returns the associated BidEvent
-     * @return the associated BidEvent
-     */
-    public BidEvent getBidEvent(){return bidEvent;}
 }

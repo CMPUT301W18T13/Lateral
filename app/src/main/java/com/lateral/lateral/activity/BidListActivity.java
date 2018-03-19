@@ -15,9 +15,12 @@ import android.widget.ListView;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.BidService;
+import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
@@ -55,11 +58,13 @@ public class BidListActivity extends AppCompatActivity {
         ArrayList<Bid> bids = bidService.getAllBidsByTaskID(taskID);
 
         UserService userService = new DefaultUserService();
+        TaskService taskService = new DefaultTaskService();
+        Task task = taskService.getById(taskID);
         for (Bid bid: bids){
             bid.setBidder(userService.getById(bid.getBidderId()));
         }
 
-        adapter = new BidRowAdapter(this, bids, BidListActivity.this);
+        adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
         adapter.setUsernameFormat(getString(R.string.bid_card_username_text_field));
         adapter.setAmountFormat(getString(R.string.bid_card_amount_text_field));
         bidListView.setAdapter(adapter);
@@ -73,9 +78,7 @@ public class BidListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra(MyTaskViewActivity.BID_EVENT, adapter.getBidEvent());
-            setResult(Activity.RESULT_OK, returnIntent);
+            setResult(Activity.RESULT_OK);
             finish();
         }
         return true; //returning true produces the onActivityResult event needed
