@@ -2,6 +2,8 @@ package com.lateral.lateral;
 
 import android.support.test.runner.AndroidJUnit4;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import java.util.Date;

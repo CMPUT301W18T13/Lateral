@@ -114,6 +114,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         String id = null;
 
         String json = gson.toJson(obj);
+        Log.i("json", json);
 
 
         postData.execute(json);

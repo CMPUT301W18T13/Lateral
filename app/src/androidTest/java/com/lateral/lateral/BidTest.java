@@ -4,11 +4,15 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
+import android.widget.EditText;
 
+import com.lateral.lateral.activity.LoginActivity;
 import com.lateral.lateral.model.Bid;
 //                         import com.lateral.lateral.model.BidStatus;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.UserService;
+import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.robotium.solo.Solo;
 
 import org.junit.Test;
@@ -21,11 +25,11 @@ import static android.support.test.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
-public class BidTest extends ActivityInstrumentationTestCase2<MainActivity> {
+public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private Solo solo;
 
     public BidTest() {
-        super(MainActivity.class);
+        super(LoginActivity.class);
     }
 
     protected void setUp() throws Exception {
@@ -45,7 +49,7 @@ public class BidTest extends ActivityInstrumentationTestCase2<MainActivity> {
     }
 
     @Test
-    public void testActivity() {
+    public void testCreatingBid() {
         // robotium assert
         //BidTest.setUp();
         //getInstrumentation();
@@ -57,30 +61,39 @@ public class BidTest extends ActivityInstrumentationTestCase2<MainActivity> {
             Log.i("Error", "Error in solo creation");
             assertTrue(false);
         }
-        solo.assertCurrentActivity("Main Activity", MainActivity.class);
-        wait(1);
+        solo.assertCurrentActivity("Login Activity", LoginActivity.class);
 
-        solo.clickOnText("RequestedTasksViewActivity");
+        EditText usernameEditText = (EditText) solo.getView(R.id.username);
+        EditText passwordEditText = (EditText) solo.getView(R.id.password);
+
+        solo.enterText(usernameEditText, "malcolm");
+        solo.enterText(passwordEditText, "malcolm");
+
+        solo.clickOnText("Sign in");
+        wait(1);
         // junit assert
         assertEquals(true, true);
     }
 }
 
+
 /*@RunWith(AndroidJUnit4.class)
 public class BidTest extends ActivityInstrumentationTestCase2<MainActivity> {
-    //private static User user = new User ("John", "7805769876",
-    //        "John@gmail.com");
-    //private static Task task = new Task("Drive me");
-    //private static BigDecimal testAmount = new BigDecimal(8.2);
+    private static User user = new User ("John", "7805769876",
+            "John@gmail.com");
+    private static Task task = new Task("Drive me");
+    private static BigDecimal testAmount = new BigDecimal(8.2);
     private Solo solo;
 
-    @Test
-    public void Hello() {
-        solo = new Solo(getInstrumentation(), );
-        solo.clickOnText("REQUESTEDTASKVIEWACTIVITY");
+    private String user_id;
+    private String task_id;
+
+    private void getTestInformation(){
+        UserService userService = new DefaultUserService();
+        userService.
     }
 
-    /*
+
     @Test
     public void testBidConstructor(){
 
@@ -143,7 +156,6 @@ public class BidTest extends ActivityInstrumentationTestCase2<MainActivity> {
     @Test
     public void  testGetters(){
         Bid bid = new Bid(testAmount, user, task);
-        assertEquals(BidStatus.POSTED, bid.getStatus());
         assertEquals(testAmount, bid.getAmount());
         assertEquals(user, bid.getBidder());
         assertEquals(task, bid.getTaskBidOn());
@@ -186,6 +198,6 @@ public class BidTest extends ActivityInstrumentationTestCase2<MainActivity> {
         } catch (Exception e){
             assertEquals(IllegalArgumentException.class, e.getClass());
         }
-    }*/
-//}
+    }
+}*/
 

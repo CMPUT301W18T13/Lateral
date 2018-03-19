@@ -22,7 +22,7 @@ public class Task extends BaseEntity {
     private String title;
     private Date date;
     // TODO: Turn off transient so we can save task status
-    private TaskStatus status;
+    private TaskStatus taskStatus;
     private String description;
     private String requestingUserId;
     private String assignedBidId;
@@ -49,7 +49,7 @@ public class Task extends BaseEntity {
     public Task (String title) {
         this.setTitle(title);
         date = new Date();
-        this.status = TaskStatus.Requested;
+        this.taskStatus = TaskStatus.Requested;
     }
 
     /**
@@ -60,7 +60,7 @@ public class Task extends BaseEntity {
     public Task (String title, String description) {
         this(title);
         this.setDescription(description);
-        this.status = TaskStatus.Requested;
+        this.taskStatus = TaskStatus.Requested;
     }
 
     /* Setters */
@@ -91,7 +91,7 @@ public class Task extends BaseEntity {
      * @param newStatus The status to be set
      */
     public void setStatus(TaskStatus newStatus) {
-        this.status = newStatus;
+        this.taskStatus = newStatus;
     }
 
     /**
@@ -139,7 +139,7 @@ public class Task extends BaseEntity {
      * @return The status of the task
      */
     public TaskStatus getStatus() {
-        return this.status;
+        return this.taskStatus;
     }
 
     /**
