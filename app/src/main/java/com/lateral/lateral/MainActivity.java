@@ -18,12 +18,19 @@ import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
 
+/**
+ * The main activity for the app
+ */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
     public static String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
+    /**
+     * Called when the activity is created
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +69,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     // handles onClick events
+
+    /**
+     * Handles onClick events
+     * @param view The clicked view
+     */
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -83,6 +95,9 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * Handles pressing of the back button
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -93,12 +108,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Called when the activity is started
+     */
     @Override
     protected void onStart() {
         super.onStart();
 
     }
 
+    /**
+     * Called when the options menu is created
+     * @param menu Menu created
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -106,6 +129,11 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Called when an options menu item is selected
+     * @param item Options menu item
+     * @return the built-in result of onOptionMenuItemSelected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -121,6 +149,11 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Handles clicking of Navigation Drawer Items
+     * @param item Navigation Drawer Item
+     * @return True
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

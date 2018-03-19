@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.dialog;
 
 import android.app.Activity;
@@ -25,15 +31,26 @@ import static java.lang.Character.isDigit;
 
 //TODO: Implement a better solution to error popup blocking cancel button
 
+/**
+ * Dialog for entering a bid
+ */
 public class BidDialog extends Dialog implements android.view.View.OnClickListener {
     private boolean defaultAmountCleared = false;
     private EditText amountPlainText;
     private Bid newBid;
 
+    /**
+     * Constructor for the dialog
+     * @param activity The parent activity
+     */
     public BidDialog(Activity activity) {
         super(activity);
     }
 
+    /**
+     * Called when the dialog is created
+     * @param savedInstanceState The saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +113,10 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
 
     }
 
+    /**
+     * Called when a view is clicked
+     * @param view The clicked view
+     */
     @Override
     public void onClick(View view) {
         amountPlainText.setError(null); // a quick fix for error message blocking cancel button
@@ -122,6 +143,9 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         }
     }
 
+    /**
+     * Creates a new bid
+     */
     private void createNewBid(){
         if (!bidAmountValid()){
             return;
@@ -132,6 +156,10 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         newBid = new Bid(amount);
     }
 
+    /**
+     * Returns whether or not the current bid is valid
+     * @return True if a valid bid; false otherwise
+     */
     private boolean bidAmountValid(){
         String bidAmount = amountPlainText.getText().toString();
         String[] newValueSplit = bidAmount.split("\\.");
@@ -168,5 +196,9 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         return true;
     }
 
+    /**
+     * Gets the new bid
+     * @return The new bid
+     */
     public Bid getNewBid(){ return newBid; }
 }

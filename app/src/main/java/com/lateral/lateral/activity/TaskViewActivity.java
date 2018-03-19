@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.content.DialogInterface;
@@ -24,6 +30,9 @@ import java.util.Locale;
 
 // Malcolm's test task id: AWI9EJpYAJsZenWtuKsd
 
+/**
+ * Activity for viewing a certain task
+ */
 public class TaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
@@ -41,6 +50,10 @@ public class TaskViewActivity extends AppCompatActivity {
     private TextView date;
     private TextView description;
 
+    /**
+     * Called when activity is created
+     * @param savedInstanceState saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +72,9 @@ public class TaskViewActivity extends AppCompatActivity {
         description = findViewById(R.id.task_view_description);
     }
 
+    /**
+     * Called when the activity is started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -80,6 +96,10 @@ public class TaskViewActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Loads the task from the database
+     * @return The loaded task
+     */
     private Task loadTask(){
 
         UserService userService = new DefaultUserService();
@@ -91,6 +111,10 @@ public class TaskViewActivity extends AppCompatActivity {
         return task;
     }
 
+    /**
+     * Called when the bid button is clicked
+     * @param v The current view
+     */
     public void onBidButtonClick(View v){
         final BidDialog bidCreationDialog=new BidDialog(TaskViewActivity.this);
         bidCreationDialog.setCanceledOnTouchOutside(false);

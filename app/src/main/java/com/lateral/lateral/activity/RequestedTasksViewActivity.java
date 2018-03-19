@@ -100,8 +100,8 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
     /**
-     *
-     * @param query
+     * Returns any tasks matching the given query
+     * @param query Query to check on
      */
     private void returnMatchingTasks(String query) {
         DefaultTaskService taskService = new DefaultTaskService();

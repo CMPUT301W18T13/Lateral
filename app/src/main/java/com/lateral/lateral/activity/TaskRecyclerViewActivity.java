@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 
@@ -22,6 +28,9 @@ import java.util.ArrayList;
 
 import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
 
+/**
+ * Activity for dealing with the Task RecyclerView
+ */
 public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     // test
@@ -52,6 +61,10 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     protected abstract Context currentActivityContext();
     protected abstract Class targetClass();
 
+    /**
+     * Called on creation of the activity
+     * @param savedInstanceState saved Instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -87,8 +100,11 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
-
+    /**
+     * Called on creation of the options menu
+     * @param menu Menu created
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -107,12 +123,19 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Adds a list of Tasks to the displayed tasks
+     * @param returnedTasks tasks to be added
+     */
     public void addTasks(ArrayList<Task> returnedTasks) {
         matchingTasks.addAll(returnedTasks);
         mAdapter.notifyItemInserted(matchingTasks.size() - 1);
 
     }
 
+    /**
+     * Clears the list of displayed tasks
+     */
     public void clearList() {
         final int size = matchingTasks.size();
         matchingTasks.clear();
