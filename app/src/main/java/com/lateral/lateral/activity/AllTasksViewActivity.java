@@ -10,6 +10,7 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 
 import com.lateral.lateral.R;
@@ -33,6 +34,8 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO fix white bar at the top of this activity --> appeared on my original pull
 // TODO clicking seems to work but test more --> pass intents
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
+
+    DefaultTaskService defaultTaskService = new DefaultTaskService();
 
     /**
      * Gets the layout ID of the activity
@@ -105,13 +108,13 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
     // meat and potatoes of the search
-
     /**
      * Handles any search intents
      * @param intent Intent and handles
      */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            Log.d("ALL TASKS", "Got here via search button");
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
             // TODO handle exception (no internet access crashes app)
@@ -121,6 +124,9 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
                 " \"fields\" : [\"title^3\", \"description\"]}}}}";
              */
             returnMatchingTask(query);
+        } else {
+            Log.d("ALL TASKS", "Got here via button, load all");
+            addTasks(defaultTaskService.getEveryTask());
         }
 
     }

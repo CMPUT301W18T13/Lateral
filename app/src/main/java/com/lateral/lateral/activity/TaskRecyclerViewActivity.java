@@ -83,12 +83,18 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         mRecyclerView = findViewById(getRecyclerListID());
         mRecyclerView.setHasFixedSize(true);
 
+        /*
+        Listens and handles clicks on the recycler view
+         */
         ItemClickSupport.addTo(mRecyclerView)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Log.d("ITEM CLICKED", "item " + (matchingTasks.get(position).getId()));
+
+                        // create intent to go to task view given by targetClass() --> defined in child activities
                         Intent viewTaskIntent = new Intent(currentActivityContext(), targetClass());
+                        // pass task id into intent
                         viewTaskIntent.putExtra(EXTRA_TASK_ID, (matchingTasks.get(position).getId()));
                         startActivity(viewTaskIntent);
                     }

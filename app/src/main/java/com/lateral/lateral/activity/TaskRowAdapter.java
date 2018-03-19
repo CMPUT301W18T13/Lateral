@@ -14,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import java.util.ArrayList;
 public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHolder> {
     private ArrayList<Task> mTasks;
     DefaultUserService defaultUserService = new DefaultUserService();
+    DefaultBidService defaultBidService = new DefaultBidService();
 
 
     /**
@@ -92,6 +95,9 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         holder.tvTitle.setText(task.getTitle());
         //TODO error handle
         holder.tvUsername.setText((defaultUserService.getUserByID(task.getRequestingUserId())).getUsername());
+        //TODO error handle
+        //holder.tvCurBid.setText(String.valueOf((defaultBidService.getLowestBid(task.getId())).getAmount()));
+        //Bid bid = de
         holder.tvDate.setText((task.getDate()).toString() );
     }
 
