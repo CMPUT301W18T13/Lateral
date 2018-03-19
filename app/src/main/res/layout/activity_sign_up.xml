@@ -62,7 +62,7 @@
                 android:layout_marginTop="8dp">
 
                 <EditText
-                    android:id="@+id/editText"
+                    android:id="@+id/usernameSignUpForm"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:ems="10"

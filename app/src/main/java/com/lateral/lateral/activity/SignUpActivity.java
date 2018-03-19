@@ -3,6 +3,7 @@ package com.lateral.lateral.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -12,9 +13,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.ElasticSearchController;
+import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -24,7 +27,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
 import static com.lateral.lateral.service.UserLoginTools.hashPassword;
-import static com.lateral.lateral.service.UserLoginTools.randomString;
+import static com.lateral.lateral.service.UserLoginTools.randomBytes;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -37,8 +40,6 @@ public class SignUpActivity extends AppCompatActivity {
 
     private View mSignUpForm;
     private View mProgressBar;
-
-    private ValidateTask mAuthTask;
 
 
     @Override
@@ -86,6 +87,10 @@ public class SignUpActivity extends AppCompatActivity {
             mUsername.setError(getString(R.string.error_invalid_username));
             focusView = mUsername;
             cancel = true;
+        } else if(!isUsernameTaken(username)){
+            mUsername.setError(getString(R.string.error_username_taken));
+            focusView = mUsername;
+            cancel = true;
         }
 
         // Check for valid phone number
@@ -111,7 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
         }
 
         // Check for a valid confirmation email address.
-        if (confEmail.equals(email)) {
+        if (!confEmail.equals(email)) {
             mConfirmEmail.setError(getString(R.string.error_no_match_email));
             focusView = mConfirmEmail;
             cancel = true;
@@ -123,14 +128,14 @@ public class SignUpActivity extends AppCompatActivity {
             focusView = mPassword;
             cancel = true;
         }
-        if (!isPasswordValid(password)) {
+        else if (!isPasswordValid(password)) {
             mPassword.setError(getString(R.string.error_invalid_password));
             focusView = mPassword;
             cancel = true;
         }
 
         // Check for a valid confirmation password.
-        if (confPassword.equals(password)) {
+        if (!confPassword.equals(password)) {
             mConfirmPassword.setError(getString(R.string.error_no_match_password));
             focusView = mConfirmPassword;
             cancel = true;
@@ -144,24 +149,38 @@ public class SignUpActivity extends AppCompatActivity {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new ValidateTask(username, phoneNumber, email, password);
-            mAuthTask.execute();
+
+            String salt = randomBytes(64);
+
+            String saltAndHash = salt + ':' + hashPassword(password, salt);
+            User user = new User(username, phoneNumber, email, saltAndHash);
+
+            DefaultUserService defaultUserService = new DefaultUserService();
+            defaultUserService.post(user);
+            String id = defaultUserService.getIdByUsername(username);
+
+            Intent mainActivityIntent = new Intent(SignUpActivity.this, MainActivity.class);
+            mainActivityIntent.putExtra("userId", id);
+            startActivity(mainActivityIntent);
         }
     }
 
     private boolean isUsernameValid(String username){
-        //TODO: Replace this with your own logic
-        return username.length() > 4;
+        return username.length() > 4 && !username.contains("@");
+    }
+
+    private boolean isUsernameTaken(String username){
+        DefaultUserService defaultUserService = new DefaultUserService();
+        User user = defaultUserService.getUserByUsername(username);
+        return user == null;
     }
 
     private boolean isPhoneNumberValid(String phoneNumber) {
-        //TODO: Replace this with your own logic
-        return phoneNumber.length() >= 10;
+        return phoneNumber.matches("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
     }
 
     private boolean isPasswordValid(String password) {
@@ -199,63 +218,6 @@ public class SignUpActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressBar.setVisibility(show ? View.VISIBLE : View.GONE);
             mSignUpForm.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    private class ValidateTask extends AsyncTask<User, Void, Boolean>{
-
-        private String mUsernameString;
-        private String mPhoneNumberString;
-        private String mEmailString;
-        private String mPasswordString;
-
-        ValidateTask(String username, String phoneNumber, String email, String password){
-            mUsernameString = username;
-            mPhoneNumberString = phoneNumber;
-            mEmailString = email;
-            mPasswordString = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(User... params){
-            // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
-
-            String salt = randomString(60);
-
-            String saltAndHash = salt + ':' + hashPassword(mPasswordString.toCharArray(), salt.getBytes(), 5000, 200).toString();
-            User user = new User(mUsernameString, mPhoneNumberString, mEmailString, saltAndHash);
-
-            // TODO: push user to ElasticSearch database
-            ElasticSearchController.AddUserTask addUserTask = new ElasticSearchController.AddUserTask();
-            addUserTask.execute(user);
-
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPassword.setError(getString(R.string.error_incorrect_password));
-                mPassword.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
         }
     }
 }

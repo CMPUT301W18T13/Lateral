@@ -82,6 +82,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
         String json = gson.toJson(obj);
 
+
         postData.execute(json);
         try{
             id = postData.get();
@@ -262,10 +263,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
     }
 
-    /*
-     asynctask to delete an item by id
-      */
-    // TODO allow multidelete for faster mass deletion
+    // asynctask to delete an item by id
     public static class DeleteData extends AsyncTask<String, Void, String> {
         String idx;
 
@@ -278,7 +276,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... obj) {
             verifySettings();
 
-                //TODO change to a for loop for mulidelete
                 Delete delete = new Delete.Builder(obj[0]).index("cmput301w18t13").type(idx).build();
 
                 try {

@@ -27,10 +27,16 @@
             </intent-filter>
         </activity>
 
+
+
         <activity
             android:name=".activity.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".activity.SignUpActivity" />
+            android:label="@string/title_activity_login"
+            android:exported="true" />
+
+        <activity
+            android:name=".activity.SignUpActivity"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.RequestedTasksViewActivity"
