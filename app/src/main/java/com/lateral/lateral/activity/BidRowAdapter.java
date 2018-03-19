@@ -109,8 +109,8 @@ public class BidRowAdapter extends BaseAdapter {
         TextView amountTextView = vi.findViewById(R.id.amount_tv);
 
         //prevent the resizing of TextViews
-        usernameTextView.setMaxWidth(usernameTextView.getWidth());
-        amountTextView.setMaxWidth(usernameTextView.getWidth());
+        //usernameTextView.setMaxWidth(usernameTextView.getWidth());
+        //amountTextView.setMaxWidth(usernameTextView.getWidth());
 
         String username = bid.getBidder().getUsername();
         String formattedUsername = String.format(usernameFormat, username);
