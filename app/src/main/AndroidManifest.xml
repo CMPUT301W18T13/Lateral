@@ -75,7 +75,8 @@
             android:name=".activity.TaskViewActivity"
             android:label="Task" />
         <activity android:name=".activity.AddEditTaskActivity" />
-        <activity android:name=".activity.MyTaskViewActivity" />
+        <activity android:name=".activity.MyTaskViewActivity"
+            android:label="@string/title_activity_my_task_view"/>
         <activity android:name=".activity.BidListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
