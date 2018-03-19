@@ -30,6 +30,8 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+// Malcolm's test task id: AWI9EJpYAJsZenWtuKsd
+
 import static com.lateral.lateral.model.BidEvent.*;
 
 public class MyTaskViewActivity extends AppCompatActivity {
@@ -75,17 +77,24 @@ public class MyTaskViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        task = loadTask(taskID); //TODO: uncomment
+
         //TODO: <<<<<<<< TEST <<<<<<<<
-        String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
-                "You have a green light to use deadly force. Canada future will be in your hands";
-        task = new Task("Secure The Hostages", des);
+        //String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
+        //        "You have a green light to use deadly force. Canada future will be in your hands";
+        //task = new Task("Secure The Hostages", des);
         User user = new User("Malcolm", "78012345678", "m@gmail.com", "bla");
         task.setRequestingUser(user);
         //TODO: <<<<<<<< TEST <<<<<<<<
 
-        // task = loadTask(taskID); //TODO: uncomment
-//        BigDecimal lowest = task.getLowestBid().getAmount();
-//        currentBid.setText(NumberFormat.getCurrencyInstance().format(lowest));
+        if (task.getLowestBid() == null){
+            //Editor complains unless I save as string then setText
+            String noBidsString = "No Bids";
+            currentBid.setText(noBidsString);
+        } else {
+            currentBid.setText(getString(R.string.dollar_amount_display,
+                    String.valueOf(task.getLowestBid().getAmount())));
+        }
         title.setText(task.getTitle());
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
@@ -139,11 +148,18 @@ public class MyTaskViewActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.e("Test", "Final test");
         if (requestCode == 1 && resultCode == Activity.RESULT_OK ){
-            //int test = data.getSerializableExtra(BID_EVENT);
             BidEvent bidEvent = (BidEvent) data.getSerializableExtra(BID_EVENT);
             if (bidEvent == BID_DECLINED) {
                 //Check if the lowest bid has been declined
                 task.setLowestBid(bidService.getLowestBid(task.getId()));
+                if (task.getLowestBid() == null){
+                    //Editor complains unless I save as string then setText
+                    String noBidsString = "No Bids";
+                    currentBid.setText(noBidsString);
+                } else {
+                    currentBid.setText(getString(R.string.dollar_amount_display,
+                            String.valueOf(task.getLowestBid().getAmount())));
+                }
                 // TODO: handle null value
             } else if (bidEvent == BID_ACCEPTED){
                 String bidID = data.getStringExtra(ACCEPTED_BID_ID);

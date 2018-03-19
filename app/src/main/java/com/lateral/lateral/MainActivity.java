@@ -25,9 +25,11 @@ import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
 import com.lateral.lateral.activity.MyTaskViewActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
 import com.lateral.lateral.activity.TaskViewActivity;
+import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
@@ -74,7 +76,21 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View view) {
         // TODO: >>>>>>>>>>test>>>>>>>>>>>>
+        //Task ta = new Task("Take out the apache helicopter", "you will have access to an rpg");
+        TaskService taskService = new DefaultTaskService();
+        //taskService.post(ta);
+        //String ID = ta.getId();
+        //Log.i("ID of task:", ID);
+
+        Task ta = taskService.getById("AWI9EJpYAJsZenWtuKsd");
+        //AWI9EJpYAJsZenWtuKsd
+
+        //Intent intent = new Intent(this, TaskViewActivity.class);
+        //intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, "AWI9EJpYAJsZenWtuKsd");
+        //startActivity(intent);
+
         Intent intent = new Intent(this, MyTaskViewActivity.class);
+        intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, "AWI9EJpYAJsZenWtuKsd");
         startActivity(intent);
 
         //BidDialog cdd=new BidDialog(MainActivity.this);

@@ -35,28 +35,31 @@ public class BidListActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         Intent intent = getIntent();
         String taskID = intent.getStringExtra(TASK_ID);
         BidService bidService = new DefaultBidService();
-        //ArrayList<Bid> bids = bidService.getAllBidsByTaskID(taskID); //TODO: load User information using id
+        ArrayList<Bid> bids = bidService.getAllBidsByTaskID(taskID); //TODO: load User information using id
 
         // TODO: Test
         User user = new User("Mordo", "7801234567", "mal@gmail.com", "djfkn");
-        String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
-                "You have a green light to use deadly force. Canada future will be in your hands";
-        Task task = new Task("Secure The Hostages", des);
-        task.setRequestingUser(user);
-        BigDecimal num = new BigDecimal(12.12);
-        Bid bid = new Bid(new BigDecimal("51.14").setScale(2, RoundingMode.CEILING));
-        Bid bid2 = new Bid(new BigDecimal(101.10).setScale(2, RoundingMode.CEILING));
-        bid.setBidder(user);
-        bid2.setBidder(user);
-        ArrayList<Bid> bids = new ArrayList<>();
-        bids.add(bid);
-        bids.add(bid2);
+        //String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
+        //        "You have a green light to use deadly force. Canada future will be in your hands";
+        //Task task = new Task("Secure The Hostages", des);
+        //task.setRequestingUser(user);
+        //BigDecimal num = new BigDecimal(12.12);
+        //Bid bid = new Bid(new BigDecimal("51.14").setScale(2, RoundingMode.CEILING));
+        //Bid bid2 = new Bid(new BigDecimal(101.10).setScale(2, RoundingMode.CEILING));
+        //bid.setBidder(user);
+        //bid2.setBidder(user);
+        //ArrayList<Bid> bids = new ArrayList<>();
+        //bids.add(bid);
+        //bids.add(bid2);
+        for (Bid bid : bids) {
+            bid.setBidder(user);
+        }
         // TODO: Test
 
         adapter = new BidRowAdapter(this, bids, BidListActivity.this);
@@ -66,7 +69,7 @@ public class BidListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent returnIntent = new Intent();
             returnIntent.putExtra(MyTaskViewActivity.BID_EVENT, adapter.getBidEvent());
@@ -76,9 +79,4 @@ public class BidListActivity extends AppCompatActivity {
         return true; //returning true produces the onActivityResult event needed
     }
 
-    public boolean Testa(){
-        return true;
-    }
-
-    //TODO handle if a bid has been accepted
 }
