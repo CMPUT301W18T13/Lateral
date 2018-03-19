@@ -96,4 +96,10 @@ public class PostingTest {
 //        Task task1 = returned.get(0);
 //        assertEquals(task1.getTitle(), "Test");
     }
+
+    @Test
+    public void testGetLowestBid() {
+//        DefaultBidService defaultBidService = new DefaultBidService();
+//        Bid lowestBid = defaultBidService.getLowestBid("AWJACBVhAJsZenWtuLON");
+    }
 }
