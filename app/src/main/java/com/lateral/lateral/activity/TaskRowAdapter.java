@@ -61,7 +61,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     }
 
     /**
-     * Sets the list of tasks
+     * Constructor for the TaskRowAdapter
      * @param mTasks List of tasks to set
      */
     public TaskRowAdapter(ArrayList<Task> mTasks) {
