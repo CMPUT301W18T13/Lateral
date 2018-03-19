@@ -22,7 +22,7 @@ public class Task extends BaseEntity {
     private String title;
     private Date date;
     // TODO: Turn off transient so we can save task status
-    private transient TaskStatus status;
+    private TaskStatus status;
     private String description;
     private String requestingUserId;
     private String assignedBidId;

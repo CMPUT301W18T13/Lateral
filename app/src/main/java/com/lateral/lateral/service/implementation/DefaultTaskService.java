@@ -71,7 +71,8 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * Deletes the task and all associated bids
      * @param taskID The ID of the task
      */
-    public void deleteTask(String taskID){
+    @Override
+    public void delete(String taskID){
         DefaultBidService defaultBidService = new DefaultBidService();
         ArrayList<Bid> taskBids = defaultBidService.getAllBidsByTaskID(taskID);
 
@@ -81,7 +82,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
             }
         }
 
-        delete(taskID);
+        super.delete(taskID);
     }
 
     /**
