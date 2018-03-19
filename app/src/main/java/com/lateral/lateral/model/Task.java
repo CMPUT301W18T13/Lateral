@@ -18,19 +18,18 @@ import java.util.Date;
 @ElasticSearchType(Name = "Task")
 public class Task extends BaseEntity {
 
-    // TODO: Need to add more getters/setters
     // Base fields
     private String title;
     private Date date;
-    private int status;                 // may change depending on how we store status
+    private TaskStatus status;
     private String description;
-    private String requestingUserId; // tyler AWItlpRj42PX8bQQT0op // nick AWItlpZ842PX8bQQT0oq
-    private String assignedUserId;
+    private String requestingUserId;
+    private String assignedBidId;
     private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
 
     // Extra fields
     private transient User requestingUser;
-    private transient User assignedUser;
+    private transient Bid assignedBid;
     private transient ArrayList<Bid> bids;
     private transient Bid lowestBid;
 
@@ -49,6 +48,7 @@ public class Task extends BaseEntity {
     public Task (String title) {
         this.setTitle(title);
         date = new Date();
+        this.status = TaskStatus.Requested;
     }
 
     /**
@@ -59,6 +59,7 @@ public class Task extends BaseEntity {
     public Task (String title, String description) {
         this(title);
         this.setDescription(description);
+        this.status = TaskStatus.Requested;
     }
 
     /* Setters */
@@ -88,7 +89,7 @@ public class Task extends BaseEntity {
      * Sets the status of the task
      * @param newStatus The status to be set
      */
-    public void setStatus(int newStatus) {
+    public void setStatus(TaskStatus newStatus) {
         this.status = newStatus;
     }
 
@@ -136,7 +137,7 @@ public class Task extends BaseEntity {
      * Gets the status of the task
      * @return The status of the task
      */
-    public int getStatus() {
+    public TaskStatus getStatus() {
         return this.status;
     }
 
@@ -205,35 +206,31 @@ public class Task extends BaseEntity {
     }
 
     /**
-     * Get the user assigned to the task
-     * @return The user assigned to the task
+     * Get the bid assigned to the task
+     * @return The bid assigned to the task
      */
-    public User getAssignedUser() {
-        return assignedUser;
+    public Bid getAssignedBid() {
+        return assignedBid;
     }
 
     /**
-     * Sets ths user assigned to the task
-     * @param assignedUser The user to be set
+     * Sets the bid assigned to the task
+     * @param assignedBid The bid to be set
      */
-    public void setAssignedUser(User assignedUser) {
-        this.assignedUser = assignedUser;
+    public void setAssignedBid(Bid assignedBid) {
+        this.assignedBid = assignedBid;
+    }
+
+    public String getAssignedBidId() {
+        return assignedBidId;
     }
 
     /**
-     * Gets the ID of the assigned user
-     * @return The ID of the assigned user
+     * Sets the bid assigned to the task
+     * @param assignedBidId The user to be set
      */
-    public String getAssignedUserId() {
-        return assignedUserId;
-    }
-
-    /**
-     * Sets the ID of the assigned user
-     * @param assignedUserId The ID to be set
-     */
-    public void setAssignedUserId(String assignedUserId) {
-        this.assignedUserId = assignedUserId;
+    public void setAssignedBidId(String assignedBidId) {
+        this.assignedBidId = assignedBidId;
     }
 
     // set geolocation of this task for searching

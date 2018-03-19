@@ -16,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
@@ -69,8 +71,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
         // Get the task id
         Intent taskIntent = getIntent();
         this.taskID = taskIntent.getStringExtra(EXTRA_TASK_ID);
-        Log.d("MYTASKVIEWACTIVITY", "id = " + this.taskID);
-        // TODO: Handle null id
+        if (this.taskID == null){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
 
         currentBid = findViewById(R.id.my_task_view_current_bid);
         title = findViewById(R.id.my_task_view_title);
@@ -86,7 +90,17 @@ public class MyTaskViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        task = loadTask(taskID);
+        refresh();
+    }
+    private void refresh(){
+
+        try {
+            task = loadTask(taskID);
+        } catch (Exception e){
+            Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
+            errorToast.show();
+            return;
+        }
 
         if (task.getLowestBid() == null){
             //Editor complains unless I save as string then setText
@@ -100,9 +114,15 @@ public class MyTaskViewActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
-        User assignedUser = task.getAssignedUser();
-        String username = (assignedUser == null) ? "" : assignedUser.getUsername();
-        assignedToUsername.setText(username);
+
+        Bid assignedBid = task.getAssignedBid();
+        if (assignedBid != null){
+            assignedToUsername.setText(assignedBid.getBidder().getUsername());
+        }
+        else{
+            String noneText = "None";
+            assignedToUsername.setText(noneText);
+        }
     }
 
     /**
@@ -111,13 +131,16 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @return The loaded task
      */
     private Task loadTask(String taskID){
+
         Task task = taskService.getById(taskID);
+
         task.setLowestBid(bidService.getLowestBid(task.getId()));
-        if (task.getAssignedUserId() != null) {
-            task.setAssignedUser(userService.getById(task.getAssignedUserId()));
+        if (task.getAssignedBidId() != null) {
+            Bid bid = bidService.getById(task.getAssignedBidId());
+            task.setAssignedBid(bid);
+            bid.setBidder(userService.getById(bid.getBidderId()));
         }
         return task;
-        // TODO: Handle null task
     }
 
     /**
@@ -153,11 +176,14 @@ public class MyTaskViewActivity extends AppCompatActivity {
             // Edit the task
             Intent intent = new Intent(this, AddEditTaskActivity.class);
             intent.putExtra(AddEditTaskActivity.EXTRA_TASK_ID, taskID);
-            startActivity(intent);
+            startActivityForResult(intent, 2);
         }
         else if (item.getItemId() == R.id.action_delete_task){
             taskService.delete(taskID);
-            // TODO: Navigate back
+            Toast postTask = Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT);
+            postTask.show();
+            setResult(RESULT_OK);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -170,27 +196,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK ){
-            BidEvent bidEvent = (BidEvent) data.getSerializableExtra(BID_EVENT);
-            if (bidEvent == BID_DECLINED) {
-                //Check if the lowest bid has been declined
-                task.setLowestBid(bidService.getLowestBid(task.getId()));
-                if (task.getLowestBid() == null){
-                    //Editor complains unless I save as string then setText
-                    String noBidsString = "No Bids";
-                    currentBid.setText(noBidsString);
-                } else {
-                    currentBid.setText(getString(R.string.dollar_amount_display,
-                            String.valueOf(task.getLowestBid().getAmount())));
-                }
-                // TODO: handle null value
-            } else if (bidEvent == BID_ACCEPTED){
-                String bidID = data.getStringExtra(ACCEPTED_BID_ID);
-                //Tyler TODO: getBidByBidId(String bidID);
-                //Devon TODO: handle that a bid has been accepted ---------------------------------------------
-            }
-
+        if (resultCode == Activity.RESULT_OK ){
+            refresh();
         }
     }
-
 }
