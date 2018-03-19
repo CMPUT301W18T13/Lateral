@@ -48,6 +48,7 @@ public class Task extends BaseEntity {
     public Task (String title) {
         this.setTitle(title);
         date = new Date();
+        this.status = TaskStatus.Requested;
     }
 
     /**
@@ -58,6 +59,7 @@ public class Task extends BaseEntity {
     public Task (String title, String description) {
         this(title);
         this.setDescription(description);
+        this.status = TaskStatus.Requested;
     }
 
     /* Setters */
