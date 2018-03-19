@@ -3,10 +3,6 @@ package com.lateral.lateral.activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,12 +84,12 @@ public class BidRowAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 //Delete all other bids which have not been accepted
-                for (Bid b : bids){ //TODO uncomment vvv
+                for (Bid b : bids){
                     if (!b.getId().equals(bid.getId())){
                         BidService bidService = new DefaultBidService();
                         bidService.delete(b.getId());
                     }
-                } //TODO uncomment ^^^
+                }
 
                 //send back to myTaskActivity, the bid that has been accepted and its id
                 Intent returnIntent = new Intent();
@@ -110,8 +106,8 @@ public class BidRowAdapter extends BaseAdapter {
             public void onClick(View v)
             {
                 bids.remove(bid);
-                BidService bidService = new DefaultBidService(); //TODO uncomment
-                bidService.delete(bid.getId()); //TODO uncomment
+                BidService bidService = new DefaultBidService();
+                bidService.delete(bid.getId());
                 notifyDataSetChanged();
                 bidEvent = BID_DECLINED;
             }

@@ -12,9 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
-import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.BidEvent;
-import com.lateral.lateral.model.BidList;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
@@ -24,9 +22,7 @@ import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -77,15 +73,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        task = loadTask(taskID); //TODO: uncomment
-
-        //TODO: <<<<<<<< TEST <<<<<<<<
-        //String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
-        //        "You have a green light to use deadly force. Canada future will be in your hands";
-        //task = new Task("Secure The Hostages", des);
-        User user = new User("Malcolm", "78012345678", "m@gmail.com", "bla");
-        task.setRequestingUser(user);
-        //TODO: <<<<<<<< TEST <<<<<<<<
+        task = loadTask(taskID);
 
         if (task.getLowestBid() == null){
             //Editor complains unless I save as string then setText
@@ -106,7 +94,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
     private Task loadTask(String taskID){
         Task task = taskService.getById(taskID);
-        //task.setLowestBid(bidService.getLowestBid(task.getId()));
         task.setLowestBid(bidService.getLowestBid(task.getId()));
         if (task.getAssignedUserId() != null) {
             task.setAssignedUser(userService.getById(task.getAssignedUserId()));
@@ -146,7 +133,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("Test", "Final test");
         if (requestCode == 1 && resultCode == Activity.RESULT_OK ){
             BidEvent bidEvent = (BidEvent) data.getSerializableExtra(BID_EVENT);
             if (bidEvent == BID_DECLINED) {

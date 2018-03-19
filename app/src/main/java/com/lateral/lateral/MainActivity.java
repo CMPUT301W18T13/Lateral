@@ -1,14 +1,7 @@
 package com.lateral.lateral;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,22 +15,7 @@ import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
-import com.lateral.lateral.activity.MyTaskViewActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
-import com.lateral.lateral.activity.TaskViewActivity;
-import com.lateral.lateral.dialog.BidDialog;
-import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.TaskService;
-import com.lateral.lateral.service.implementation.DefaultBidService;
-import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
-
-import android.widget.ArrayAdapter;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -75,29 +53,7 @@ public class MainActivity extends AppCompatActivity
     // handles onClick events
     @Override
     public void onClick(View view) {
-        // TODO: >>>>>>>>>>test>>>>>>>>>>>>
-        //Task ta = new Task("Take out the apache helicopter", "you will have access to an rpg");
-        TaskService taskService = new DefaultTaskService();
-        //taskService.post(ta);
-        //String ID = ta.getId();
-        //Log.i("ID of task:", ID);
-
-        Task ta = taskService.getById("AWI9EJpYAJsZenWtuKsd");
-        //AWI9EJpYAJsZenWtuKsd
-
-        //Intent intent = new Intent(this, TaskViewActivity.class);
-        //intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, "AWI9EJpYAJsZenWtuKsd");
-        //startActivity(intent);
-
-        Intent intent = new Intent(this, MyTaskViewActivity.class);
-        intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, "AWI9EJpYAJsZenWtuKsd");
-        startActivity(intent);
-
-        //BidDialog cdd=new BidDialog(MainActivity.this);
-        //cdd.show();
-        // TODO: <<<<<<<<<<test<<<<<<<<<<<<
-        // TODO: vvvvvv uncomment out vvvvvv
-        /*switch (view.getId()) {
+        switch (view.getId()) {
             case R.id.ViewRequestedTasksButton:
                 Intent ViewRequestedTasksIntent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
                 startActivity(ViewRequestedTasksIntent);
@@ -112,7 +68,7 @@ public class MainActivity extends AppCompatActivity
                 Intent AssignedAndBiddedTasksViewActivity = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
                 startActivity(AssignedAndBiddedTasksViewActivity);
                 break;
-        }*/
+        }
 
     }
 

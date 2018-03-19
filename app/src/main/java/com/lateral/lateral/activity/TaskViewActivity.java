@@ -11,7 +11,6 @@ import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -64,18 +63,7 @@ public class TaskViewActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        // TODO: vvv uncomment out vvv
         task = loadTask();
-        // TODO ^^^ uncomment out ^^^
-
-        // TODO: <<<<<<< test <<<<<<<
-        //String des = "20 Boogies have taken the Prime Minister and his family hostage in his home. They are armed with fully automatic weapons " +
-        // "You have a green light to use deadly force. Canada future will be in your hands";
-        //task = new Task("Secure The Hostages", des);
-        User user = new User("Malcolm", "78012345678", "m@gmail.com", "bla");
-        task.setRequestingUser(user);
-        // TODO: >>>>>>> test >>>>>>>
-
         if (task.getLowestBid() == null){
             //Editor complains unless I save as string then setText
             String noBidsString = "No Bids";
@@ -97,7 +85,7 @@ public class TaskViewActivity extends AppCompatActivity {
         UserService userService = new DefaultUserService();
 
         Task task = taskService.getById(taskID);
-        //task.setRequestingUser(userService.getById(task.getRequestingUserId())); //TODO uncomment
+        task.setRequestingUser(userService.getById(task.getRequestingUserId()));
         task.setLowestBid(bidService.getLowestBid(task.getId()));
         // TODO: Handle null task
         return task;
@@ -112,10 +100,9 @@ public class TaskViewActivity extends AppCompatActivity {
                 Bid newBid = bidCreationDialog.getNewBid();
                 if (newBid != null){
                     newBid.setTaskId(taskID);
-                    //newBid.setBidderId(task.getAssignedUserId()); // TODO: uncomment for final
-                    //task.addBid(newBid);
+                    newBid.setBidderId(task.getAssignedUserId()); // TODO: check if this is correct
+                    task.addBid(newBid);
 
-                    //TODO: what current bid displays depends on bidder input. Fix that.
                     if (task.getLowestBid() == null){
                         task.setLowestBid(newBid);
                         currentBid.setText(getString(R.string.dollar_amount_display,
@@ -131,6 +118,5 @@ public class TaskViewActivity extends AppCompatActivity {
             }
         });
         bidCreationDialog.show();
-        //while(!bidCreationDialog.Dismissed()){Log.i("Waiting", "Activity waiting for dialog");}
     }
 }

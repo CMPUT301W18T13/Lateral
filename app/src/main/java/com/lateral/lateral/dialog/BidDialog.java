@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
@@ -25,7 +23,7 @@ import java.math.RoundingMode;
 
 import static java.lang.Character.isDigit;
 
-//TODO: Implement a permanent solution to error popup blocking cancel button
+//TODO: Implement a better solution to error popup blocking cancel button
 
 public class BidDialog extends Dialog implements android.view.View.OnClickListener {
     private boolean defaultAmountCleared = false;
@@ -36,7 +34,6 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         super(activity);
     }
 
-    //TODO: change to onStart()
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
