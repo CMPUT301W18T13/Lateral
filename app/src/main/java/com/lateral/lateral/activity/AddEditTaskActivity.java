@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.content.Intent;
@@ -19,6 +25,9 @@ import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 
+/**
+ * Activity to add and edit tasks
+ */
 public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
@@ -32,6 +41,10 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private EditText description;
     private Button confirmButton;
 
+    /**
+     * Called when the activity is created
+     * @param savedInstanceState The saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +76,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Sets the input filters for the fields
+     */
     protected void setInputFilters(){
         // TODO: Test that these actually work
         InputFilter[] titleFilter = new InputFilter[1];
@@ -75,6 +91,10 @@ public class AddEditTaskActivity extends AppCompatActivity {
         // TODO: Disable button while title is empty using TextWatcher
     }
 
+    /**
+     * Called when the Add/Edit Confirm button is clicked
+     * @param v The current view
+     */
     public void onAddEditConfirmClick(View v){
         try{
             // TODO: Trim the title and desc??

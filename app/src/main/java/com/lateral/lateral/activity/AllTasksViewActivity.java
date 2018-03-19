@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.app.SearchManager;
@@ -21,30 +27,53 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 
  */
 
+/**
+ * Activity for viewing all available tasks
+ */
 // TODO fix white bar at the top of this activity --> appeared on my original pull
 // TODO clicking seems to work but test more --> pass intents
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
+    /**
+     * Gets the layout ID of the activity
+     * @return The R-id of the activity
+     */
     @Override
     protected int getResourceLayoutID(){
         return R.layout.activity_all_tasks_view;
     }
 
+    /**
+     * Gets the ID of the RecyclerView
+     * @return The R-id of the RecyclerView
+     */
     @Override
     protected int getRecyclerListID() {
         return R.id.taskViewList;
     }
 
+    /**
+     * Gets the context of the current activity
+     * @return The current activity's Context
+     */
     @Override
     protected Context currentActivityContext(){
         return AllTasksViewActivity.this;
     }
 
+    /**
+     * Returns the target class of the activity
+     * @return The target class of the activity
+     */
     @Override
     protected Class targetClass() {
         return TaskViewActivity.class;
     }
 
+    /**
+     * Called when activity is started
+     * @param savedInstanceState The saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +82,11 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     }
 
-
-
+    /**
+     * Called when the options menu is created
+     * @param menu The menu being created
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

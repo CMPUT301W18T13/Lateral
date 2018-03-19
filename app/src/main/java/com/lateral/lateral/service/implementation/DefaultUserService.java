@@ -9,7 +9,6 @@ package com.lateral.lateral.service.implementation;
 import android.util.Log;
 
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.ElasticSearchController;
 import com.lateral.lateral.service.UserService;
 
 import org.json.JSONArray;
