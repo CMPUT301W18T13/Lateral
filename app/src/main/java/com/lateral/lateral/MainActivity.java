@@ -2,6 +2,7 @@ package com.lateral.lateral;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,7 +22,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
-    public static final String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
+    public static String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,13 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        // Receive intent
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            LOGGED_IN_USER = extras.getString("userId");
+        }
+        Log.i("MainActivity", "Logged in user's ID: " + LOGGED_IN_USER);
 
         // Define buttons
         Button ViewRequestedTasksButton = findViewById(R.id.ViewRequestedTasksButton);

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.TaskService;
@@ -47,7 +48,36 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
-    //TODO delete all bids asssociated with a deleted task
+    /*
+    deletes task and all associated bids
+     */
+    public void deleteTask(String taskID){
+        DefaultBidService defaultBidService = new DefaultBidService();
+        ArrayList<Bid> taskBids = defaultBidService.getAllBidsByTaskID(taskID);
+
+        if(taskBids != null) {
+            for (Bid bid : taskBids) {
+                defaultBidService.delete(bid.getId());
+            }
+        }
+
+        delete(taskID);
+    }
+
+    public ArrayList<Task> getAllTasksByDistance(Double latitude, Double longitude, Double distance){
+        String json = "{" +
+                "\"query\" : { " +
+                "\"filtered\" : { " +
+                "\"filter\" : { " +
+                "\"geo_distance\" : { " +
+                "\"distance\": \"" + Double.toString(distance) + "km\", " +
+                "\"geo_location\" : { " +
+                "\"lat\": " + Double.toString(latitude) + "," +
+                "\"lon\": " + Double.toString(longitude) + "}}}}}}";
+        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+
+        return gson.fromJson("[" + get(json) + "]", listType);
+    }
 
 }
 

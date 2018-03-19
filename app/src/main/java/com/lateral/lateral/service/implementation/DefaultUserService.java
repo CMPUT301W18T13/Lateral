@@ -48,6 +48,21 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
     }
 
     /*
+     retrieve a users id from database
+     */
+    public String getIdByUsername(String username){
+        String json = "{\"_source\": [\"id\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
+
+        String result = get(json);
+
+        if(result.equals("")){
+            return null;
+        }else {
+            return getValueFromJson(result, "id");
+        }
+    }
+
+    /*
      retrieves users token from db
       */
     public String getToken(String username){

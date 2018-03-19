@@ -1,5 +1,7 @@
 package com.lateral.lateral.service;
 
+import android.util.Log;
+
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.util.Random;
@@ -15,31 +17,44 @@ import javax.crypto.spec.PBEKeySpec;
 public class UserLoginTools {
 
     // Source https://www.owasp.org/index.php/Hashing_Java
-    public static byte[] hashPassword( final char[] password, final byte[] salt, final int iterations, final int keyLength ) {
+    public static String hashPassword( final String password, final String salt) {
 
         try {
             SecretKeyFactory skf = SecretKeyFactory.getInstance( "PBKDF2WithHmacSHA512" );
-            PBEKeySpec spec = new PBEKeySpec( password, salt, iterations, keyLength );
+            PBEKeySpec spec = new PBEKeySpec( password.toCharArray(), hexToBytes(salt), 5000, 256 );
             SecretKey key = skf.generateSecret( spec );
             byte[] res = key.getEncoded( );
-            return res;
+            return bytesToHex(res);
 
         } catch( NoSuchAlgorithmException | InvalidKeySpecException e ) {
             throw new RuntimeException( e );
         }
     }
 
-    // Source: https://stackoverflow.com/questions/20536566/creating-a-random-string-with-a-z-and-0-9-in-java
-    public static String randomString(int length){
-        String ALPHANUMERIC = "abcdefghijklmnopwrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        String string = new String();
-        Random rnd = new Random();
+    // Source: https://stackoverflow.com/questions/5683206/how-to-create-an-array-of-20-random-bytes
+    public static String randomBytes(int numBytes){
+        byte[] bytes = new byte[numBytes];
+        new Random().nextBytes(bytes);
+        return bytesToHex(bytes);
+    }
 
-        while(string.length() < length){
-            int index = (int) (rnd.nextFloat() * ALPHANUMERIC.length());
-            string += ALPHANUMERIC.charAt(index);
+    // Source: https://stackoverflow.com/questions/2817752/java-code-to-convert-byte-to-hexadecimal
+    private static String bytesToHex(byte[] bytes){
+        StringBuilder sb = new StringBuilder();
+        for (byte b : bytes) {
+            sb.append(String.format("%02X", b));
         }
+        return sb.toString();
+    }
 
-        return string;
+    // Source: https://stackoverflow.com/questions/140131/convert-a-string-representation-of-a-hex-dump-to-a-byte-array-using-java
+    private static byte[] hexToBytes(String s){
+        int len = s.length();
+        byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                    + Character.digit(s.charAt(i+1), 16));
+        }
+        return data;
     }
 }
