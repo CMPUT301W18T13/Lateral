@@ -1,13 +1,7 @@
 package com.lateral.lateral;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -23,17 +17,6 @@ import android.widget.Button;
 import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
-import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.implementation.DefaultBidService;
-import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
-
-import android.widget.ArrayAdapter;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
@@ -78,7 +61,6 @@ public class MainActivity extends AppCompatActivity
     // handles onClick events
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.ViewRequestedTasksButton:
                 Intent ViewRequestedTasksIntent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);

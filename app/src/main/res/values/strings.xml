@@ -59,4 +59,22 @@
 
     <!-- Strings related to searching -->
     <string name="search_hint">Search all tasks</string>
+    <string name="title_activity_assigned_tasks_view">AssignedTasksViewActivity</string>
+    <string name="title_activity_bid_pop_up">BidPopUpActivity</string>
+    <string name="title_activity_test">test</string>
+
+    <!-- Strings for Bid Dialog -->
+    <string name="bid_dialog_title">Place Your Bid</string>
+    <string name="bid_dialog_amount_filler">$0.00</string>
+    <string name="bid_dialog_bid_button_text">Bid</string>
+    <string name="bid_dialog_cancel_button_text">Cancel</string>
+
+    <!-- Strings for Bid Card -->
+    <string name="bid_card_accept_button">Accept</string>
+    <string name="bid_card_decline_button">Decline</string>
+    <string name="bid_card_username_text_field">Username: %1s</string>
+    <string name="bid_card_amount_text_field">Amount: $%1s</string>
+
+    <!-- Project wide strings-->
+    <string name="dollar_amount_display">$%1$s</string>
 </resources>

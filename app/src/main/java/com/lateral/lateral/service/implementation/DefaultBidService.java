@@ -48,5 +48,4 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
     }
-
 }
