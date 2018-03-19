@@ -96,8 +96,12 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         //TODO error handle
         holder.tvUsername.setText((defaultUserService.getUserByID(task.getRequestingUserId())).getUsername());
         //TODO error handle
-        //holder.tvCurBid.setText(String.valueOf((defaultBidService.getLowestBid(task.getId())).getAmount()));
-        //Bid bid = de
+        Bid bid = defaultBidService.getLowestBid(task.getId());
+        String bidText = "No Bids";
+        if (bid != null) {
+            bidText = String.valueOf(bid.getAmount());
+        }
+        holder.tvCurBid.setText(bidText);
         holder.tvDate.setText((task.getDate()).toString() );
     }
 
