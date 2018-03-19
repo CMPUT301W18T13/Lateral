@@ -21,7 +21,6 @@ public class Bid extends BaseEntity {
     private BigDecimal amount;
     private String bidderId;
     private String taskId;
-    private BidStatus status;
 
     // Extra fields
     private transient User bidder;
@@ -42,9 +41,20 @@ public class Bid extends BaseEntity {
         }
 
         this.amount = amount;
-        this.status = BidStatus.POSTED;
         this.taskId = taskId;
         this.bidderId = bidderId;
+    }
+
+    /**
+     * Constructor
+     * @param amount
+     */
+    public Bid(BigDecimal amount){
+        if (amount.compareTo(new BigDecimal(Constants.MIN_BID_AMOUNT)) < 0){
+            throw new IllegalArgumentException("Amount is below " + Constants.MIN_BID_AMOUNT);
+        }
+
+        this.amount = amount;
     }
 
     /**
@@ -59,17 +69,13 @@ public class Bid extends BaseEntity {
      */
     public User getBidder() { return this.bidder; }
 
+    public void setBidder(User bidder) {this.bidder = bidder;}
+
     /**
      * Gets the task associated with this Bid
      * @return The corresponding Task
      */
     public Task getTaskBidOn() { return this.task; }
-
-    /**
-     * Gets the status of this Bid
-     * @return The Bid's status
-     */
-    public BidStatus getStatus() {return this.status; }
 
     /**
      * Returns the ID of the task associated with this bid
@@ -78,14 +84,20 @@ public class Bid extends BaseEntity {
     public String getTaskId(){return this.taskId; }
 
     /**
-     * Sets the status of the bid
-     * @param status The status to be set
+     * Sets the Task ID of the bid
+     * @param taskId ID to be set
      */
-    // If an assigned task is set to requested are all bids removed?
-    public void setStatus(BidStatus status) {
-        if (this.status != BidStatus.POSTED){
-            throw new IllegalArgumentException("This has already been declined or accepted");
-        }
-        this.status = status;
-    }
+    public void setTaskId(String taskId){ this.taskId = taskId; }
+
+    /**
+     * Sets the Bidder ID of the bid
+     * @param bidderId ID to be set
+     */
+    public void setBidderId(String bidderId){ this.bidderId = bidderId; }
+
+    /**
+     * Gets the Bidder ID of the bid
+     * @return The Bidder ID
+     */
+    public String getBidderId(){ return this.bidderId; }
 }

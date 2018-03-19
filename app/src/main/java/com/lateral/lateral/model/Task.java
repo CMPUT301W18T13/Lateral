@@ -248,4 +248,10 @@ public class Task extends BaseEntity {
         this.longitude = longitude;
         this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
     }
+
+    /**
+     * Adds a given bid to the list of bids
+     * @param bid The bid to add
+     */
+    public void addBid(Bid bid){this.bids.add(bid);}
 }
