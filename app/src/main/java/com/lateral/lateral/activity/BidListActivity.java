@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
@@ -19,12 +25,19 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
+/**
+ * Activity to display the list of bids
+ */
 public class BidListActivity extends AppCompatActivity {
     public static final String TASK_ID = "com.lateral.lateral.TASK_ID_INTERESTED_IN";
 
     private ListView bidListView;
     private BidRowAdapter adapter;
 
+    /**
+     * Called when activity created
+     * @param savedInstanceState the saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +45,9 @@ public class BidListActivity extends AppCompatActivity {
         bidListView = findViewById(R.id.bid_lv);
     }
 
+    /**
+     * Called when activity started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -54,6 +70,11 @@ public class BidListActivity extends AppCompatActivity {
         bidListView.setAdapter(adapter);
     }
 
+    /**
+     * Called when a certain menu item is selected
+     * @param item The item selected
+     * @return True
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

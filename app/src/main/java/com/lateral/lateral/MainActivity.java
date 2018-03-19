@@ -32,9 +32,12 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         // Receive intent
-        String extra = getIntent().getExtras().getString("userId");
-        if(extra != null){
-            LOGGED_IN_USER = extra;
+        Bundle extras = getIntent().getExtras();
+        if(extras != null){
+            String user = extras.getString("userId");
+            if (user != null) {
+                LOGGED_IN_USER = user;
+            }
         }
         Log.i("MainActivity", "Logged in user's ID: " + LOGGED_IN_USER);
 

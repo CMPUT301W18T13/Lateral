@@ -116,6 +116,10 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     }
 
+    /**
+     * Returns
+     * @param query
+     */
     private void returnMatchingTask(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
         addTasks(taskService.getAllTasks(query));
