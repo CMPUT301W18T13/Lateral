@@ -119,6 +119,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
         if (assignedBid != null){
             assignedToUsername.setText(assignedBid.getBidder().getUsername());
         }
+        else{
+            String noneText = "None";
+            assignedToUsername.setText(noneText);
+        }
     }
 
     /**
@@ -172,7 +176,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
             // Edit the task
             Intent intent = new Intent(this, AddEditTaskActivity.class);
             intent.putExtra(AddEditTaskActivity.EXTRA_TASK_ID, taskID);
-            startActivity(intent);
+            startActivityForResult(intent, 2);
         }
         else if (item.getItemId() == R.id.action_delete_task){
             taskService.delete(taskID);
@@ -192,7 +196,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1 && resultCode == Activity.RESULT_OK ){
+        if (resultCode == Activity.RESULT_OK ){
             refresh();
         }
     }

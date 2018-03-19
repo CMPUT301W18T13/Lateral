@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
@@ -22,7 +23,9 @@ import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
+import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
@@ -55,7 +58,7 @@ public class BidRowAdapter extends BaseAdapter {
 
         this.context = context;
         this.bids = bids;
-        this.task =task;
+        this.task = task;
         this.BidListActivtyClass = BidListActivtyClass;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -134,6 +137,14 @@ public class BidRowAdapter extends BaseAdapter {
 
                 task.setAssignedBidId(bid.getId());
                 task.setStatus(TaskStatus.Assigned);
+                TaskService taskService = new DefaultTaskService();
+                try{
+                    taskService.update(task);
+                } catch(Exception e){
+                    Toast errorToast = Toast.makeText(context,
+                            "Failed to update task", Toast.LENGTH_SHORT);
+                    errorToast.show();
+                }
 
                 BidListActivtyClass.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
