@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
@@ -23,6 +29,9 @@ import static com.lateral.lateral.model.BidEvent.*;
 //TODO: use recycler view
 //TODO: make disgusting bid_card look nicer
 
+/**
+ * Class to work the Bid List into the List/RecyclerView
+ */
 public class BidRowAdapter extends BaseAdapter {
 
     private Context context;
@@ -33,6 +42,12 @@ public class BidRowAdapter extends BaseAdapter {
     private String usernameFormat;
     private String amountFormat;
 
+    /**
+     * Constructor for the adapter
+     * @param context The current context
+     * @param bids The list of bids to add
+     * @param BidListActivtyClass The activity to use this in
+     */
     public BidRowAdapter(Context context, ArrayList<Bid> bids, Activity BidListActivtyClass) {
         this.context = context;
         this.bids = bids;
@@ -41,21 +56,42 @@ public class BidRowAdapter extends BaseAdapter {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
+    /**
+     * Gets the count of all the bids in the list
+     * @return The count of all the bids
+     */
     @Override
     public int getCount() {
         return bids.size();
     }
 
+    /**
+     * Gets an item at the specified position
+     * @param position Position in the list
+     * @return The item at the position
+     */
     @Override
     public Object getItem(int position) {
         return bids.get(position);
     }
 
+    /**
+     * Gets the position of the item in the list
+     * @param position The position of the item
+     * @return The position of the item in the list
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Returns the view used to represent an item
+     * @param position The position of the item in the list
+     * @param convertView The view to display the info in
+     * @param parent The parent view for the adapter
+     * @return The fully populated view
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final Bid bid = bids.get(position);
@@ -116,11 +152,23 @@ public class BidRowAdapter extends BaseAdapter {
         return vi;
     }
 
+    /**
+     * Sets the displayed username according to a certain format
+     * @param usernameFormat the format to display the username
+     */
     public void setUsernameFormat(String usernameFormat){ this.usernameFormat = usernameFormat; }
 
+    /**
+     * Sets the displayed amount according to a certain format
+     * @param amountFormat the format to display the amount
+     */
     public void setAmountFormat(String amountFormat){
         this.amountFormat = amountFormat;
     }
 
+    /**
+     * Returns the associated BidEvent
+     * @return the associated BidEvent
+     */
     public BidEvent getBidEvent(){return bidEvent;}
 }

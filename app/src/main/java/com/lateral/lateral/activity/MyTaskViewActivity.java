@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
@@ -51,6 +57,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private UserService userService = new DefaultUserService();
     private BidService bidService = new DefaultBidService();
 
+    /**
+     * Called when the activity is created
+     * @param savedInstanceState the saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +79,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
         assignedToUsername = findViewById(R.id.my_text_view_username);
     }
 
+    /**
+     * Called when the activity is started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -92,6 +105,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
         assignedToUsername.setText(username);
     }
 
+    /**
+     * Loads a task based on its taskID
+     * @param taskID Task ID of the task
+     * @return The loaded task
+     */
     private Task loadTask(String taskID){
         Task task = taskService.getById(taskID);
         task.setLowestBid(bidService.getLowestBid(task.getId()));
@@ -102,13 +120,21 @@ public class MyTaskViewActivity extends AppCompatActivity {
         // TODO: Handle null task
     }
 
+    /**
+     * Called when see bid button is clicked
+     * @param v The current view
+     */
     public void onSeeBidButtonClick(View v){
         Intent intent = new Intent(this, BidListActivity.class);
         intent.putExtra(BidListActivity.TASK_ID, taskID);
         startActivityForResult(intent, 1);
     }
 
-
+    /**
+     * Called when the options menu is created
+     * @param menu The menu created
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -116,6 +142,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Called when an options menu item is selected
+     * @param item The menu item selected
+     * @return The built in result of calling onOptionsItemSelected
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_edit_task){
@@ -131,6 +162,12 @@ public class MyTaskViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called when the child activity exits
+     * @param requestCode The request code supplied by calling function
+     * @param resultCode The result code returned by the child activity
+     * @param data The Intent supplied
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK ){

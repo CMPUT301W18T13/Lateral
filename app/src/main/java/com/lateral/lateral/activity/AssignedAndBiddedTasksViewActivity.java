@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral.activity;
 
 import android.app.SearchManager;
@@ -23,11 +29,19 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 import java.util.ArrayList;
 
 // Just ignore this activity for now
+
+/**
+ * Activity for viewing any assigned/bidden on tasks
+ */
 public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
     private String thisUserID = "npwhite";          // for testing
 
+    /**
+     * Called when Activity is created
+     * @param savedInstanceState The saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -57,8 +71,11 @@ public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
 
     }
 
-
-
+    /**
+     * Called when the options menu is created
+     * @param menu The menu created
+     * @return True
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -75,18 +92,29 @@ public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Adds a list of tasks to the currently displayed lists
+     * @param returnedTasks The list of tasks to add
+     */
     private void addTasks(ArrayList<Task> returnedTasks) {
         matchingTasks.addAll(returnedTasks);
         mAdapter.notifyItemInserted(matchingTasks.size() - 1);
 
     }
 
+    /**
+     * Clear the list of displayed tasks
+     */
     private void clearList() {
         final int size = matchingTasks.size();
         matchingTasks.clear();
         mAdapter.notifyItemRangeRemoved(0, size);
     }
 
+    /**
+     * Adds the list of tasks matching a certain Requester ID to the list of displayed tasks
+     * @param query The Requester ID to get tasks from
+     */
     private void returnMatchingTasks(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
         addTasks(taskService.getAllTasksByRequesterID(query));
