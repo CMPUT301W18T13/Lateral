@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
-    public static String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
+    public static String LOGGED_IN_USER = "AWJFrRNp7ZEnxuZlXrJo";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
     /**
      * Called when the activity is created

@@ -14,6 +14,7 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -180,8 +181,9 @@ public class SignUpActivity extends AppCompatActivity {
             defaultUserService.post(user);
 
             // Start the next activity with the user logged in
-            String id = defaultUserService.getIdByUsername(username);
+            String id = defaultUserService.getUserByUsername(username).getId();
             Intent mainActivityIntent = new Intent(SignUpActivity.this, MainActivity.class);
+            Log.i("SignUp", "id="+id);
             mainActivityIntent.putExtra("userId", id);
             startActivity(mainActivityIntent);
         }
