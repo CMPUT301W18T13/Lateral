@@ -181,10 +181,9 @@ public class SignUpActivity extends AppCompatActivity {
             defaultUserService.post(user);
 
             // Start the next activity with the user logged in
-            String id = defaultUserService.getUserByUsername(username).getId();
             Intent mainActivityIntent = new Intent(SignUpActivity.this, MainActivity.class);
-            Log.i("SignUp", "id="+id);
-            mainActivityIntent.putExtra("userId", id);
+            Log.i("SignUp", "id="+user.getId());
+            mainActivityIntent.putExtra("userId", user.getId());
             startActivity(mainActivityIntent);
         }
     }
