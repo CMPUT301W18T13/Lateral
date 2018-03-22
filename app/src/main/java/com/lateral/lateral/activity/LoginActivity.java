@@ -26,11 +26,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.service.UserLoginTools.hashPassword;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static com.lateral.lateral.service.UserLoginService.hashPassword;
+import static com.lateral.lateral.service.UserLoginService.isPasswordValid;
+import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
+import static com.lateral.lateral.service.UserLoginService.loadUserFromToken;
+import static com.lateral.lateral.service.UserLoginService.login;
+import static com.lateral.lateral.service.UserLoginService.saveUserToken;
 
 /**
  * A login screen that offers login via username/password.
@@ -88,6 +101,12 @@ public class LoginActivity extends AppCompatActivity{
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        String userId = loadUserFromToken(getApplicationContext());
+        if (userId != null){
+            login(userId, getApplicationContext());
+            finish();
+        }
     }
 
     /**
@@ -150,26 +169,6 @@ public class LoginActivity extends AppCompatActivity{
             mAuthTask = new UserLoginTask(password, saltAndHash, id);
             mAuthTask.execute((Void) null);
         }
-    }
-
-
-    /**
-     * Validates whether the username matches the complexity requirements
-     * @param username Username to validate
-     * @return True if it matches requirements; false otherwise
-     */
-    private boolean isUsernameValid(String username) {
-        return username.length() >= 4;
-    }
-
-
-    /**
-     * Validates whether the password matches the complexity requirements
-     * @param password Password to validate
-     * @return True if it matches requirements; false otherwise
-     */
-    private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
     }
 
 
@@ -257,9 +256,9 @@ public class LoginActivity extends AppCompatActivity{
             showProgress(false);
 
             if (success) {
-                Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-                mainActivityIntent.putExtra("userId", mId);
-                startActivity(mainActivityIntent);
+                saveUserToken(mId, getApplicationContext());
+                login(mId, getApplicationContext());
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

@@ -27,8 +27,15 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.service.UserLoginTools.hashPassword;
-import static com.lateral.lateral.service.UserLoginTools.randomBytes;
+import static com.lateral.lateral.service.UserLoginService.hashPassword;
+import static com.lateral.lateral.service.UserLoginService.isEmailValid;
+import static com.lateral.lateral.service.UserLoginService.isPasswordValid;
+import static com.lateral.lateral.service.UserLoginService.isPhoneNumberValid;
+import static com.lateral.lateral.service.UserLoginService.isUsernameTaken;
+import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
+import static com.lateral.lateral.service.UserLoginService.login;
+import static com.lateral.lateral.service.UserLoginService.randomBytes;
+import static com.lateral.lateral.service.UserLoginService.saveUserToken;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -181,66 +188,10 @@ public class SignUpActivity extends AppCompatActivity {
             defaultUserService.post(user);
 
             // Start the next activity with the user logged in
-            Intent mainActivityIntent = new Intent(SignUpActivity.this, MainActivity.class);
-            Log.i("SignUp", "id="+user.getId());
-            mainActivityIntent.putExtra("userId", user.getId());
-            startActivity(mainActivityIntent);
+            saveUserToken(user.getId(), getApplicationContext());
+            login(user.getId(), getApplicationContext());
+            finish();
         }
-    }
-
-    /**
-     * Verifies that the username matches complexity requirements
-     * @param username Username to verify
-     * @return True if requirements met; false otherwise
-     */
-    private boolean isUsernameValid(String username){
-        return username.length() > 4 && !username.contains("@");
-    }
-
-    /**
-     * Verifies that the username isn't used by another user
-     * @param username Username to verify
-     * @return True if requirement met; false otherwise
-     */
-    private boolean isUsernameTaken(String username){
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getUserByUsername(username);
-        return user == null;
-    }
-
-    /**
-     * Verifies that the phone number matches a certain format
-     * @param phoneNumber Phone number to verify
-     * @return True if requirements met; false otherwise
-     */
-    private boolean isPhoneNumberValid(String phoneNumber) {
-        /*
-        Regex matches on any 1 or digit country code, area code in or out of brackets
-        and the rest of the digits separated by ".", "-", " ", or nothing
-        Note: doesn't work on non-Canadian/American phone number formats
-         */
-        return phoneNumber.matches("^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]?\\d{3}[\\s.-]?\\d{4}$");
-    }
-
-    /**
-     * Verifies that the email matches a certain format
-     * @param email Email to verify
-     * @return True if requirements met; false otherwise
-     */
-    private boolean isEmailValid(String email) {
-        /*
-        Regex matches on any string of the form "username@website.tld",
-         */
-        return email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
-    }
-
-    /**
-     * Verifies that the password meets certain complexity requirements
-     * @param password Password to verify
-     * @return True if requirements met; false otherwise
-     */
-    private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
     }
 
     /**

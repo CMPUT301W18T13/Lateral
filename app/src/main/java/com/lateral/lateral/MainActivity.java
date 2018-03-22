@@ -3,6 +3,7 @@ package com.lateral.lateral;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,7 +17,10 @@ import android.widget.Button;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
+import com.lateral.lateral.activity.LoginActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
+
+import static com.lateral.lateral.Constants.USER_FILE_NAME;
 
 /**
  * The main activity for the app
@@ -163,7 +167,12 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
-
+            if(getApplicationContext().deleteFile(USER_FILE_NAME)){
+                Log.i("MainActivity", "File deleted");
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
