@@ -53,6 +53,8 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
 
         String result = get(json);
 
+        if(result == null){ return null; }
+
         if(result.equals("")){
             return null;
         }else {
@@ -69,6 +71,8 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
         String json = "{\"_source\": [\"id\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
 
         String result = get(json);
+
+        if(result == null){ return null; }
 
         if(result.equals("")){
             return null;

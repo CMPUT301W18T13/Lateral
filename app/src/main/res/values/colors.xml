@@ -3,11 +3,8 @@
     <color name="colorPrimary">#424242</color>
     <color name="colorPrimaryDark">#1B1B1B</color>
     <color name="colorAccent">#6D6D6D</color>
-    <color name="green">#00FF00</color>
-    <color name="darkgreen">#33CC33</color>
+    <color name="green">#33CC33</color>
     <color name="red">#FF0000</color>
     <color name="blue">#56A5EC</color>
-    <color name="darkblue">#0000CC</color>
-    <color name="yellow">#FFFF00</color>
-    <color name="burntorange">#FFCC00</color>
+    <color name="yellow">#FFCC00</color>
 </resources>
