@@ -73,9 +73,14 @@
     <!-- Strings for Bid Card -->
     <string name="bid_card_accept_button">Accept</string>
     <string name="bid_card_decline_button">Decline</string>
-    <string name="bid_card_username_text_field">Username: %1s</string>
+    <string name="bid_card_username_text_field">Username: @%1s</string>
     <string name="bid_card_amount_text_field">Amount: $%1s</string>
+
+    <!-- Strings for Task View -->
+    <string name="task_view_no_bids">No Bids!</string>
+    <string name="task_view_not_assigned">None</string>
 
     <!-- Project wide strings-->
     <string name="dollar_amount_display">$%1$s</string>
+    <string name="username_display">\@%1$s</string>
 </resources>

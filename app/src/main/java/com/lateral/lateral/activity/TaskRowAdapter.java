@@ -6,6 +6,10 @@
 
 package com.lateral.lateral.activity;
 
+import android.app.Activity;
+import android.app.Application;
+import android.app.DialogFragment;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
@@ -29,6 +34,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     private ArrayList<Task> mTasks;
     DefaultUserService defaultUserService = new DefaultUserService();
     DefaultBidService defaultBidService = new DefaultBidService();
+    Context context;
 
 
     /**
@@ -64,9 +70,10 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
      * Constructor for the TaskRowAdapter
      * @param mTasks List of tasks to set
      */
-    public TaskRowAdapter(ArrayList<Task> mTasks) {
+    public TaskRowAdapter(ArrayList<Task> mTasks, Context context) {
         //this.context = context;
         this.mTasks = mTasks;
+        this.context = context;
     }
 
 
@@ -91,10 +98,17 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         // need to fill more properly once big/user objects implemented on elastic search
-        Task task = mTasks.get(position);
+        final Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
         //TODO error handle
-        holder.tvUsername.setText((defaultUserService.getUserByID(task.getRequestingUserId())).getUsername());
+        holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
+        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = UserInfoDialog.newInstance(task.getRequestingUserId());
+                newFragment.show(((Activity)context).getFragmentManager(), "dialog");
+            }
+        });
         //TODO error handle
         Bid bid = defaultBidService.getLowestBid(task.getId());
         String bidText = "No Bids";

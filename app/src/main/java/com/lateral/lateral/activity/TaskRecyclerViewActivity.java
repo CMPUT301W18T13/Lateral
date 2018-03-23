@@ -102,7 +102,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new TaskRowAdapter(matchingTasks);
+        mAdapter = new TaskRowAdapter(matchingTasks, this);
         mRecyclerView.setAdapter(mAdapter);
     }
 

@@ -7,6 +7,7 @@
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
@@ -103,9 +105,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         }
 
         if (task.getLowestBid() == null){
-            //Editor complains unless I save as string then setText
-            String noBidsString = "No Bids";
-            currentBid.setText(noBidsString);
+            currentBid.setText(R.string.task_view_no_bids);
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
                     String.valueOf(task.getLowestBid().getAmount())));
@@ -115,13 +115,19 @@ public class MyTaskViewActivity extends AppCompatActivity {
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
-        Bid assignedBid = task.getAssignedBid();
+        final Bid assignedBid = task.getAssignedBid();
         if (assignedBid != null){
-            assignedToUsername.setText(assignedBid.getBidder().getUsername());
+            assignedToUsername.setText(getString(R.string.username_display, assignedBid.getBidder().getUsername()));
+            assignedToUsername.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DialogFragment newFragment = UserInfoDialog.newInstance(assignedBid.getBidderId());
+                    newFragment.show(getFragmentManager(), "dialog");
+                }
+            });
         }
         else{
-            String noneText = "None";
-            assignedToUsername.setText(noneText);
+            assignedToUsername.setText(R.string.task_view_not_assigned);
         }
     }
 

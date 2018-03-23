@@ -6,10 +6,12 @@
 
 package com.lateral.lateral.activity;
 
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.SpannableString;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.BidService;
@@ -104,7 +107,14 @@ public class TaskViewActivity extends AppCompatActivity {
         }
 
         title.setText(task.getTitle());
-        username.setText(task.getRequestingUser().getUsername());
+        username.setText(getString(R.string.username_display, task.getRequestingUser().getUsername()));
+        username.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = UserInfoDialog.newInstance(task.getRequestingUserId());
+                newFragment.show(getFragmentManager(), "dialog");
+            }
+        });
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());

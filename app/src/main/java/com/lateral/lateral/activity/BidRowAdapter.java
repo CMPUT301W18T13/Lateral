@@ -7,6 +7,7 @@
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
@@ -115,6 +117,14 @@ public class BidRowAdapter extends BaseAdapter {
         String username = bid.getBidder().getUsername();
         String formattedUsername = String.format(usernameFormat, username);
         usernameTextView.setText(formattedUsername);
+
+        usernameTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogFragment newFragment = UserInfoDialog.newInstance(bid.getBidderId());
+                newFragment.show(((Activity)context).getFragmentManager(), "dialog");
+            }
+        });
 
         String amount = bid.getAmount().toString();
         String formattedAmount = String.format(amountFormat, amount);
