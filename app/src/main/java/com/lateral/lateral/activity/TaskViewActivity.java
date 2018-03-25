@@ -22,6 +22,7 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -159,6 +160,8 @@ public class TaskViewActivity extends AppCompatActivity {
 
                 // TODO: Error handling required
                 bidService.post(newBid);// Make sure bid has task Id
+                task.setStatus(TaskStatus.Bidded);
+                taskService.update(task);
             }
             }
         });
