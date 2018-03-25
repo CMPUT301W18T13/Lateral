@@ -9,12 +9,10 @@ package com.lateral.lateral.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -22,11 +20,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
+import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.service.UserLoginService.hashPassword;
 import static com.lateral.lateral.service.UserLoginService.isEmailValid;
 import static com.lateral.lateral.service.UserLoginService.isPasswordValid;
@@ -37,7 +35,7 @@ import static com.lateral.lateral.service.UserLoginService.login;
 import static com.lateral.lateral.service.UserLoginService.randomBytes;
 import static com.lateral.lateral.service.UserLoginService.saveUserToken;
 
-public class SignUpActivity extends AppCompatActivity {
+public class EditUserActivity extends AppCompatActivity {
 
     private EditText mUsername;
     private EditText mPhoneNumber;
@@ -49,21 +47,29 @@ public class SignUpActivity extends AppCompatActivity {
     private View mSignUpForm;
     private View mProgressBar;
 
+    private User mCurrentUser;
 
-    /**
-     * Called when the activity is started
-     * @param savedInstanceState The saved instance to run from
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        DefaultUserService defaultUserService = new DefaultUserService();
+        mCurrentUser = defaultUserService.getById(LOGGED_IN_USER);
+
         // Set up form views
         mUsername = findViewById(R.id.usernameSignUpForm);
+        mUsername.setText(mCurrentUser.getUsername());
+
         mPhoneNumber = findViewById(R.id.phoneSignUpForm);
+        mPhoneNumber.setText(mCurrentUser.getPhoneNumber());
+
         mEmail = findViewById(R.id.emailSignUpForm);
+        mEmail.setText(mCurrentUser.getEmailAddress());
+
         mConfirmEmail = findViewById(R.id.emailConfirmSignUpForm);
+        mConfirmEmail.setText(mCurrentUser.getEmailAddress());
+
         mPassword = findViewById(R.id.passwordSignUpForm);
         mConfirmPassword = findViewById(R.id.passwordConfirmSignUpForm);
 
@@ -138,7 +144,7 @@ public class SignUpActivity extends AppCompatActivity {
             focusView = mEmail;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmail.setError(getString(R.string.error_invalid_username));
+            mEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEmail;
             cancel = true;
         }
@@ -183,14 +189,17 @@ public class SignUpActivity extends AppCompatActivity {
             String saltAndHash = salt + ':' + hashPassword(password, salt);
 
             // Create and store the user
-            User user = new User(username, phoneNumber, email, saltAndHash);
+            mCurrentUser.setUsername(username);
+            mCurrentUser.setPhoneNumber(phoneNumber);
+            mCurrentUser.setEmailAddress(email);
+            mCurrentUser.setSaltAndHash(saltAndHash);
+
             DefaultUserService defaultUserService = new DefaultUserService();
-            Log.i("SignUpActivity", "Posting user...");
-            defaultUserService.post(user);
+            defaultUserService.update(mCurrentUser);
 
             // Start the next activity with the user logged in
-            saveUserToken(user.getId(), getApplicationContext());
-            login(user.getId(), getApplicationContext());
+            saveUserToken(mCurrentUser.getId(), getApplicationContext());
+            login(mCurrentUser.getId(), getApplicationContext());
             finish();
         }
     }

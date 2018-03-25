@@ -61,7 +61,7 @@ public class AssignedAndBiddedTasksViewActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new TaskRowAdapter(matchingTasks);
+        mAdapter = new TaskRowAdapter(matchingTasks, getApplicationContext());
         mRecyclerView.setAdapter(mAdapter);
 
         // for now just display requested tasks from this user

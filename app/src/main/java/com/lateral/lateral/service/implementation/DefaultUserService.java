@@ -53,6 +53,8 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
 
         String result = get(json);
 
+        if(result == null){ return null; }
+
         if(result.equals("")){
             return null;
         }else {
@@ -70,6 +72,8 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
 
         String result = get(json);
 
+        if(result == null){ return null; }
+
         if(result.equals("")){
             return null;
         }else {
@@ -80,11 +84,11 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
 
     /**
      * Gets the user's token based on the user's username
-     * @param username Username of the user
+     * @param id ID of the user
      * @return The token of the user if it exists; null otherwise;
      */
-    public String getToken(String username){
-        String json = "{\"_source\": [\"token\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
+    public String getToken(String id){
+        String json = "{\"_source\": [\"token\"], \"query\": {\"match\": {\"id\": \"" + id + "\"}}}";
 
         String result = get(json);
 

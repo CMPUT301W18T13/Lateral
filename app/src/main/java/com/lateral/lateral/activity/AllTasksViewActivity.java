@@ -6,12 +6,17 @@
 
 package com.lateral.lateral.activity;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
@@ -55,6 +60,9 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         return R.id.taskViewList;
     }
 
+    @Override
+    protected int getProgressBarID() { return R.id.all_task_view_progress; }
+
     /**
      * Gets the context of the current activity
      * @return The current activity's Context
@@ -82,7 +90,6 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         super.onCreate(savedInstanceState);
         // check how we got here
         handleIntent(getIntent());
-
     }
 
     /**
@@ -128,7 +135,6 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             Log.d("ALL TASKS", "Got here via button, load all");
             addTasks(defaultTaskService.getEveryTask());
         }
-
     }
 
     /**

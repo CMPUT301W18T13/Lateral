@@ -3,6 +3,7 @@ package com.lateral.lateral;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +14,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
+import com.lateral.lateral.activity.EditUserActivity;
+import com.lateral.lateral.activity.LoginActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
+import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.implementation.DefaultUserService;
+
+import static com.lateral.lateral.Constants.USER_FILE_NAME;
 
 /**
  * The main activity for the app
@@ -25,7 +33,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
-    public static String LOGGED_IN_USER = "AWItlpRj42PX8bQQT0op";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
+    public static String LOGGED_IN_USER = "AWJFrRNp7ZEnxuZlXrJo";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
     /**
      * Called when the activity is created
@@ -65,6 +73,17 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        DefaultUserService defaultUserService = new DefaultUserService();
+        User user = defaultUserService.getUserByID(LOGGED_IN_USER);
+
+        View hView = navigationView.getHeaderView(0);
+        TextView usernameView = hView.findViewById(R.id.nav_header_username);
+        usernameView.setText(getString(R.string.username_display, user.getUsername()));
+
+        TextView emailView = hView.findViewById(R.id.nav_header_email);
+        emailView.setText(user.getEmailAddress());
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 
@@ -160,18 +179,25 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_edit_user) {
+            Intent intent = new Intent(MainActivity.this, EditUserActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_req_tasks) {
+            Intent intent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_all_tasks) {
+            Intent intent = new Intent(MainActivity.this, AllTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_bidded_tasks) {
+            Intent intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_logout) {
+            if(getApplicationContext().deleteFile(USER_FILE_NAME)){
+                Log.i("MainActivity", "File deleted");
+                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

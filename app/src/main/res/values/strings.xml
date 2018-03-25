@@ -16,7 +16,7 @@
     <string name="prompt_password_confirm">Re-enter password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_email">This email is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_invalid_username">This username is invalid</string>
     <string name="error_username_taken">This username is already in use</string>
@@ -73,9 +73,17 @@
     <!-- Strings for Bid Card -->
     <string name="bid_card_accept_button">Accept</string>
     <string name="bid_card_decline_button">Decline</string>
-    <string name="bid_card_username_text_field">Username: %1s</string>
+    <string name="bid_card_username_text_field">Username: @%1s</string>
     <string name="bid_card_amount_text_field">Amount: $%1s</string>
+
+    <!-- Strings for Task View -->
+    <string name="task_view_no_bids">No Bids!</string>
+    <string name="task_view_not_assigned">None</string>
 
     <!-- Project wide strings-->
     <string name="dollar_amount_display">$%1$s</string>
+    <string name="username_display">\@%1$s</string>
+
+    <string name="load_user_fail">Failed to load user!</string>
+    <string name="network_connection_fail_message">Couldn\'t connect to the network</string>
 </resources>

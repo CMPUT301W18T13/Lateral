@@ -7,9 +7,13 @@
 package com.lateral.lateral.activity;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +39,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     // test
 
+    private RecyclerView mRecyclerView;
+    private View progressView;
+
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
 
@@ -58,6 +65,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     protected abstract int getResourceLayoutID();
     protected abstract int getRecyclerListID();
+    protected abstract int getProgressBarID();
     protected abstract Context currentActivityContext();
     protected abstract Class targetClass();
 
@@ -68,7 +76,6 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        RecyclerView mRecyclerView;
         RecyclerView.LayoutManager mLayoutManager;
 
         super.onCreate(savedInstanceState);
@@ -82,6 +89,8 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         // defining recycler view
         mRecyclerView = findViewById(getRecyclerListID());
         mRecyclerView.setHasFixedSize(true);
+
+        progressView = findViewById(getProgressBarID());
 
         /*
         Listens and handles clicks on the recycler view
@@ -102,7 +111,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new TaskRowAdapter(matchingTasks);
+        mAdapter = new TaskRowAdapter(matchingTasks, this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -134,8 +143,17 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
      * @param returnedTasks tasks to be added
      */
     public void addTasks(ArrayList<Task> returnedTasks) {
+        Log.i("addTasks", "Showing progress bar!");
+        showProgress(true);
+        Log.i("addTasks", "Progress bar shown!");
+
         matchingTasks.addAll(returnedTasks);
-        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
+//        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
+        mAdapter.notifyDataSetChanged();
+
+        Log.i("addTasks", "Hiding progress bar!");
+        showProgress(false);
+        Log.i("addTasks", "Progress bar hidden!");
 
     }
 
@@ -147,5 +165,36 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         matchingTasks.clear();
         mAdapter.notifyItemRangeRemoved(0, size);
     }
+
+    /**
+     * Shows the progress UI and hides the login form.
+     * @param show Whether to show or hide the progress wheel
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+        mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mRecyclerView.animate().setDuration(shortAnimTime).alpha(
+                show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mRecyclerView.setVisibility(show ? View.GONE : View.VISIBLE);
+            }
+        });
+
+        progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+        progressView.animate().setDuration(shortAnimTime).alpha(
+                show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                progressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            }
+        });
+    }
+
 
 }

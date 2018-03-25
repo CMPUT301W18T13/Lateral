@@ -1,0 +1,15 @@
+<!--
+  ~ Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+  ~ You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+  ~ You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="24.0"
+        android:viewportHeight="24.0">
+    <path
+        android:fillColor="#FF000000"
+        android:pathData="M10,2C7.791,2 6,3.791 6,6C6,8.209 7.791,10 10,10C12.209,10 14,8.209 14,6C14,3.791 12.209,2 10,2zM19.781,11C19.621,11 19.466,11.066 19.344,11.188L18.281,12.25L20.75,14.719L21.813,13.656C22.056,13.412 22.056,13.025 21.813,12.781L20.219,11.188C20.097,11.066 19.941,11 19.781,11zM10,12C3.923,12 2,16 2,16L2,18L10,18L14.906,13.094C13.706,12.469 12.1,12 10,12zM17.5,13L11,19.5L11,22L13.5,22L20,15.5L17.5,13z"/>
+</vector>

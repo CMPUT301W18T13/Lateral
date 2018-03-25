@@ -2,11 +2,12 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/userDialogView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/profileImage"
+        android:id="@+id/profile_image"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginTop="8dp"
@@ -17,42 +18,70 @@
         app:srcCompat="@drawable/ic_menu_gallery" />
 
     <TextView
-        android:id="@+id/usenameText"
+        android:id="@+id/user_dialog_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/temp_username"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
     <TextView
-        android:id="@+id/emailText"
+        android:id="@+id/user_dialog_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="(780) 555 0986"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneText"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/user_dialog_phone" />
 
     <TextView
-        android:id="@+id/phoneText"
+        android:id="@+id/user_dialog_phone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="cjmerkos\@ualberta.ca"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/usenameText" />
+        app:layout_constraintTop_toBottomOf="@+id/user_dialog_username" />
 
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
+    <ImageButton
+        android:id="@+id/call_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Cole Merkosky"
-        android:textAppearance="@android:style/TextAppearance.Material.Large"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImage" />
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_phone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/message_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_dialog_email" />
+
+    <ImageButton
+        android:id="@+id/email_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/ic_email"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/message_button"
+        app:layout_constraintTop_toBottomOf="@+id/user_dialog_email" />
+
+    <ImageButton
+        android:id="@+id/message_button"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/email_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/call_button"
+        app:layout_constraintTop_toBottomOf="@+id/user_dialog_email"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/ic_message" />
+
 </android.support.constraint.ConstraintLayout>

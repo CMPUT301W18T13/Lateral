@@ -9,6 +9,7 @@ package com.lateral.lateral.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 
@@ -22,15 +23,20 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.service.UserLoginTools.hashPassword;
+import static com.lateral.lateral.service.UserLoginService.hashPassword;
+import static com.lateral.lateral.service.UserLoginService.isPasswordValid;
+import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
+import static com.lateral.lateral.service.UserLoginService.loadUserFromToken;
+import static com.lateral.lateral.service.UserLoginService.login;
+import static com.lateral.lateral.service.UserLoginService.saveUserToken;
 
 /**
  * A login screen that offers login via username/password.
@@ -88,6 +94,12 @@ public class LoginActivity extends AppCompatActivity{
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        String userId = loadUserFromToken(getApplicationContext());
+        if (userId != null){
+            login(userId, getApplicationContext());
+            finish();
+        }
     }
 
     /**
@@ -123,13 +135,13 @@ public class LoginActivity extends AppCompatActivity{
             cancel = true;
         }
 
-        // Check for a valid email address.
+        // Check for a valid username
         if (TextUtils.isEmpty(username)) {
             mUsernameView.setError(getString(R.string.error_field_required));
             focusView = mUsernameView;
             cancel = true;
         } else if (!isUsernameValid(username)) {
-            mUsernameView.setError(getString(R.string.error_invalid_email));
+            mUsernameView.setError(getString(R.string.error_invalid_username));
             focusView = mUsernameView;
             cancel = true;
         }
@@ -141,35 +153,27 @@ public class LoginActivity extends AppCompatActivity{
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
-            showProgress(true);
 
             DefaultUserService defaultUserService = new DefaultUserService();
             String saltAndHash = defaultUserService.getSaltAndHash(username);
             String id = defaultUserService.getIdByUsername(username);
 
-            mAuthTask = new UserLoginTask(password, saltAndHash, id);
-            mAuthTask.execute((Void) null);
+            if(saltAndHash != null && id != null) {
+                View view = this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                }
+                mAuthTask = new UserLoginTask(password, saltAndHash, id);
+                mAuthTask.execute((Void) null);
+                showProgress(true);
+            }
+            else{
+                mUsernameView.setError(getString(R.string.network_connection_fail_message));
+            }
         }
-    }
-
-
-    /**
-     * Validates whether the username matches the complexity requirements
-     * @param username Username to validate
-     * @return True if it matches requirements; false otherwise
-     */
-    private boolean isUsernameValid(String username) {
-        return username.length() >= 4;
-    }
-
-
-    /**
-     * Validates whether the password matches the complexity requirements
-     * @param password Password to validate
-     * @return True if it matches requirements; false otherwise
-     */
-    private boolean isPasswordValid(String password) {
-        return password.length() >= 4;
     }
 
 
@@ -257,9 +261,9 @@ public class LoginActivity extends AppCompatActivity{
             showProgress(false);
 
             if (success) {
-                Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
-                mainActivityIntent.putExtra("userId", mId);
-                startActivity(mainActivityIntent);
+                saveUserToken(mId, getApplicationContext());
+                login(mId, getApplicationContext());
+                finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

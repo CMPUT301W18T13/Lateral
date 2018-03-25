@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.lateral.lateral.activity.RequestedTasksViewActivity">
 
+    <ProgressBar
+        android:id="@+id/req_task_view_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_anchorGravity="center" />
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

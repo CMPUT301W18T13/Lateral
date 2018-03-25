@@ -48,6 +48,9 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
         return R.id.requestedTaskViewList;
     }
 
+    @Override
+    protected int getProgressBarID() { return R.id.req_task_view_progress;}
+
     /**
      * Gets the context of the current activity
      * @return The current activity's Context
