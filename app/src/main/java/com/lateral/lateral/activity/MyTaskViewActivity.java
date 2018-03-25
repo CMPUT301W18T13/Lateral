@@ -9,22 +9,24 @@ package com.lateral.lateral.activity;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -36,15 +38,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-// Malcolm's test task id: AWI9EJpYAJsZenWtuKsd
-
-import static com.lateral.lateral.model.BidEvent.*;
-
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
-    public static final String BID_EVENT = "com.lateral.lateral.BID_EVENT";
-    public static final String ACCEPTED_BID_ID = "com.lateral.lateral.ACCEPTED_BID_ID";
 
     private String taskID;
 
@@ -56,6 +52,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private TextView date;
     private TextView description;
     private TextView assignedToUsername;
+
+    private Button seeBidsButton;
+    private Button taskDoneButton;
+    private Button cancelTaskButton;
 
     private TaskService taskService = new DefaultTaskService();
     private UserService userService = new DefaultUserService();
@@ -83,6 +83,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
         date = findViewById(R.id.my_task_view_date);
         description = findViewById(R.id.my_task_view_description);
         assignedToUsername = findViewById(R.id.my_text_view_username);
+        seeBidsButton = findViewById(R.id.my_task_view_see_bids_button);
+        cancelTaskButton = findViewById(R.id.my_task_view_set_requested);
+        taskDoneButton = findViewById(R.id.my_task_view_set_done);
     }
 
     /**
@@ -128,6 +131,33 @@ public class MyTaskViewActivity extends AppCompatActivity {
         }
         else{
             assignedToUsername.setText(R.string.task_view_not_assigned);
+        }
+
+        setButtonVisibility();
+    }
+
+    /**
+     * Sets the visibility for each button
+     */
+    private void setButtonVisibility(){
+
+        switch (task.getStatus()){
+            case Assigned:
+                seeBidsButton.setVisibility(View.INVISIBLE);
+                cancelTaskButton.setVisibility(View.VISIBLE);
+                taskDoneButton.setVisibility(View.VISIBLE);
+                break;
+            case Done:
+                seeBidsButton.setVisibility(View.INVISIBLE);
+                cancelTaskButton.setVisibility(View.INVISIBLE);
+                taskDoneButton.setVisibility(View.INVISIBLE);
+                break;
+            case Requested: // Fall through
+            case Bidded:
+                seeBidsButton.setVisibility(View.VISIBLE);
+                cancelTaskButton.setVisibility(View.INVISIBLE);
+                taskDoneButton.setVisibility(View.INVISIBLE);
+                break;
         }
     }
 

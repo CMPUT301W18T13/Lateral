@@ -6,6 +6,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+        android:id="@+id/my_task_view_set_done"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="onSeeBidButtonClick"
+        android:text="Task Done"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/my_task_view_set_requested" />
+
+    <Button
+        android:id="@+id/my_task_view_set_requested"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="onSeeBidButtonClick"
+        android:text="Cancel Assigned Bid"
+        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/my_task_view_set_done"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="0dp"
@@ -200,7 +226,6 @@
         </LinearLayout>
 
 
-
     </ScrollView>
 
     <Button
@@ -208,11 +233,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        android:text="See Bids"
         android:onClick="onSeeBidButtonClick"
+        android:text="See Bids"
         android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/my_task_view_set_requested"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
