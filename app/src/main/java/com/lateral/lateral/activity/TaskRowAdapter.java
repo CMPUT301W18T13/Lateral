@@ -10,17 +10,20 @@ import android.app.Activity;
 import android.app.Application;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
@@ -49,6 +52,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         TextView tvUsername;
         TextView tvDate;
         TextView tvCurBid;
+        GridLayout tvTaskStatus;
 
         /**
          * Constructor for the ViewHolder
@@ -62,6 +66,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             tvUsername = itemView.findViewById(R.id.usernameTextView);
             tvDate = itemView.findViewById(R.id.dateTextView);
             tvCurBid = itemView.findViewById(R.id.bidTextView);
+            tvTaskStatus = itemView.findViewById(R.id.bidStatusIndicator);
         }
 
     }
@@ -117,6 +122,13 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         }
         holder.tvCurBid.setText(bidText);
         holder.tvDate.setText((task.getDate()).toString() );
+
+        /*
+        Sets the task status color accordingly (colors are default, can substitute our own later)
+         */
+        // get task status -> get color from status -> set background color
+        holder.tvTaskStatus.setBackgroundColor(getColorValueFromTaskStatus(task.getStatus()));
+
     }
 
     /**
@@ -126,6 +138,31 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     @Override
     public int getItemCount() {
         return mTasks.size();
+    }
+
+
+    public int getColorValueFromTaskStatus(TaskStatus status) {
+
+        int statusColor = Color.BLACK;      // default in case no status match
+
+        switch (status) {
+            case Requested:
+                statusColor = Color.GREEN;
+                break;
+
+            case Bidded:
+                statusColor = Color.YELLOW;
+                break;
+
+            case Done:
+                statusColor = Color.RED;
+                break;
+
+            case Assigned:
+                statusColor = Color.BLUE;
+                break;
+        }
+        return statusColor;
     }
 
 }

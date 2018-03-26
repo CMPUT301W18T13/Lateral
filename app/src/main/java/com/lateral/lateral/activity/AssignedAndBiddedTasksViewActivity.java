@@ -79,9 +79,10 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * Returns the target class of the activity
      * @return The target class of the activity
      */
+    // TODO probably need to change, need to hide "BID NOW!" button which will appear
     @Override
     protected Class targetClass() {
-        return MyTaskViewActivity.class;
+        return TaskViewActivity.class;
     }
 
 
