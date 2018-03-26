@@ -141,7 +141,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     }
 
 
-    public int getColorValueFromTaskStatus(TaskStatus status) {
+    private int getColorValueFromTaskStatus(TaskStatus status) {
 
         int statusColor = Color.BLACK;      // default in case no status match
 

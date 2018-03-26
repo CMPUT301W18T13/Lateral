@@ -45,6 +45,10 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
 
+    // request code for starting 'view a task' activity
+    static final int VIEW_TASK_REQUEST = 1;
+    private int clickedItemPosition = 0;
+
     /*
     public RecyclerView.Adapter getmAdapter(){
         return this.mAdapter;
@@ -99,13 +103,15 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        clickedItemPosition = position;
                         Log.d("ITEM CLICKED", "item " + (matchingTasks.get(position).getId()));
 
                         // create intent to go to task view given by targetClass() --> defined in child activities
                         Intent viewTaskIntent = new Intent(currentActivityContext(), targetClass());
                         // pass task id into intent
                         viewTaskIntent.putExtra(EXTRA_TASK_ID, (matchingTasks.get(position).getId()));
-                        startActivity(viewTaskIntent);
+                        //startActivity(viewTaskIntent);
+                        startActivityForResult(viewTaskIntent, VIEW_TASK_REQUEST);
                     }
                 });
 
@@ -194,6 +200,20 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
                 progressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
+    }
+
+
+    /*
+    Called when user returns from viewing a task (assuming they got to it from a recyclerView)
+    Can modify to catch specific results if needed
+      */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VIEW_TASK_REQUEST) {
+            Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+            mAdapter.notifyItemChanged(clickedItemPosition);
+
+        }
     }
 
 
