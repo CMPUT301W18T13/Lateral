@@ -97,15 +97,24 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
         refresh();
     }
+
     private void refresh(){
 
         try {
             task = loadTask(taskID);
+            refresh(task);
         } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
             errorToast.show();
-            return;
+            setResult(RESULT_CANCELED);
+            finish();
         }
+    }
+
+    /** Refresh with the loaded task
+     * @param task task
+     */
+    private void refresh(Task task) {
 
         if (task.getLowestBid() == null){
             currentBid.setText(R.string.task_view_no_bids);
@@ -120,14 +129,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
         final Bid assignedBid = task.getAssignedBid();
         if (assignedBid != null){
-            assignedToUsername.setText(getString(R.string.username_display, assignedBid.getBidder().getUsername()));
-            assignedToUsername.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment newFragment = UserInfoDialog.newInstance(assignedBid.getBidderId());
-                    newFragment.show(getFragmentManager(), "dialog");
-                }
-            });
+            String assignedUsername = assignedBid.getBidder().getUsername();
+            assignedToUsername.setText(getString(R.string.username_display, assignedUsername));
         }
         else{
             assignedToUsername.setText(R.string.task_view_not_assigned);
@@ -137,26 +140,30 @@ public class MyTaskViewActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets the visibility for each button
+     * Sets the visibility for the action buttons
      */
     private void setButtonVisibility(){
 
         switch (task.getStatus()){
             case Assigned:
-                seeBidsButton.setVisibility(View.INVISIBLE);
+                seeBidsButton.setVisibility(View.GONE);
                 cancelTaskButton.setVisibility(View.VISIBLE);
                 taskDoneButton.setVisibility(View.VISIBLE);
                 break;
             case Done:
-                seeBidsButton.setVisibility(View.INVISIBLE);
-                cancelTaskButton.setVisibility(View.INVISIBLE);
-                taskDoneButton.setVisibility(View.INVISIBLE);
+                seeBidsButton.setVisibility(View.GONE);
+                cancelTaskButton.setVisibility(View.GONE);
+                taskDoneButton.setVisibility(View.GONE);
                 break;
-            case Requested: // Fall through
+            case Requested:
+                seeBidsButton.setVisibility(View.GONE);
+                cancelTaskButton.setVisibility(View.GONE);
+                taskDoneButton.setVisibility(View.GONE);
+                break;
             case Bidded:
                 seeBidsButton.setVisibility(View.VISIBLE);
-                cancelTaskButton.setVisibility(View.INVISIBLE);
-                taskDoneButton.setVisibility(View.INVISIBLE);
+                cancelTaskButton.setVisibility(View.GONE);
+                taskDoneButton.setVisibility(View.GONE);
                 break;
         }
     }
@@ -187,6 +194,38 @@ public class MyTaskViewActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BidListActivity.class);
         intent.putExtra(BidListActivity.TASK_ID, taskID);
         startActivityForResult(intent, 1);
+    }
+
+    /**
+     * Called when Set Done button is clicked
+     * @param v current view
+     */
+    public void onSetDoneButtonClick(View v){
+        task.setStatus(TaskStatus.Done);
+        taskService.update(task);
+        refresh(task);
+    }
+    // TODO: Need some way to clearly display the status within the view
+
+    /**
+     * Called when Set Requested (Cancel) button is clicked
+     * @param v current view
+     */
+    public void onSetRequestedButtonClick(View v){
+
+        // TODO: BUG: Cannot save assignedBidId as null!!!!!
+        Toast temp = Toast.makeText(this, "Button cannot be implemented yet", Toast.LENGTH_LONG);
+        temp.show();
+
+//        task.setAssignedBid(null);
+//        task.setAssignedBidId(null);
+//        task.setBids(null);
+//        task.setLowestBid(null);
+//        task.setStatus(TaskStatus.Requested);
+//
+//        bidService.deleteBidsByTask(taskID);
+//        taskService.update(task);
+//        refresh(task);
     }
 
     /**
@@ -233,6 +272,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK ){
+            // TODO: Testing
+            Toast temp = Toast.makeText(this, "Refreshing!", Toast.LENGTH_LONG);
+            temp.show();
+
             refresh();
         }
     }

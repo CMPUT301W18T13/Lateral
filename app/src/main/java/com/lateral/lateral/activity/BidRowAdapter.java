@@ -118,14 +118,6 @@ public class BidRowAdapter extends BaseAdapter {
         String formattedUsername = String.format(usernameFormat, username);
         usernameTextView.setText(formattedUsername);
 
-        usernameTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = UserInfoDialog.newInstance(bid.getBidderId());
-                newFragment.show(((Activity)context).getFragmentManager(), "dialog");
-            }
-        });
-
         String amount = bid.getAmount().toString();
         String formattedAmount = String.format(amountFormat, amount);
         amountTextView.setText(formattedAmount);
@@ -137,6 +129,7 @@ public class BidRowAdapter extends BaseAdapter {
             @Override
             public void onClick(View v)
             {
+                // TODO: Make more efficient? Maybe add service method to simplify this
                 //Delete all other bids which have not been accepted
                 for (Bid b : bids){
                     if (!b.getId().equals(bid.getId())){

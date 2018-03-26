@@ -9,6 +9,7 @@ package com.lateral.lateral.service;
 import com.lateral.lateral.model.BaseEntity;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Represents a ElasticSearch service class for a certain type of data

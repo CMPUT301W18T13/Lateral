@@ -25,7 +25,10 @@ import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Adapter for the TaskRow RecyclerView
@@ -102,13 +105,6 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         holder.tvTitle.setText(task.getTitle());
         //TODO error handle
         holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
-        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = UserInfoDialog.newInstance(task.getRequestingUserId());
-                newFragment.show(((Activity)context).getFragmentManager(), "dialog");
-            }
-        });
         //TODO error handle
         Bid bid = defaultBidService.getLowestBid(task.getId());
         String bidText = "No Bids";
@@ -116,7 +112,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             bidText = String.valueOf(bid.getAmount());
         }
         holder.tvCurBid.setText(bidText);
-        holder.tvDate.setText((task.getDate()).toString() );
+        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
+        holder.tvDate.setText(df.format(task.getDate()));
     }
 
     /**
@@ -129,3 +126,6 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     }
 
 }
+// TODO: Need to open MyTaskViewActivity if the task belongs to current user
+// TODO: Need to refresh on return to this
+// TODO: Get the notification "x new bids!" working (or remove it)

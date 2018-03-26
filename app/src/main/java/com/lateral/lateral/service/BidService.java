@@ -18,4 +18,10 @@ public interface BidService extends BaseService<Bid> {
      * @return The lowest bid
      */
     Bid getLowestBid(String taskID);
+
+    /**
+     * Delete all bids for the given task
+     * @param taskID Jest ID of the task
+     */
+    void deleteBidsByTask(String taskID);
 }

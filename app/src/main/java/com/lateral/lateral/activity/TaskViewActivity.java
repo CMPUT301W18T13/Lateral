@@ -109,13 +109,6 @@ public class TaskViewActivity extends AppCompatActivity {
 
         title.setText(task.getTitle());
         username.setText(getString(R.string.username_display, task.getRequestingUser().getUsername()));
-        username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = UserInfoDialog.newInstance(task.getRequestingUserId());
-                newFragment.show(getFragmentManager(), "dialog");
-            }
-        });
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
@@ -168,4 +161,6 @@ public class TaskViewActivity extends AppCompatActivity {
         bidCreationDialog.show();
         refresh();
     }
+    // TODO: Need to overwrite your own bid
+    // TODO: Ensure you can't bid on your own task
 }

@@ -21,7 +21,6 @@ public class Task extends BaseEntity {
     // Base fields
     private String title;
     private Date date;
-    // TODO: Turn off transient so we can save task status
     private TaskStatus taskStatus;
     private String description;
     private String requestingUserId;

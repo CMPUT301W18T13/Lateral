@@ -77,7 +77,7 @@
     <string name="bid_card_amount_text_field">Amount: $%1s</string>
 
     <!-- Strings for Task View -->
-    <string name="task_view_no_bids">No Bids!</string>
+    <string name="task_view_no_bids">None</string>
     <string name="task_view_not_assigned">None</string>
 
     <!-- Project wide strings-->
@@ -86,4 +86,7 @@
 
     <string name="load_user_fail">Failed to load user!</string>
     <string name="network_connection_fail_message">Couldn\'t connect to the network</string>
+    <string name="set_requested_btn_text">Cancel Assigned Bid</string>
+    <string name="set_done_btn_text">Task Done</string>
+    <string name="see_bids_btn_text">See Bids</string>
 </resources>
