@@ -36,6 +36,8 @@ import java.util.Locale;
 
 // Malcolm's test task id: AWI9EJpYAJsZenWtuKsd
 
+// TODO: Need to overwrite your own bid
+// TODO: Ensure you can't bid on your own task
 /**
  * Activity for viewing a certain task
  */
@@ -161,6 +163,4 @@ public class TaskViewActivity extends AppCompatActivity {
         bidCreationDialog.show();
         refresh();
     }
-    // TODO: Need to overwrite your own bid
-    // TODO: Ensure you can't bid on your own task
 }

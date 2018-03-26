@@ -103,7 +103,6 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // need to fill more properly once big/user objects implemented on elastic search
         final Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
-        //TODO error handle
         holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
         //TODO error handle
         Bid bid = defaultBidService.getLowestBid(task.getId());
@@ -126,6 +125,3 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     }
 
 }
-// TODO: Need to open MyTaskViewActivity if the task belongs to current user
-// TODO: Need to refresh on return to this
-// TODO: Get the notification "x new bids!" working (or remove it)

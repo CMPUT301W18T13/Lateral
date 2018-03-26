@@ -272,10 +272,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK ){
-            // TODO: Testing
-            Toast temp = Toast.makeText(this, "Refreshing!", Toast.LENGTH_LONG);
-            temp.show();
-
             refresh();
         }
     }
