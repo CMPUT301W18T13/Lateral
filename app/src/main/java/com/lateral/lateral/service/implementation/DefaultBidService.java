@@ -49,6 +49,14 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
+    public ArrayList<Bid> getAllBidsByUserID(String userId) {
+        String json = "{\"query\":{\"match\":{\"bidderId\":{\"query\":\"" + userId + "\"}}}}";
+        Type listType = new TypeToken<ArrayList<Bid>>() {
+        }.getType();
+        return gson.fromJson("[" + get(json) + "]", listType);
+
+    }
+
     /**
      * Delete all bids for the given task
      * @param taskID Jest ID of the task

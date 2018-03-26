@@ -14,10 +14,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
@@ -44,7 +46,8 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();
-
+    private PullRefreshLayout layout;
+    private SwipeRefreshLayout mySwipeRefreshLayout;
     /**
      * Gets the layout ID of the activity
      * @return The R-id of the activity
@@ -93,6 +96,36 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         super.onCreate(savedInstanceState);
         // check how we got here
         handleIntent(getIntent());
+
+
+        // listen refresh event
+        layout = (PullRefreshLayout) findViewById(R.id.allTasksSwipeRefreshLayout);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // start refresh
+                addTasks(defaultTaskService.getEveryTask());
+                layout.setRefreshing(false);
+            }
+        });
+
+//        mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
+//        mySwipeRefreshLayout.setOnRefreshListener(
+//                new SwipeRefreshLayout.OnRefreshListener() {
+//                    @Override
+//                    public void onRefresh() {
+//                        //Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
+//
+//                        // This method performs the actual data-refresh operation.
+//                        // The method calls setRefreshing(false) when it's finished.
+//                        //myUpdateOperation();
+//                        addTasks(defaultTaskService.getEveryTask());
+//                        //Log.d("ALL TASKS", "All tasks stop refreshing");
+//                        mySwipeRefreshLayout.setRefreshing(false);
+//                    }
+//                }
+//        );
+
     }
 
     /**

@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context="com.lateral.lateral.activity.RequestedTasksViewActivity">
 
+
+
     <ProgressBar
         android:id="@+id/req_task_view_progress"
         android:layout_width="wrap_content"
@@ -40,7 +42,10 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
+
     <include layout="@layout/content_requested_tasks_view" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/addNewTaskFab"

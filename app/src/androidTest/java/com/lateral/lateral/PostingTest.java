@@ -102,4 +102,11 @@ public class PostingTest {
 //        DefaultBidService defaultBidService = new DefaultBidService();
 //        Bid lowestBid = defaultBidService.getLowestBid("AWJACBVhAJsZenWtuLON");
     }
+
+
+    @Test
+    public void testDeleteTask() {
+//        DefaultTaskService defaultTaskService = new DefaultTaskService();
+//        defaultTaskService.delete("AWJACBVhAJsZenWtuLON");
+    }
 }
