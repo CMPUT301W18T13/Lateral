@@ -161,7 +161,8 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         Log.i("addTasks", "Progress bar shown!");
 
         // most likely need to clear screen of tasks first
-        clearList();
+        //clearList();
+        matchingTasks.clear();
 
         matchingTasks.addAll(returnedTasks);
 //        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
