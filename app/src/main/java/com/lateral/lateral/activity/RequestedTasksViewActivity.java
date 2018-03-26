@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.View;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
@@ -29,6 +30,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     private ArrayList<Task> matchingTasks;
 
     private String thisUserID = LOGGED_IN_USER;             // class spec       // for testing
+    private PullRefreshLayout layout;
 
     /**
      * Gets the layout ID of the activity
@@ -88,6 +90,18 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
         // display requested tasks from this user
         returnMatchingTasks(thisUserID);
+
+
+        // listen refresh event
+        layout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // start refresh
+                returnMatchingTasks(thisUserID);
+                layout.setRefreshing(false);
+            }
+        });
 
     }
 

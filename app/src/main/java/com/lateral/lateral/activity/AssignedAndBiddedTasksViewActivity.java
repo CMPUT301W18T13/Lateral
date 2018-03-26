@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
@@ -35,14 +36,13 @@ import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 /**
  * Activity for viewing any assigned/bidden on tasks
  */
-// Lets start CHANGING!!
 public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
     //private String thisUserID = "npwhite";          // for testing
 
     private String thisUserID = LOGGED_IN_USER;
-
+    private PullRefreshLayout layout;
 
     /**
      * Gets the layout ID of the activity
@@ -95,6 +95,18 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         super.onCreate(savedInstanceState);
         Log.d("LOGGED IN USER", thisUserID);
         returnMatchingTasks(thisUserID);
+
+
+        // listen refresh event
+        layout = (PullRefreshLayout) findViewById(R.id.AssignedAndBiddedSwipeRefreshLayout);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // start refresh
+                returnMatchingTasks(thisUserID);
+                layout.setRefreshing(false);
+            }
+        });
     }
 
     /**

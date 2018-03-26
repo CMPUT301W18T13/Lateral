@@ -19,6 +19,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.baoyz.widget.PullRefreshLayout
+        android:id="@+id/AssignedAndBiddedSwipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:refreshType="water_drop">
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/assignedTaskViewList"
         android:layout_width="0dp"
@@ -35,4 +41,6 @@
         app:layout_constraintTop_toBottomOf="@+id/filterText">
 
     </android.support.v7.widget.RecyclerView>
+
+    </com.baoyz.widget.PullRefreshLayout>
 </android.support.constraint.ConstraintLayout>

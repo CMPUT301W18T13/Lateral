@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.ItemClickSupport;
@@ -48,6 +50,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     // request code for starting 'view a task' activity
     static final int VIEW_TASK_REQUEST = 1;
     private int clickedItemPosition = 0;
+
+    private SwipeRefreshLayout mySwipeRefreshLayout;
+    private PullRefreshLayout layout;
 
     /*
     public RecyclerView.Adapter getmAdapter(){
@@ -119,6 +124,8 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new TaskRowAdapter(matchingTasks, this);
         mRecyclerView.setAdapter(mAdapter);
+
+
     }
 
     /**
@@ -152,6 +159,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         Log.i("addTasks", "Showing progress bar!");
         showProgress(true);
         Log.i("addTasks", "Progress bar shown!");
+
+        // most likely need to clear screen of tasks first
+        clearList();
 
         matchingTasks.addAll(returnedTasks);
 //        mAdapter.notifyItemInserted(matchingTasks.size() - 1);

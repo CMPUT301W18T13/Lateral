@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
@@ -41,6 +42,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();
+    private PullRefreshLayout layout;
 
     /**
      * Gets the layout ID of the activity
@@ -90,6 +92,18 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         super.onCreate(savedInstanceState);
         // check how we got here
         handleIntent(getIntent());
+
+
+        // listen refresh event
+        layout = (PullRefreshLayout) findViewById(R.id.allTasksSwipeRefreshLayout);
+        layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // start refresh
+                addTasks(defaultTaskService.getEveryTask());
+                layout.setRefreshing(false);
+            }
+        });
     }
 
     /**
