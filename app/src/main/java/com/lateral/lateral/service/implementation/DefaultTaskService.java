@@ -115,5 +115,28 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
     }
 
+    // nick
+    public Task getTaskByTaskID(String taskID){
+        String json = "{\"query\": {\"match\": {\"id\": \"" + taskID + "\"}}}";
+        return gson.fromJson(get(json), Task.class);
+    }
+
+    // nick
+    public ArrayList<Task> getBiddedTasks(String bidderID) {
+        DefaultBidService defaultBidService = new DefaultBidService();
+        ArrayList<Bid> userBids = defaultBidService.getAllBidsByUserID(bidderID);       // SearchQuery
+        ArrayList<Task> biddedTasks = new ArrayList<Task>();
+
+
+        for (Bid bid : userBids) {
+            /*
+            should be substituted with bid.getTaskBidOn() but doesnt appear to be implemented
+             */
+            Task task = getTaskByTaskID(bid.getTaskId());           // Search query
+            biddedTasks.add(task);
+        }
+        return biddedTasks;
+    }
+
 }
 

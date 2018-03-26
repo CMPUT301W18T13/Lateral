@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity
                 LOGGED_IN_USER = user;
             }
         }
-        Log.i("MainActivity", "Logged in user's ID: " + LOGGED_IN_USER);
+        Log.i("MainActivity", "AFT Logged in user's ID: " + LOGGED_IN_USER);
 
         // Define buttons
         Button ViewRequestedTasksButton = findViewById(R.id.ViewRequestedTasksButton);
