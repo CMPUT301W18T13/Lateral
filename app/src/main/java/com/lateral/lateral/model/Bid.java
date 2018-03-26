@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 @ElasticSearchType(Name = "Bid")
 public class Bid extends BaseEntity {
-    // TODO: Need to add more getters/setters
+
     // Base fields
     private BigDecimal amount;
     private String bidderId;

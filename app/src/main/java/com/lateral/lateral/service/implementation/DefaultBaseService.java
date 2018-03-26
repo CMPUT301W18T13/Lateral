@@ -27,6 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Delete;
@@ -133,7 +134,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @param obj Object to be updated
      */
     @Override
-    public void update(T obj){
+    public void update(T obj) {
         String ElasticSearchType = getElasticSearchType();
         UpdateData updateData = new UpdateData(ElasticSearchType, obj.getId());
         String id = null;
@@ -146,6 +147,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             id = updateData.get();
         } catch (Exception e){
             Log.i("Error", "Failed to get task from async object");
+            // TODO: Throw custom exception
         }
     }
 

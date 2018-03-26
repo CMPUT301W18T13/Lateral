@@ -9,22 +9,24 @@ package com.lateral.lateral.activity;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -36,15 +38,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
-// Malcolm's test task id: AWI9EJpYAJsZenWtuKsd
-
-import static com.lateral.lateral.model.BidEvent.*;
-
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
-    public static final String BID_EVENT = "com.lateral.lateral.BID_EVENT";
-    public static final String ACCEPTED_BID_ID = "com.lateral.lateral.ACCEPTED_BID_ID";
 
     private String taskID;
 
@@ -56,6 +52,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private TextView date;
     private TextView description;
     private TextView assignedToUsername;
+
+    private Button seeBidsButton;
+    private Button taskDoneButton;
+    private Button cancelTaskButton;
 
     private TaskService taskService = new DefaultTaskService();
     private UserService userService = new DefaultUserService();
@@ -83,6 +83,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
         date = findViewById(R.id.my_task_view_date);
         description = findViewById(R.id.my_task_view_description);
         assignedToUsername = findViewById(R.id.my_text_view_username);
+        seeBidsButton = findViewById(R.id.my_task_view_see_bids_button);
+        cancelTaskButton = findViewById(R.id.my_task_view_set_requested);
+        taskDoneButton = findViewById(R.id.my_task_view_set_done);
     }
 
     /**
@@ -94,15 +97,24 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
         refresh();
     }
+
     private void refresh(){
 
         try {
             task = loadTask(taskID);
+            refresh(task);
         } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
             errorToast.show();
-            return;
+            setResult(RESULT_CANCELED);
+            finish();
         }
+    }
+
+    /** Refresh with the loaded task
+     * @param task task
+     */
+    private void refresh(Task task) {
 
         if (task.getLowestBid() == null){
             currentBid.setText(R.string.task_view_no_bids);
@@ -117,17 +129,42 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
         final Bid assignedBid = task.getAssignedBid();
         if (assignedBid != null){
-            assignedToUsername.setText(getString(R.string.username_display, assignedBid.getBidder().getUsername()));
-            assignedToUsername.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogFragment newFragment = UserInfoDialog.newInstance(assignedBid.getBidderId());
-                    newFragment.show(getFragmentManager(), "dialog");
-                }
-            });
+            String assignedUsername = assignedBid.getBidder().getUsername();
+            assignedToUsername.setText(getString(R.string.username_display, assignedUsername));
         }
         else{
             assignedToUsername.setText(R.string.task_view_not_assigned);
+        }
+
+        setButtonVisibility();
+    }
+
+    /**
+     * Sets the visibility for the action buttons
+     */
+    private void setButtonVisibility(){
+
+        switch (task.getStatus()){
+            case Assigned:
+                seeBidsButton.setVisibility(View.GONE);
+                cancelTaskButton.setVisibility(View.VISIBLE);
+                taskDoneButton.setVisibility(View.VISIBLE);
+                break;
+            case Done:
+                seeBidsButton.setVisibility(View.GONE);
+                cancelTaskButton.setVisibility(View.GONE);
+                taskDoneButton.setVisibility(View.GONE);
+                break;
+            case Requested:
+                seeBidsButton.setVisibility(View.GONE);
+                cancelTaskButton.setVisibility(View.GONE);
+                taskDoneButton.setVisibility(View.GONE);
+                break;
+            case Bidded:
+                seeBidsButton.setVisibility(View.VISIBLE);
+                cancelTaskButton.setVisibility(View.GONE);
+                taskDoneButton.setVisibility(View.GONE);
+                break;
         }
     }
 
@@ -157,6 +194,38 @@ public class MyTaskViewActivity extends AppCompatActivity {
         Intent intent = new Intent(this, BidListActivity.class);
         intent.putExtra(BidListActivity.TASK_ID, taskID);
         startActivityForResult(intent, 1);
+    }
+
+    /**
+     * Called when Set Done button is clicked
+     * @param v current view
+     */
+    public void onSetDoneButtonClick(View v){
+        task.setStatus(TaskStatus.Done);
+        taskService.update(task);
+        refresh(task);
+    }
+    // TODO: Need some way to clearly display the status within the view
+
+    /**
+     * Called when Set Requested (Cancel) button is clicked
+     * @param v current view
+     */
+    public void onSetRequestedButtonClick(View v){
+
+        // TODO: BUG: Cannot save assignedBidId as null!!!!!
+        Toast temp = Toast.makeText(this, "Button cannot be implemented yet", Toast.LENGTH_LONG);
+        temp.show();
+
+//        task.setAssignedBid(null);
+//        task.setAssignedBidId(null);
+//        task.setBids(null);
+//        task.setLowestBid(null);
+//        task.setStatus(TaskStatus.Requested);
+//
+//        bidService.deleteBidsByTask(taskID);
+//        taskService.update(task);
+//        refresh(task);
     }
 
     /**

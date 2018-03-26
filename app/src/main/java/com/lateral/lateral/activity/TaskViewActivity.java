@@ -22,6 +22,7 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -32,9 +33,13 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+// TODO: (devon) Make title either offset or single-line
+// TODO: (devon) Fix up this view to match MyTaskView
+// TODO: (devon) BUG: Sometimes get after update fails to retrieve new changes
+// TODO: (devon) Change text field to the tools text field on all views
 
-// Malcolm's test task id: AWI9EJpYAJsZenWtuKsd
-
+// TODO: Need to overwrite your own bid
+// TODO: Ensure you can't bid on your own task
 /**
  * Activity for viewing a certain task
  */
@@ -108,13 +113,6 @@ public class TaskViewActivity extends AppCompatActivity {
 
         title.setText(task.getTitle());
         username.setText(getString(R.string.username_display, task.getRequestingUser().getUsername()));
-        username.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = UserInfoDialog.newInstance(task.getRequestingUserId());
-                newFragment.show(getFragmentManager(), "dialog");
-            }
-        });
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
@@ -159,6 +157,8 @@ public class TaskViewActivity extends AppCompatActivity {
 
                 // TODO: Error handling required
                 bidService.post(newBid);// Make sure bid has task Id
+                task.setStatus(TaskStatus.Bidded);
+                taskService.update(task);
             }
             }
         });

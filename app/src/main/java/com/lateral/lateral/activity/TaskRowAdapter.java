@@ -28,7 +28,10 @@ import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Adapter for the TaskRow RecyclerView
@@ -105,15 +108,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // need to fill more properly once big/user objects implemented on elastic search
         final Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
-        //TODO error handle
         holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
-        holder.tvUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment newFragment = UserInfoDialog.newInstance(task.getRequestingUserId());
-                newFragment.show(((Activity)context).getFragmentManager(), "dialog");
-            }
-        });
         //TODO error handle
         Bid bid = defaultBidService.getLowestBid(task.getId());
         String bidText = "No Bids";
@@ -121,7 +116,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             bidText = String.valueOf(bid.getAmount());
         }
         holder.tvCurBid.setText(bidText);
-        holder.tvDate.setText((task.getDate()).toString() );
+
+        //holder.tvDate.setText((task.getDate()).toString() );
 
         /*
         Sets the task status color accordingly (colors are default, can substitute our own later)
@@ -129,6 +125,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // get task status -> get color from status -> set background color
         holder.tvTaskStatus.setBackgroundColor(getColorValueFromTaskStatus(task.getStatus()));
 
+        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
+        holder.tvDate.setText(df.format(task.getDate()));
     }
 
     /**

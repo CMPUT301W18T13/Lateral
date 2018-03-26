@@ -14,6 +14,7 @@ import com.google.gson.JsonParser;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 
 import org.apache.commons.lang3.NotImplementedException;
@@ -73,15 +74,8 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      */
     @Override
     public void delete(String taskID){
-        DefaultBidService defaultBidService = new DefaultBidService();
-        ArrayList<Bid> taskBids = defaultBidService.getAllBidsByTaskID(taskID);
-
-        if(taskBids != null) {
-            for (Bid bid : taskBids) {
-                defaultBidService.delete(bid.getId());
-            }
-        }
-
+        BidService bidService = new DefaultBidService();
+        bidService.deleteBidsByTask(taskID);
         super.delete(taskID);
     }
 

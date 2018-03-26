@@ -78,7 +78,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
                     app:layout_constraintStart_toEndOf="@+id/imageView3">
 
-                    <TextView
+                    <com.lateral.lateral.widget.UserLinkTextView
                         android:id="@+id/task_view_title"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -91,7 +91,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.lateral.lateral.widget.UserLinkTextView
                         android:id="@+id/task_view_username"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -199,8 +199,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/green"
-        android:text="@string/bid_button_label"
         android:onClick="onBidButtonClick"
+        android:text="@string/bid_button_label"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
