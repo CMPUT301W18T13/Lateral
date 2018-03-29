@@ -14,4 +14,14 @@
 
     </ListView>
 
+    <TextView
+        android:id="@+id/empty"
+        android:text="@string/bid_list_default_display_text"
+        android:textSize="20sp"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:textColor="@android:color/black"
+        />
+
 </LinearLayout>

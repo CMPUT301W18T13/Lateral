@@ -44,8 +44,8 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO fix white bar at the top of this activity --> appeared on my original pull
 // TODO clicking seems to work but test more --> pass intents
 // TODO: Need to open MyTaskViewActivity if the task belongs to current user
-// TODO: Need to refresh on return to this
 // TODO: Get the notification "x new bids!" working (or remove it)
+// TODO: Disable app rotation
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();

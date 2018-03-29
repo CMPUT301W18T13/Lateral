@@ -30,7 +30,8 @@
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity" >
 
             <!-- Just added this -->
             <meta-data
@@ -69,13 +70,30 @@
         <activity android:name=".activity.AddEditTaskActivity" />
         <activity
             android:name=".activity.MyTaskViewActivity"
-            android:label="@string/title_activity_my_task_view" />
-        <activity android:name=".activity.BidListActivity">
+            android:label="@string/title_activity_my_task_view"
+            android:parentActivityName=".activity.RequestedTasksViewActivity" />
+        <activity
+            android:name=".activity.BidListActivity"
+            android:parentActivityName=".activity.MyTaskViewActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MyTaskViewActivity" />
         </activity>
-        <activity android:name=".activity.EditUserActivity"></activity>
+        <activity
+            android:name=".activity.EditUserActivity">
+        </activity>
+        <service
+            android:name=".service.Notification.NewBidNotificationService"
+            android:label="New Bid Notification Service"
+            android:permission="android.permission.BIND_JOB_SERVICE" >
+        </service>
+        <receiver android:name=".service.Notification.StartServiceReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
