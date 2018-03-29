@@ -26,6 +26,8 @@ public class Task extends BaseEntity {
     private String requestingUserId;
     private String assignedBidId;
     private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
+    private int bidsNotViewed;
+    private int bidsPendingNotification;
 
     // Extra fields
     private transient User requestingUser;
@@ -251,4 +253,12 @@ public class Task extends BaseEntity {
      * @param bid The bid to add
      */
     public void addBid(Bid bid){this.bids.add(bid);}
+
+    public void setBidsNotViewed(int bidsNotViewed){this.bidsNotViewed = bidsNotViewed;}
+
+    public int getBidsNotViewed(){return this.bidsNotViewed;}
+
+    public void setBidsPendingNotification(int bidsPendingNotification){this.bidsPendingNotification = bidsPendingNotification;}
+
+    public int getBidsPendingNotification(){return this.bidsPendingNotification;}
 }

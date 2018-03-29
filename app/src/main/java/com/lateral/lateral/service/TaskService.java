@@ -9,8 +9,12 @@ package com.lateral.lateral.service;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 
+import java.util.ArrayList;
+
 /**
  * Interface for interacting with Tasks on the ElasticSearch server
  */
 public interface TaskService extends BaseService<Task> {
+
+    ArrayList<Task> getAllTasksByRequesterID(String requesterID);
 }

@@ -7,8 +7,10 @@
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
 import android.app.DialogFragment;
+import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
@@ -55,6 +57,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         TextView tvUsername;
         TextView tvDate;
         TextView tvCurBid;
+        TextView tvNewBids;
         GridLayout tvTaskStatus;
 
         /**
@@ -69,6 +72,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             tvUsername = itemView.findViewById(R.id.usernameTextView);
             tvDate = itemView.findViewById(R.id.dateTextView);
             tvCurBid = itemView.findViewById(R.id.bidTextView);
+            tvNewBids = itemView.findViewById(R.id.newBidTextView);
             tvTaskStatus = itemView.findViewById(R.id.bidStatusIndicator);
         }
 
@@ -116,7 +120,6 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             bidText = String.valueOf(bid.getAmount());
         }
         holder.tvCurBid.setText(bidText);
-
         //holder.tvDate.setText((task.getDate()).toString() );
 
         /*

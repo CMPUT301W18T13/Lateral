@@ -67,7 +67,7 @@ public class Bid extends BaseEntity {
      * Gets the bidder on this object
      * @return The associated bidder
      */
-    public User getBidder() { return this.bidder; }
+    public User getBidder() { return this.bidder; } //TODO: delete
 
     /**
      * Sets the bidder on this object
