@@ -83,10 +83,22 @@
     <!-- Project wide strings-->
     <string name="dollar_amount_display">$%1$s</string>
     <string name="username_display">\@%1$s</string>
+    <string name="ok">Ok</string>
 
     <string name="load_user_fail">Failed to load user!</string>
     <string name="network_connection_fail_message">Couldn\'t connect to the network</string>
     <string name="set_requested_btn_text">Cancel Assigned Bid</string>
     <string name="set_done_btn_text">Task Done</string>
     <string name="see_bids_btn_text">See Bids</string>
+
+    <string name="qrcode_message_text">Click the button to scan a QR Code for a task</string>
+    <string name="qrcode_button_text">Start!</string>
+    <string name="qrcode_autofocus_check">Autofocus</string>
+    <string name="qrcode_flash_check">Flash</string>
+
+    <string name="permission_camera_rationale">Needed to access the camera to scan a QR code</string>
+    <string name="no_camera_permission">Permission to open camera not granted!</string>
+    <string name="low_storage_error">Your device doesn\'t have enough storage!</string>
+
+
 </resources>

@@ -21,6 +21,10 @@
             android:icon="@drawable/ic_bidded_tasks"
             android:title="Bidded and Assigned Tasks" />
         <item
+            android:id="@+id/nav_qrcode"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="QR Code" />
+        <item
             android:id="@+id/nav_logout"
             android:title="Logout" />
 

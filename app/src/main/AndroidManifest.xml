@@ -3,6 +3,7 @@
     package="com.lateral.lateral">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +15,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/app_name">
@@ -75,7 +76,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MyTaskViewActivity" />
         </activity>
-        <activity android:name=".activity.EditUserActivity"></activity>
+        <activity android:name=".activity.EditUserActivity" />
+        <activity android:name=".activity.QRCodeActivity"/>
+        <activity android:name=".barcodereader.BarcodeCaptureActivity" />
     </application>
 
 </manifest>

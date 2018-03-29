@@ -20,6 +20,7 @@ import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
 import com.lateral.lateral.activity.EditUserActivity;
 import com.lateral.lateral.activity.LoginActivity;
+import com.lateral.lateral.activity.QRCodeActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
@@ -190,6 +191,9 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_bidded_tasks) {
             Intent intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_qrcode){
+            Intent intent = new Intent(MainActivity.this, QRCodeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
