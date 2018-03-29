@@ -161,5 +161,19 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VIEW_TASK_REQUEST) {
+            Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+            //mAdapter.notifyItemChanged(clickedItemPosition);
+            // TODO IMPORTANT --> eventually change to only update position clicked
+            //      -->does not work rn because list order changes when task updated
+            //mAdapter.notifyDataSetChanged();
+            returnMatchingTasks(thisUserID);
+
+        }
+    }
+
+
 }
 

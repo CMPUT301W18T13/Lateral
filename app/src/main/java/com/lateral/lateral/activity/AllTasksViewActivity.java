@@ -21,7 +21,10 @@ import android.view.View;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
+
+import java.util.ArrayList;
 
 /*
 Searching interface info
@@ -94,6 +97,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // check how we got here
         handleIntent(getIntent());
 
@@ -169,7 +173,10 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             returnMatchingTask(query);
         } else {
             Log.d("ALL TASKS", "Got here via button, load all");
-            addTasks(defaultTaskService.getEveryTask());
+
+            ArrayList<Task> everyTask = defaultTaskService.getEveryTask();
+            //Log.d("Number of tasks", Integer.toString(everyTask.size()));
+            addTasks(everyTask);
         }
     }
 
@@ -181,6 +188,28 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         DefaultTaskService taskService = new DefaultTaskService();
         addTasks(taskService.getAllTasks(query));
     }
+
+
+
+
+    /*
+    Called when user returns from viewing a task (assuming they got to it from a recyclerView)
+    Can modify to catch specific results if needed
+    */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == VIEW_TASK_REQUEST) {
+            Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+            //mAdapter.notifyItemChanged(clickedItemPosition);
+            // TODO IMPORTANT --> eventually change to only update position clicked
+            //      -->does not work rn because list order changes when task updated
+            //mAdapter.notifyDataSetChanged();
+            addTasks(defaultTaskService.getEveryTask());
+
+        }
+    }
+
+
 
 
 }

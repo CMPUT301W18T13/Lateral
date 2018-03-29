@@ -9,6 +9,7 @@ package com.lateral.lateral.model;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.annotation.ElasticSearchType;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,6 +27,11 @@ public class Task extends BaseEntity {
     private String requestingUserId;
     private String assignedBidId;
     private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
+    private int bidsNotViewed;
+    private int bidsPendingNotification;
+
+    private String requestingUserUsername;
+    private BigDecimal lowestBidValue;
 
     // Extra fields
     private transient User requestingUser;
@@ -181,6 +187,24 @@ public class Task extends BaseEntity {
         return requestingUserId;
     }
 
+    public String getRequestingUserUsername() {
+        return requestingUserUsername;
+    }
+
+    public void setRequestingUserUsername(String requestingUserUsername){
+        this.requestingUserUsername = requestingUserUsername;
+    }
+
+
+    public void setLowestBidValue(BigDecimal newLowestBidValue) {
+        this.lowestBidValue = newLowestBidValue;
+    }
+
+    public BigDecimal getLowestBidValue() {
+        return lowestBidValue;
+    }
+
+
     /**
      * Sets the ID of the requesting user
      * @param requestingUserId The ID to be set
@@ -251,4 +275,12 @@ public class Task extends BaseEntity {
      * @param bid The bid to add
      */
     public void addBid(Bid bid){this.bids.add(bid);}
+
+    public void setBidsNotViewed(int bidsNotViewed){this.bidsNotViewed = bidsNotViewed;}
+
+    public int getBidsNotViewed(){return this.bidsNotViewed;}
+
+    public void setBidsPendingNotification(int bidsPendingNotification){this.bidsPendingNotification = bidsPendingNotification;}
+
+    public int getBidsPendingNotification(){return this.bidsPendingNotification;}
 }

@@ -26,6 +26,8 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
+import com.lateral.lateral.service.implementation.DefaultUserService;
+
 import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 
 /**
@@ -140,6 +142,13 @@ public class AddEditTaskActivity extends AppCompatActivity {
         try {
             Task newTask = new Task(title, desc);
             newTask.setRequestingUserId(LOGGED_IN_USER);
+
+            // nick stuff
+            // TODO create variable LOGGED_IN_USER_USERNAME which specifies the current users username
+            DefaultUserService defaultUserService = new DefaultUserService();
+            String username = defaultUserService.getUserByID(LOGGED_IN_USER).getUsername();
+            newTask.setRequestingUserUsername(username);
+
             // TODO: Testing
             newTask.setLocation(53.644250, -113.652206);
             service.post(newTask);

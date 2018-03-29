@@ -72,11 +72,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
         // Get the task id
         Intent taskIntent = getIntent();
-        this.taskID = taskIntent.getStringExtra(EXTRA_TASK_ID);
+        this.taskID = taskIntent.getStringExtra(MyTaskViewActivity.EXTRA_TASK_ID);
         if (this.taskID == null){
             setResult(RESULT_CANCELED);
             finish();
-        }
+        } //TODO: uncomment
 
         currentBid = findViewById(R.id.my_task_view_current_bid);
         title = findViewById(R.id.my_task_view_title);
@@ -94,7 +94,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        Log.e("debug", "onStart called");
         refresh();
     }
 
@@ -193,7 +193,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     public void onSeeBidButtonClick(View v){
         Intent intent = new Intent(this, BidListActivity.class);
         intent.putExtra(BidListActivity.TASK_ID, taskID);
-        startActivityForResult(intent, 1);
+        startActivity(intent);
     }
 
     /**
@@ -263,16 +263,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Called when the child activity exits
-     * @param requestCode The request code supplied by calling function
-     * @param resultCode The result code returned by the child activity
-     * @param data The Intent supplied
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK ){
-            refresh();
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent data) {
+        if (resultCode == RESULT_OK) {
+            Log.e("Debug", "on activity called");
         }
+
     }
 }

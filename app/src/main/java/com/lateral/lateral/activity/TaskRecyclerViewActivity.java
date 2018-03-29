@@ -100,6 +100,8 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
 
         progressView = findViewById(getProgressBarID());
+        mRecyclerView.setVisibility(View.GONE);
+
 
         /*
         Listens and handles clicks on the recycler view
@@ -168,6 +170,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 //        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
         mAdapter.notifyDataSetChanged();
 
+
         Log.i("addTasks", "Hiding progress bar!");
         showProgress(false);
         Log.i("addTasks", "Progress bar hidden!");
@@ -214,18 +217,10 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     }
 
 
-    /*
-    Called when user returns from viewing a task (assuming they got to it from a recyclerView)
-    Can modify to catch specific results if needed
-      */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VIEW_TASK_REQUEST) {
-            Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
-            mAdapter.notifyItemChanged(clickedItemPosition);
 
-        }
-    }
+
+
+
 
 
 }

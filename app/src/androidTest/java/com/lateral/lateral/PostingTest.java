@@ -103,10 +103,16 @@ public class PostingTest {
 //        Bid lowestBid = defaultBidService.getLowestBid("AWJACBVhAJsZenWtuLON");
     }
 
-
+    // currently only deletes 10
     @Test
-    public void testDeleteTask() {
+    public void testDeleteAllTasks() {
 //        DefaultTaskService defaultTaskService = new DefaultTaskService();
-//        defaultTaskService.delete("AWJACBVhAJsZenWtuLON");
+//        //defaultTaskService.delete("AWJACBVhAJsZenWtuLON");
+//        ArrayList<Task> allTasks = defaultTaskService.getEveryTask();
+//        String taskId;
+//        for (Task task : allTasks) {
+//            taskId = task.getId();
+//            defaultTaskService.delete(taskId);
+//        }
     }
 }

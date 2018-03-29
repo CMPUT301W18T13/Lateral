@@ -3,7 +3,6 @@ package com.lateral.lateral;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -23,6 +22,7 @@ import com.lateral.lateral.activity.LoginActivity;
 import com.lateral.lateral.activity.QRCodeActivity;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
-    public static String LOGGED_IN_USER = "AWJFrRNp7ZEnxuZlXrJo";     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
+    public static String LOGGED_IN_USER = null;     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
 
     /**
      * Called when the activity is created
@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity
             }
         }
         Log.i("MainActivity", "AFT Logged in user's ID: " + LOGGED_IN_USER);
+
+        //Start sending notifications
+        NotificationServiceScheduler.scheduleNewBid(getApplicationContext());
 
         // Define buttons
         Button ViewRequestedTasksButton = findViewById(R.id.ViewRequestedTasksButton);
@@ -197,6 +200,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
+                LOGGED_IN_USER = null;
                 Log.i("MainActivity", "File deleted");
                 Intent intent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(intent);

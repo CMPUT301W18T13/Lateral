@@ -8,6 +8,8 @@ package com.lateral.lateral.service;
 
 import com.lateral.lateral.model.Bid;
 
+import java.util.ArrayList;
+
 /**
  * Interface for dealing with Bids in the database
  */
@@ -24,4 +26,6 @@ public interface BidService extends BaseService<Bid> {
      * @param taskID Jest ID of the task
      */
     void deleteBidsByTask(String taskID);
+
+    ArrayList<Bid> getAllBidsByTaskID(String taskID);
 }
