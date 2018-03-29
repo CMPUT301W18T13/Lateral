@@ -28,6 +28,7 @@ import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -105,15 +106,19 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
      */
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        Log.d("ADAPTER", Integer.toString(position));
         // need to fill more properly once big/user objects implemented on elastic search
         final Task task = mTasks.get(position);
         holder.tvTitle.setText(task.getTitle());
-        holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
+        //holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
+        holder.tvUsername.setText(context.getString(R.string.username_display, task.getRequestingUserUsername()));
         //TODO error handle
-        Bid bid = defaultBidService.getLowestBid(task.getId());
+        //Bid bid = defaultBidService.getLowestBid(task.getId());
+        BigDecimal bid = task.getLowestBidValue();
         String bidText = "No Bids";
         if (bid != null) {
-            bidText = String.valueOf(bid.getAmount());
+            //bidText = String.valueOf(bid.getAmount());
+            bidText =  String.valueOf(bid);
         }
         holder.tvCurBid.setText(bidText);
 
@@ -127,6 +132,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         holder.tvDate.setText(df.format(task.getDate()));
+
+
     }
 
     /**

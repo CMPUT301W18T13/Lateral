@@ -149,10 +149,12 @@ public class TaskViewActivity extends AppCompatActivity {
                 if (task.getLowestBid() == null){
                     currentBid.setText(getString(R.string.dollar_amount_display,
                             String.valueOf(newBid.getAmount())));
+                    task.setLowestBidValue(newBid.getAmount());     // nick
                 } else if (newBid.getAmount().compareTo(task.getLowestBid().getAmount()) < 0){
                     task.setLowestBid(newBid);
                     currentBid.setText(getString(R.string.dollar_amount_display,
                             String.valueOf(newBid.getAmount())));
+                    task.setLowestBidValue(newBid.getAmount());     // nick
                 }
 
                 // TODO: Error handling required

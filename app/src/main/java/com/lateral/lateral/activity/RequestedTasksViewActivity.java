@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
@@ -31,6 +32,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
     private String thisUserID = LOGGED_IN_USER;             // class spec       // for testing
     private PullRefreshLayout layout;
+    static final int ADD_EDIT_TASK_CODE = 2;
 
     /**
      * Gets the layout ID of the activity
@@ -83,8 +85,9 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
         addNewTaskFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("Add New Task Pressed", "Add new task");
                 Intent AddTaskIntent = new Intent(RequestedTasksViewActivity.this, AddEditTaskActivity.class);
-                startActivity(AddTaskIntent);
+                startActivityForResult(AddTaskIntent, ADD_EDIT_TASK_CODE);
             }
         });
 
@@ -123,6 +126,22 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     private void returnMatchingTasks(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
         addTasks(taskService.getAllTasksByRequesterID(query));
+    }
+
+    // TODO update so only refreshes if new activity posted
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+        if (requestCode == ADD_EDIT_TASK_CODE) {
+            //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+            //mAdapter.notifyItemChanged(clickedItemPosition);
+            // TODO IMPORTANT --> eventually change to only update position clicked
+            //      -->does not work rn because list order changes when task updated
+            //mAdapter.notifyDataSetChanged();
+            returnMatchingTasks(thisUserID);
+
+        }
     }
 
 

@@ -9,6 +9,7 @@ package com.lateral.lateral.model;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.annotation.ElasticSearchType;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -26,6 +27,9 @@ public class Task extends BaseEntity {
     private String requestingUserId;
     private String assignedBidId;
     private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
+
+    private String requestingUserUsername;
+    private BigDecimal lowestBidValue;
 
     // Extra fields
     private transient User requestingUser;
@@ -180,6 +184,24 @@ public class Task extends BaseEntity {
     public String getRequestingUserId() {
         return requestingUserId;
     }
+
+    public String getRequestingUserUsername() {
+        return requestingUserUsername;
+    }
+
+    public void setRequestingUserUsername(String requestingUserUsername){
+        this.requestingUserUsername = requestingUserUsername;
+    }
+
+
+    public void setLowestBidValue(BigDecimal newLowestBidValue) {
+        this.lowestBidValue = newLowestBidValue;
+    }
+
+    public BigDecimal getLowestBidValue() {
+        return lowestBidValue;
+    }
+
 
     /**
      * Sets the ID of the requesting user
