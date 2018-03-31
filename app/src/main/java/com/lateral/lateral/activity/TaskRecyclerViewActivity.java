@@ -41,7 +41,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     // test
 
-    private RecyclerView mRecyclerView;
+    public RecyclerView mRecyclerView;
     private View progressView;
 
     private RecyclerView.Adapter mAdapter;
@@ -53,6 +53,8 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
     private PullRefreshLayout layout;
+
+    private static int firstVisibleInListview;
 
     /*
     public RecyclerView.Adapter getmAdapter(){
@@ -128,6 +130,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new TaskRowAdapter(matchingTasks, this);
         mRecyclerView.setAdapter(mAdapter);
+
+
+
 
 
     }

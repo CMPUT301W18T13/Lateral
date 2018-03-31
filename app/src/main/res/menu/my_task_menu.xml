@@ -12,5 +12,10 @@
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/delete_button_text"
         app:showAsAction="ifRoom|collapseActionView" />
+    <item
+        android:id="@+id/action_qrcode"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/qrcode_option"
+        app:showAsAction="never|collapseActionView" />
 
 </menu>

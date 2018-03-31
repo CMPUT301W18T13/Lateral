@@ -31,8 +31,8 @@
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Just added this -->
             <meta-data
@@ -81,23 +81,23 @@
                 android:value=".activity.MyTaskViewActivity" />
         </activity>
         <activity android:name=".activity.EditUserActivity" />
-        <activity android:name=".activity.QRCodeActivity"/>
+        <activity android:name=".activity.QRCodeActivity" />
         <activity android:name=".barcodereader.BarcodeCaptureActivity" />
-        <activity
-            android:name=".activity.EditUserActivity">
-        </activity>
+
         <service
             android:name=".service.Notification.NewBidNotificationService"
             android:label="New Bid Notification Service"
-            android:permission="android.permission.BIND_JOB_SERVICE" >
-        </service>
-        <receiver android:name=".service.Notification.StartServiceReceiver" >
+            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+
+        <receiver android:name=".service.Notification.StartServiceReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activity.DisplayQRCodeActivity"></activity>
     </application>
 
 </manifest>

@@ -138,7 +138,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         holder.tvDate.setText(df.format(task.getDate()));
 
         // display number of new bids
-       //holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
+       //
+        // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
 
 
     }
