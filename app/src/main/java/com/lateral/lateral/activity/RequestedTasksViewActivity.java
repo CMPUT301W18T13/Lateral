@@ -30,7 +30,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
 
-    private String thisUserID = LOGGED_IN_USER;             // class spec       // for testing
+    private String thisUserID = LOGGED_IN_USER;
     private PullRefreshLayout layout;
     static final int ADD_EDIT_TASK_CODE = 2;
 
@@ -69,7 +69,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
      * @return The target class of the activity
      */
     @Override
-    protected Class targetClass() {
+    protected Class targetClass(Task clickedTask) {
         return MyTaskViewActivity.class;
     }
 
@@ -131,16 +131,21 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     // TODO update so only refreshes if new activity posted
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
-        //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
-        if (requestCode == ADD_EDIT_TASK_CODE) {
-            //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+        Log.d("activity result invoked", "OnActivityResult");
+        if (requestCode == VIEW_TASK_REQUEST) {
             //mAdapter.notifyItemChanged(clickedItemPosition);
-            // TODO IMPORTANT --> eventually change to only update position clicked
+            // TODO --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
-            //mAdapter.notifyDataSetChanged();
+            // For now. refreshes entire list
+            Log.d("VIEW_TASK_REQUEST", "returned, update adapter");
             returnMatchingTasks(thisUserID);
 
+        } else if (requestCode == ADD_EDIT_TASK_CODE) {
+            // User wants to add a whole new task
+            // if added, notify data set added
+            // for now, refreshes entire list
+            Log.d("ADD_EDIT_TASK_CODE", "returned");
+            returnMatchingTasks(thisUserID);
         }
     }
 
