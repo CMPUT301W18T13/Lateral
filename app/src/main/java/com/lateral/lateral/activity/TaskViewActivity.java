@@ -32,7 +32,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 // TODO: (devon) Make title either offset or single-line
-// TODO: (devon) Fix up this view to match MyTaskView
 // TODO: (devon) BUG: Sometimes get after update fails to retrieve new changes
 // TODO: (devon) Change text field to the tools text field on all views
 

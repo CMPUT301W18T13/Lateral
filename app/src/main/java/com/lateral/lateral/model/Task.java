@@ -29,7 +29,6 @@ public class Task extends BaseEntity {
     private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
     private int bidsNotViewed;
     private int bidsPendingNotification;
-
     private String requestingUserUsername;
     private BigDecimal lowestBidValue;
 

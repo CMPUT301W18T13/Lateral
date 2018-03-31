@@ -20,4 +20,5 @@ public final class Constants {
     public static int PBKDF2_KEY_LENGTH = 256;
 
     public static String USER_FILE_NAME = "user_profile.sav";
+    public static int MAX_PHOTOS = 5;
 }
