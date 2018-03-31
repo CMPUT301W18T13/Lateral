@@ -35,7 +35,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-
+// TODO: Title overflows on task card if too long
 /**
  * Adapter for the TaskRow RecyclerView
  */
@@ -53,6 +53,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
      */
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
+        // TODO: Write code to display main image
         ImageView imageView;
         TextView tvTitle;
         TextView tvUsername;

@@ -6,21 +6,12 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.View;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
@@ -29,7 +20,7 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 // Just ignore this activity for now
 

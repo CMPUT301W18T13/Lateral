@@ -6,15 +6,18 @@
 
 package com.lateral.lateral.activity;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lateral.lateral.MainActivity;
+import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
 import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
@@ -34,6 +37,8 @@ import java.util.Locale;
 // TODO: (devon) Make title either offset or single-line
 // TODO: (devon) BUG: Sometimes get after update fails to retrieve new changes
 // TODO: (devon) Change text field to the tools text field on all views
+// TODO: Rename imageviews
+// TODO: Set the imageView sizes correctly!
 
 // TODO: Need to overwrite your own bid
 // TODO: Ensure you can't bid on your own task
@@ -151,9 +156,7 @@ public class TaskViewActivity extends AppCompatActivity {
         }
 
         if (task.getLowestBid() == null){
-            //Editor complains unless I save as string then setText
-            String noBidsString = "No Bids";
-            currentBid.setText(noBidsString);
+            currentBid.setText(R.string.task_view_no_bids);
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
                     String.valueOf(task.getLowestBid().getAmount())));
@@ -164,6 +167,9 @@ public class TaskViewActivity extends AppCompatActivity {
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
+
+        // TODO: Change imageview names
+        // TODO: Write image viewing code
     }
 
     /**

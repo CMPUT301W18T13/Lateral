@@ -11,7 +11,7 @@ import android.util.Log;
 import android.content.Context;
 
 import com.lateral.lateral.Constants;
-import com.lateral.lateral.MainActivity;
+import com.lateral.lateral.activity.MainActivity;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 

@@ -11,6 +11,7 @@ import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.math.BigDecimal;
 
+// TODO: Maybe sore bidderUsername instead of bidderId for efficiency?
 /**
  * Represents a bid object that is associated with a certain task
  */

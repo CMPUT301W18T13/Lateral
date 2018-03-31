@@ -19,10 +19,8 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.lateral.lateral.MainActivity;
-import com.lateral.lateral.activity.BidListActivity;
+import com.lateral.lateral.activity.MainActivity;
 import com.lateral.lateral.activity.MyTaskViewActivity;
-import com.lateral.lateral.activity.RequestedTasksViewActivity;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;

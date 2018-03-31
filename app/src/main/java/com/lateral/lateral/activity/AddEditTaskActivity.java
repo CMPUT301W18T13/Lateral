@@ -12,10 +12,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -28,8 +24,10 @@ import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
+// TODO: Autocapitalize in textboxes
+// TODO: Scroll View so keyboard doesn't cover images
 /**
  * Activity to add and edit tasks
  */

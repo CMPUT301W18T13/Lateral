@@ -38,6 +38,8 @@ import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 
+// TODO: BUG: Need to ensure update/post/delete calls are complete before returning to caller!!!!
+
 /**
  * Represents a service class to handle a specified type of object
  * @param <T> The type of the object handled.
@@ -48,15 +50,26 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
     // Stores T.class since java doesn't let you call T.class
     private final Class<T> typeArgument;
 
-    Gson gson = new Gson();
+    protected final Gson gson;
 
     /**
      * Constructor for the service
      */
     protected DefaultBaseService(){
-        // https://stackoverflow.com/questions/3403909/
+        // Source: https://stackoverflow.com/questions/3403909/
         ParameterizedType type = (ParameterizedType)getClass().getGenericSuperclass();
         this.typeArgument = (Class<T>)type.getActualTypeArguments()[0];
+
+        gson = buildGson().create();
+    }
+
+    /**
+     * Create GsonBuilder
+     * Sublasses can override to extend the builder
+     * @return builder
+     */
+    protected GsonBuilder buildGson() {
+        return new GsonBuilder().serializeNulls();
     }
 
     /**
@@ -124,6 +137,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             id = postData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
+            // TODO: Need to rethrow custom exception
         }
         obj.setId(id);
         setDocId(id);
@@ -148,7 +162,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             id = updateData.get();
         } catch (Exception e){
             Log.i("Error", "Failed to get task from async object");
-            // TODO: Throw custom exception
+            // TODO: Need to rethrow custom exception
         }
     }
 
@@ -186,6 +200,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             String success = deleteData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
+            // TODO: Need to rethrow custom exception
         }
     }
 
@@ -196,9 +211,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     protected final String getElasticSearchType(){
         Annotation annotation = typeArgument.getAnnotation(ElasticSearchType.class);
-        if (annotation == null){
-            // TODO: Throw some error. Class needs annotation
-        }
 
         return ((ElasticSearchType) annotation).Name();
     }
@@ -253,6 +265,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     }
                 } catch (Exception e) {
                     Log.i("Error", "Application failed to send user to server");
+                    // TODO: Need to rethrow custom exception
                 }
             }
             return id;
@@ -297,6 +310,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 }
             } catch (Exception e) {
                 Log.i("Error", "Error communicating with the elasticsearch server!");
+                // TODO: Need to rethrow custom exception
             }
 
             return get;
@@ -342,6 +356,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 }
             } catch (Exception e) {
                 Log.i("Error", "Application failed to send user to server");
+                // TODO: Need to rethrow custom exception
             }
             return id;
         }
@@ -382,6 +397,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     }
                 } catch (Exception e) {
                     Log.i("Error", "Application failed to send user to server");
+                    // TODO: Need to rethrow custom exception
                 }
             return "Success";
         }

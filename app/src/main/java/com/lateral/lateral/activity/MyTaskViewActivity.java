@@ -135,6 +135,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         else{
             assignedToUsername.setText(R.string.task_view_not_assigned);
         }
+        // TODO: Write image viewing code
 
         setButtonVisibility();
     }

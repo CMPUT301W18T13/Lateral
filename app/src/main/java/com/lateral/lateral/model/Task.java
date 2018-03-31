@@ -31,6 +31,7 @@ public class Task extends BaseEntity {
     private int bidsPendingNotification;
     private String requestingUserUsername;
     private BigDecimal lowestBidValue;
+    private PhotoGallery photoGallery;
 
     // Extra fields
     private transient User requestingUser;
@@ -42,7 +43,7 @@ public class Task extends BaseEntity {
     // TODO: Implement photo storage allocation
     private transient double latitude;
     private transient double longitude;
-    //
+
     // Private constructor for Jest to use
     private Task(){}
 
@@ -53,6 +54,7 @@ public class Task extends BaseEntity {
     public Task (String title) {
         this.setTitle(title);
         date = new Date();
+        this.photoGallery = new PhotoGallery();
         this.taskStatus = TaskStatus.Requested;
     }
 
@@ -64,7 +66,6 @@ public class Task extends BaseEntity {
     public Task (String title, String description) {
         this(title);
         this.setDescription(description);
-        this.taskStatus = TaskStatus.Requested;
     }
 
     /* Setters */
@@ -282,4 +283,8 @@ public class Task extends BaseEntity {
     public void setBidsPendingNotification(int bidsPendingNotification){this.bidsPendingNotification = bidsPendingNotification;}
 
     public int getBidsPendingNotification(){return this.bidsPendingNotification;}
+
+    public PhotoGallery getPhotoGallery() {
+        return photoGallery;
+    }
 }

@@ -29,13 +29,13 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import java.util.ArrayList;
 
 //TODO: fix bid limit problem
+// TODO: When you decline all bids, need to set status back to Requested and update task in DB
 
 /**
  * Activity to display the list of bids
  */
 public class BidListActivity extends AppCompatActivity {
     public static final String TASK_ID = "com.lateral.lateral.TASK_ID_INTERESTED_IN";
-// TODO: When you decline all bids, need to set status back to Requested and update task in DB
     private ListView bidListView;
     private BidRowAdapter adapter;
     private String taskID;

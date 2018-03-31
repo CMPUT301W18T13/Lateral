@@ -21,7 +21,7 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 /**
  * Activity to view all requested tasks

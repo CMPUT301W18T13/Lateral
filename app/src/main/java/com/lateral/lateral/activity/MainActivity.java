@@ -1,4 +1,10 @@
-package com.lateral.lateral;
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
+package com.lateral.lateral.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,18 +21,13 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.lateral.lateral.activity.AllTasksViewActivity;
-import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
-import com.lateral.lateral.activity.EditUserActivity;
-import com.lateral.lateral.activity.LoginActivity;
-import com.lateral.lateral.activity.QRCodeActivity;
-import com.lateral.lateral.activity.RequestedTasksViewActivity;
+import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
-
+// TODO: Add hamburger menu on (almost) all pages
 /**
  * The main activity for the app
  */

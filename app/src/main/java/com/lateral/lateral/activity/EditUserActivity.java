@@ -24,7 +24,7 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.service.UserLoginService.hashPassword;
 import static com.lateral.lateral.service.UserLoginService.isEmailValid;
 import static com.lateral.lateral.service.UserLoginService.isPasswordValid;
