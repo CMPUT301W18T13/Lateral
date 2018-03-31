@@ -260,6 +260,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
             setResult(RESULT_OK);
             finish();
         }
+        else if (item.getItemId() == R.id.action_qrcode){
+            Intent intent = new Intent(this, DisplayQRCodeActivity.class);
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
+            startActivity(intent);
+        }
         return super.onOptionsItemSelected(item);
     }
 

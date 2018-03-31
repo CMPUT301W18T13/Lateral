@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getUserByID(LOGGED_IN_USER);
+        User user = defaultUserService.getById(LOGGED_IN_USER);
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);

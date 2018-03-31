@@ -20,8 +20,12 @@ import com.google.android.gms.common.api.CommonStatusCodes;
 import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 
+import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 import com.lateral.lateral.barcodereader.BarcodeCaptureActivity;
+import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
+import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 public class QRCodeActivity extends AppCompatActivity {
 
@@ -69,8 +73,37 @@ public class QRCodeActivity extends AppCompatActivity {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
                     //TODO: Handle QR Code Result
-                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
-                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+//                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
+//                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
+                    String url = barcode.displayValue;
+                    if(url.startsWith("http://lateral.lateral.com/")){
+                        String taskId = url.substring(27); // Length of URL string
+
+                        DefaultTaskService defaultTaskService = new DefaultTaskService();
+                        Task task = defaultTaskService.getTaskByTaskID(taskId);
+
+                        if(task != null){
+                            if(task.getRequestingUserId().equals(MainActivity.LOGGED_IN_USER)){
+                                Toast.makeText(this, "You own this task!", Toast.LENGTH_LONG).show();
+                            }
+                            else if (task.getStatus() == TaskStatus.Assigned || task.getStatus() == TaskStatus.Done){
+                                Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Intent intent = new Intent(QRCodeActivity.this, TaskViewActivity.class);
+                                intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, taskId);
+                                startActivity(intent);
+                                finish();
+                            }
+                        }
+                        else{
+                            Toast.makeText(this, "Could not load task!", Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                    else{
+                        Toast.makeText(this, "Couldn't get task data!", Toast.LENGTH_LONG).show();
+                    }
                 } else {
                     Log.d(TAG, "No barcode captured, intent data is null");
                 }

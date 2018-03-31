@@ -198,7 +198,7 @@ public class EditUserActivity extends AppCompatActivity {
             defaultUserService.update(mCurrentUser);
 
             // Start the next activity with the user logged in
-            saveUserToken(mCurrentUser.getId(), getApplicationContext());
+            saveUserToken(mCurrentUser, getApplicationContext());
             login(mCurrentUser.getId(), getApplicationContext());
             finish();
         }

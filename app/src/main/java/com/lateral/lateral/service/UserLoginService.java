@@ -141,17 +141,16 @@ public class UserLoginService {
     /**
      * Saves a user's ID and token to a file.
      */
-    public static void saveUserToken(String userId, Context context){
+    public static void saveUserToken(User user, Context context){
         try {
             FileOutputStream fos = context.openFileOutput(USER_FILE_NAME,
                     Context.MODE_PRIVATE);
             BufferedWriter out = new BufferedWriter(new OutputStreamWriter(fos));
 
-            DefaultUserService defaultUserService = new DefaultUserService();
-            User user = defaultUserService.getById(userId);
-
             String newToken = randomBytes(32);
             user.setToken(newToken);
+
+            DefaultUserService defaultUserService = new DefaultUserService();
             defaultUserService.update(user);
 
             out.write(user.getId());

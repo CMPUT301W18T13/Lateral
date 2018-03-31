@@ -29,6 +29,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.service.UserLoginService.hashPassword;
@@ -261,7 +262,11 @@ public class LoginActivity extends AppCompatActivity{
             showProgress(false);
 
             if (success) {
-                saveUserToken(mId, getApplicationContext());
+                DefaultUserService defaultUserService = new DefaultUserService();
+                User user = defaultUserService.getById(mId);
+
+
+                saveUserToken(user, getApplicationContext());
                 login(mId, getApplicationContext());
                 finish();
             } else {

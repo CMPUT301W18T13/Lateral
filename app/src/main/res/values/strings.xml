@@ -98,6 +98,8 @@
     <string name="qrcode_button_text">Start!</string>
     <string name="qrcode_autofocus_check">Autofocus</string>
     <string name="qrcode_flash_check">Flash</string>
+    <string name="qrcode_option">QR Code</string>
+    <string name="qrcode_instructions">Screenshot this page to save this task\'s QR Code!</string>
 
     <string name="permission_camera_rationale">Needed to access the camera to scan a QR code</string>
     <string name="no_camera_permission">Permission to open camera not granted!</string>

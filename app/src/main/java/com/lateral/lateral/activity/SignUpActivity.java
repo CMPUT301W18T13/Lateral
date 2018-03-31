@@ -188,8 +188,11 @@ public class SignUpActivity extends AppCompatActivity {
             Log.i("SignUpActivity", "Posting user...");
             defaultUserService.post(user);
 
+            String id = user.getId();
+            Log.i("SignUpActivity", "ID is " + id);
+
             // Start the next activity with the user logged in
-            saveUserToken(user.getId(), getApplicationContext());
+            saveUserToken(user, getApplicationContext());
             login(user.getId(), getApplicationContext());
             finish();
         }
