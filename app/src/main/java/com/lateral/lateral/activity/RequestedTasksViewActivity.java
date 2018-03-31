@@ -81,7 +81,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Move to create new task activity when fab pressed
-        FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
+        final FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
         addNewTaskFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,6 +104,39 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
                 returnMatchingTasks(thisUserID);
                 layout.setRefreshing(false);
             }
+        });
+
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            int fabVisibility = 1;
+            int approxPosition = 0;
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                approxPosition += dy;
+
+                // if near top
+                if (approxPosition < 100) {
+
+                    // if fab hidden, show
+                    if (fabVisibility == 0) {
+                        addNewTaskFab.show();
+                        fabVisibility = 1;
+                    }
+
+                } else {
+                    // if fab shown, hide
+                    if (fabVisibility == 1) {
+                        addNewTaskFab.hide();
+                        fabVisibility = 0;
+                    }
+                }
+
+            }
+
         });
 
     }
