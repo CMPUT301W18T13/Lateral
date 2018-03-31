@@ -81,7 +81,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      */
     // TODO probably need to change, need to hide "BID NOW!" button which will appear
     @Override
-    protected Class targetClass() {
+    protected Class targetClass(Task clickedTask) {
         return TaskViewActivity.class;
     }
 
@@ -166,9 +166,8 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         if (requestCode == VIEW_TASK_REQUEST) {
             Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //mAdapter.notifyItemChanged(clickedItemPosition);
-            // TODO IMPORTANT --> eventually change to only update position clicked
+            // TODO  --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
-            //mAdapter.notifyDataSetChanged();
             returnMatchingTasks(thisUserID);
 
         }

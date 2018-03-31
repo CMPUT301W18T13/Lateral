@@ -26,6 +26,8 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
+import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+
 /*
 Searching interface info
 https://developer.android.com/guide/topics/search/search-dialog.html#UsingSearchWidget
@@ -86,8 +88,22 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
      * @return The target class of the activity
      */
     @Override
-    protected Class targetClass() {
-        return TaskViewActivity.class;
+    protected Class targetClass(Task clickedTask) {
+
+        Class targetClass;
+
+        if (clickedTask.getRequestingUserId().equals(LOGGED_IN_USER)) {
+
+            // user clicked on own task
+            targetClass = MyTaskViewActivity.class;
+
+        } else {
+            // user clicked on someone else's task
+
+            targetClass = TaskViewActivity.class;
+        }
+
+        return targetClass;
     }
 
     /**
@@ -201,9 +217,8 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         if (requestCode == VIEW_TASK_REQUEST) {
             Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //mAdapter.notifyItemChanged(clickedItemPosition);
-            // TODO IMPORTANT --> eventually change to only update position clicked
+            // TODO --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
-            //mAdapter.notifyDataSetChanged();
             addTasks(defaultTaskService.getEveryTask());
 
         }
