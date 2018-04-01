@@ -25,6 +25,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
@@ -41,16 +42,19 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    static final int PLACE_PICKER_REQUEST = 1;
 
-    private int PLACE_PICKER_REQUEST = 1;
     private String taskID;
     private Task editTask;
     private TaskService service;
+    private LatLng latLng;
+    private CharSequence address;
 
     // UI elements
     private EditText title;
     private EditText description;
     private Button confirmButton;
+    private Button addGeoLocationButton;
 
 
     /**
@@ -69,6 +73,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
         title = findViewById(R.id.add_edit_task_title);
         description = findViewById(R.id.add_edit_task_description);
         confirmButton = findViewById(R.id.add_edit_task_confirm_button);
+        addGeoLocationButton = findViewById(R.id.add_geolocatio_button);
         setInputFilters();
 
         service = new DefaultTaskService();
@@ -78,6 +83,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
+        latLng = null;
         if (taskID == null){
             // Add new task
             confirmButton.setText(R.string.add_task_confirm);
@@ -148,11 +154,15 @@ public class AddEditTaskActivity extends AppCompatActivity {
         startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place selectedPlace = PlacePicker.getPlace(this, data);
-                Log.i("Geolocation", Double.toString(selectedPlace.getLatLng().latitude));
+                latLng = selectedPlace.getLatLng();
+                addGeoLocationButton.setText(selectedPlace.getName());
+                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_blue_24dp, 0, 0, 0);
+
             }
         }
     }
@@ -170,7 +180,10 @@ public class AddEditTaskActivity extends AppCompatActivity {
             newTask.setRequestingUserUsername(username);
 
             // TODO: Testing
-            newTask.setLocation(53.644250, -113.652206);
+            if(latLng != null){
+                newTask.setLocation(latLng.latitude, latLng.longitude);
+            }
+
             service.post(newTask);
             Toast postTask = Toast.makeText(this, "Task added", Toast.LENGTH_SHORT);
             postTask.show();
