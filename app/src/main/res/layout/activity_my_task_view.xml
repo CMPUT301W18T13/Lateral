@@ -29,12 +29,12 @@
             tools:layout_conversion_absoluteWidth="384dp">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/my_task_view_image_main"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_menu_gallery"
@@ -85,7 +85,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/my_task_view_image_main"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="72dp"
                 tools:layout_conversion_absoluteWidth="231dp">
@@ -157,48 +157,48 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageButton
-                android:id="@+id/image6"
+                android:id="@+id/my_task_view_image_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image7"
+                android:id="@+id/my_task_view_image_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image8"
+                android:id="@+id/my_task_view_image_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image9"
+                android:id="@+id/my_task_view_image_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image10"
+                android:id="@+id/my_task_view_image_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
         </LinearLayout>
 

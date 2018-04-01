@@ -148,7 +148,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         //SearchView searchView;
 
         // Inflate the options menu from XML
-        getMenuInflater().inflate(R.menu.task_view_menu, menu);
+        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);

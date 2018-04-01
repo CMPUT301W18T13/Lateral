@@ -27,7 +27,7 @@
         </activity>
         <activity
             android:name=".activity.SignUpActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
@@ -67,27 +67,23 @@
         </activity>
         <activity
             android:name=".activity.TaskViewActivity"
-            android:label="Task" />
-        <activity android:name=".activity.AddEditTaskActivity" />
+            android:label="change this title" />
         <activity
             android:name=".activity.MyTaskViewActivity"
-            android:label="@string/title_activity_my_task_view"
-            android:parentActivityName=".activity.RequestedTasksViewActivity" />
+            android:label="@string/title_activity_my_task_view" />
         <activity
-            android:name=".activity.BidListActivity"
-            android:parentActivityName=".activity.MyTaskViewActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MyTaskViewActivity" />
-        </activity>
+            android:name=".activity.AddEditTaskActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".activity.BidListActivity"/>
         <activity android:name=".activity.EditUserActivity" />
-        <activity android:name=".activity.QRCodeActivity" />
+        <activity android:name=".activity.ScanQRCodeActivity"
+            android:label="@string/title_activity_scan_qrcode"/>
         <activity android:name=".barcodereader.BarcodeCaptureActivity" />
 
         <service
             android:name=".service.Notification.NewBidNotificationService"
             android:label="New Bid Notification Service"
-            android:permission="android.permission.BIND_JOB_SERVICE"></service>
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
         <receiver android:name=".service.Notification.StartServiceReceiver">
             <intent-filter>
@@ -97,7 +93,9 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.DisplayQRCodeActivity"></activity>
+        <activity
+            android:name=".activity.DisplayQRCodeActivity"
+            android:label="@string/title_activity_display_qrcode"/>
     </application>
 
 </manifest>

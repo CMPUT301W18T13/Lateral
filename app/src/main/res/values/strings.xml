@@ -8,6 +8,8 @@
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
+    <string name="edit_user_title">Edit User</string>
+    <string name="add_user_title">Sign Up</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_email_confirm">Re-enter email</string>
     <string name="prompt_phone">Phone number</string>
@@ -37,10 +39,11 @@
     <string name="search">Search</string>
     <string name="title_activity_task_view">All Tasks</string>
     <string name="title_activity_my_task_view">My Requested Tasks</string>
+    <string name="title_activity_display_qrcode">Task QR Code</string>
+    <string name="title_activity_scan_qrcode">Scan Task QR Code</string>
     <string name="large_text">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis massa quam, ut accumsan purus facilisis a. Suspendisse a accumsan risus. Curabitur et mollis augue, laoreet semper ante. Vestibulum pulvinar, ipsum non scelerisque egestas, ligula magna blandit felis, at placerat nunc ligula sit amet urna. Suspendisse aliquet lectus sapien, eget dignissim sem semper ac. Mauris vehicula purus mi. Nulla ac pretium tortor, vitae mattis velit. Sed arcu erat, posuere eget ipsum id, condimentum bibendum dolor.\n\n
-        Vivamus et auctor est. Nulla rutrum eget diam non tincidunt. Suspendisse potenti. Nunc eleifend, mi imperdiet molestie ultrices, felis felis aliquam lacus, at ullamcorper sapien nisl nec enim. Aenean vehicula sem mi, quis ultricies ante interdum a. Vestibulum vitae metus eleifend, dapibus leo id, condimentum tellus. Integer ac nibh ac orci vulputate viverra. Integer a gravida massa. Sed elementum blandit posuere. Phasellus sed nisl dignissim purus ultricies consequat. Proin vel arcu lorem. Maecenas quis tellus hendrerit, mollis risus ut, pulvinar massa. Mauris imperdiet odio sed elit aliquam, quis congue enim mattis. Nunc consequat quis dui vel tristique. Curabitur semper suscipit ligula semper faucibus. Vestibulum vel faucibus est.\n\n
-        Maecenas porttitor enim at quam pulvinar, feugiat condimentum dolor dapibus. Donec et odio nisi. Praesent malesuada in odio in aliquam. Integer ac augue dui. Maecenas laoreet nec purus quis pretium. Praesent diam leo, suscipit et tortor nec, gravida sollicitudin urna. Mauris eu iaculis lacus. Ut eget tellus at metus volutpat feugiat at vitae diam. Vestibulum eu diam tellus.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque convallis massa quam, ut accumsan purus facilisis a. Suspendisse a accumsan risus. Curabitur et mollis augue, laoreet semper ante.
+        Suspendisse aliquet lectus sapien, eget dignissim sem semper ac. Mauris vehicula purus mi. Nulla ac pretium tortor, vitae mattis velit. Sed arcu erat, posuere eget ipsum id, condimentum bibendum dolor.\n\n
     </string>
     <string name="bid_button_label">Bid Now!</string>
     <string name="current_bid_prompt">Current Bid:</string>
@@ -98,7 +101,8 @@
     <string name="qrcode_button_text">Start!</string>
     <string name="qrcode_autofocus_check">Autofocus</string>
     <string name="qrcode_flash_check">Flash</string>
-    <string name="qrcode_option">QR Code</string>
+    <string name="qrcode_scan">Scan Task QR Code</string>
+    <string name="qrcode_create">QR Code</string>
     <string name="qrcode_instructions">Screenshot this page to save this task\'s QR Code!</string>
 
     <string name="permission_camera_rationale">Needed to access the camera to scan a QR code</string>

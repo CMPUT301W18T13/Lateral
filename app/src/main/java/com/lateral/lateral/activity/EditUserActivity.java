@@ -10,10 +10,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.os.Build;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -34,7 +36,7 @@ import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
 import static com.lateral.lateral.service.UserLoginService.login;
 import static com.lateral.lateral.service.UserLoginService.randomBytes;
 import static com.lateral.lateral.service.UserLoginService.saveUserToken;
-
+// TODO: Username should not be editable!!! It breaks other parts of the app if user changes name
 public class EditUserActivity extends AppCompatActivity {
 
     private EditText mUsername;
@@ -52,7 +54,10 @@ public class EditUserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_sign_up);
+        setTitle(R.string.edit_user_title);
 
         DefaultUserService defaultUserService = new DefaultUserService();
         mCurrentUser = defaultUserService.getById(LOGGED_IN_USER);
@@ -96,6 +101,21 @@ public class EditUserActivity extends AppCompatActivity {
 
         mSignUpForm = findViewById(R.id.signUpFormView);
         mProgressBar = findViewById(R.id.signUpProgress);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
+            finish();
+        } else return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 
     /**

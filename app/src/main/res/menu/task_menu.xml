@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+  ~ You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+  ~ You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_qrcode"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="@string/qrcode_create"
+        app:showAsAction="never|collapseActionView" />
+
+</menu>

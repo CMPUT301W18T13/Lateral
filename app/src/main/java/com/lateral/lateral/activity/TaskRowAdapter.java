@@ -12,6 +12,7 @@ import android.app.Application;
 import android.app.DialogFragment;
 import android.content.ComponentName;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -140,8 +141,10 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // display number of new bids
        //
         // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
-
-
+// TODO: Testing
+//        Bitmap image = task.getPhotoGallery().get(0);
+//        if (image == null) holder.imageView.setImageResource(R.drawable.ic_menu_gallery);
+//        else holder.imageView.setImageBitmap(image);
     }
 
     /**

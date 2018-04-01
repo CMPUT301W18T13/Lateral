@@ -67,48 +67,48 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <ImageButton
-                android:id="@+id/image11"
+                android:id="@+id/task_view_image_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image12"
+                android:id="@+id/task_view_image_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image13"
+                android:id="@+id/task_view_image_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image14"
+                android:id="@+id/task_view_image_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
             <ImageButton
-                android:id="@+id/image15"
+                android:id="@+id/task_view_image_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
         </LinearLayout>
 
@@ -122,12 +122,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/task_view_image_main"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
-                android:scaleType="centerCrop"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_menu_gallery" />
@@ -172,7 +172,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/task_view_image_main"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <com.lateral.lateral.widget.UserLinkTextView

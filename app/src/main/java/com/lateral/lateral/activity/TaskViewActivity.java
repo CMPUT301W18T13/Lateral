@@ -10,8 +10,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,7 +41,6 @@ import java.util.Locale;
 // TODO: (devon) Make title either offset or single-line
 // TODO: (devon) BUG: Sometimes get after update fails to retrieve new changes
 // TODO: (devon) Change text field to the tools text field on all views
-// TODO: Rename imageviews
 // TODO: Set the imageView sizes correctly!
 
 // TODO: Need to overwrite your own bid
@@ -62,6 +65,13 @@ public class TaskViewActivity extends AppCompatActivity {
     private TextView date;
     private TextView description;
 
+    private ImageView imageMain;
+    private ImageView image0;
+    private ImageView image1;
+    private ImageView image2;
+    private ImageView image3;
+    private ImageView image4;
+
     /**
      * Called when activity is created
      * @param savedInstanceState saved instance
@@ -70,6 +80,8 @@ public class TaskViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_view);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Get the task id
         Intent taskIntent = getIntent();
@@ -85,56 +97,12 @@ public class TaskViewActivity extends AppCompatActivity {
         date = findViewById(R.id.task_view_date);
         description = findViewById(R.id.task_view_description);
 
-        //TODO: testvvvv
-        NotificationServiceScheduler.scheduleNewBid(getApplicationContext());
-
-        /*final int NOTIFY_ID = 1002;
-        NotificationManager notifManager = null;
-        // There are hardcoding only for show it's just strings
-        String name = "my_package_channel";
-        String id = "my_package_channel_1"; // The user-visible name of the channel.
-        String description = "my_package_first_channel"; // The user-visible description of the channel.
-
-        Intent intent;
-        PendingIntent pendingIntent;
-        NotificationCompat.Builder builder;
-
-        if (notifManager == null) {
-            notifManager =
-                    (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            int importance = NotificationManager.IMPORTANCE_HIGH;
-            NotificationChannel mChannel = notifManager.getNotificationChannel(id);
-            if (mChannel == null) {
-                mChannel = new NotificationChannel(id, name, importance);
-                mChannel.setDescription(description);
-                mChannel.enableVibration(true);
-                mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-                notifManager.createNotificationChannel(mChannel);
-            }
-        }
-
-        builder = new NotificationCompat.Builder(this, id);
-
-        intent = new Intent(this, MyTaskViewActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        builder.setContentTitle("bid title")  // required
-                .setSmallIcon(android.R.drawable.ic_popup_reminder) // required
-                .setContentText(this.getString(R.string.app_name))  // required
-                .setDefaults(Notification.DEFAULT_ALL)
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-                .setTicker("ticker")
-                .setVibrate(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-
-
-        Notification notification = builder.build();
-        notifManager.notify(NOTIFY_ID, notification);*/
-        //TODO: test^^^
+        imageMain = findViewById(R.id.task_view_image_main);
+        image0 = findViewById(R.id.task_view_image_0);
+        image1 = findViewById(R.id.task_view_image_1);
+        image2 = findViewById(R.id.task_view_image_2);
+        image3 = findViewById(R.id.task_view_image_3);
+        image4 = findViewById(R.id.task_view_image_4);
     }
 
     /**
@@ -168,8 +136,30 @@ public class TaskViewActivity extends AppCompatActivity {
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
-        // TODO: Change imageview names
-        // TODO: Write image viewing code
+        setImages();
+    }
+
+    private void setImages() {
+        // TODO: Testing
+        return;
+//        PhotoGallery gallery = task.getPhotoGallery();
+//
+//        Bitmap image;
+//        if ((image = gallery.get(0)) == null){
+//            imageMain.setImageResource(R.drawable.ic_menu_gallery);
+//            image0.setImageResource(R.drawable.ic_menu_gallery);
+//        } else {
+//            imageMain.setImageBitmap(image);
+//            image0.setImageBitmap(image);
+//        }
+//        if ((image = gallery.get(1)) == null) image1.setImageResource(R.drawable.ic_menu_gallery);
+//        else image1.setImageBitmap(image);
+//        if ((image = gallery.get(2)) == null) image2.setImageResource(R.drawable.ic_menu_gallery);
+//        else image2.setImageBitmap(image);
+//        if ((image = gallery.get(3)) == null) image3.setImageResource(R.drawable.ic_menu_gallery);
+//        else image3.setImageBitmap(image);
+//        if ((image = gallery.get(4)) == null) image4.setImageResource(R.drawable.ic_menu_gallery);
+//        else image4.setImageBitmap(image);
     }
 
     /**
@@ -183,6 +173,45 @@ public class TaskViewActivity extends AppCompatActivity {
         task.setLowestBid(bidService.getLowestBid(task.getId()));
         return task;
 
+    }
+    /**
+     * Called when the options menu is created
+     * @param menu The menu created
+     * @return True
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.task_menu, menu);
+        return true;
+    }
+
+    /**
+     * Called when an options menu item is selected
+     * @param item The menu item selected
+     * @return The built in result of calling onOptionsItemSelected
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == R.id.action_qrcode){
+            Intent intent = new Intent(this, DisplayQRCodeActivity.class);
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
+            startActivity(intent);
+        }
+        else if (item.getItemId() == android.R.id.home){
+            setResult(RESULT_OK);
+            finish();
+        }
+        else{
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 
     /**

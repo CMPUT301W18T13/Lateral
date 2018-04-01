@@ -11,7 +11,7 @@ import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.math.BigDecimal;
 
-// TODO: Maybe sore bidderUsername instead of bidderId for efficiency?
+// TODO: Maybe store bidderUsername as well as bidderId for efficiency?
 /**
  * Represents a bid object that is associated with a certain task
  */
@@ -68,7 +68,7 @@ public class Bid extends BaseEntity {
      * Gets the bidder on this object
      * @return The associated bidder
      */
-    public User getBidder() { return this.bidder; } //TODO: delete
+    public User getBidder() { return this.bidder; }
 
     /**
      * Sets the bidder on this object

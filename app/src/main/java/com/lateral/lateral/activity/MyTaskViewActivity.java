@@ -6,25 +6,28 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.Activity;
-import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
+import android.graphics.Bitmap;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
-import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
@@ -37,7 +40,9 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-
+// TODO: Don't bother refreshing after displaying QR code (use startActivityForResult with code)
+// TODO: Change lots of titles
+// TODO: Need progress bar in here
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
@@ -57,6 +62,13 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private Button taskDoneButton;
     private Button cancelTaskButton;
 
+    private ImageView imageMain;
+    private ImageView image0;
+    private ImageView image1;
+    private ImageView image2;
+    private ImageView image3;
+    private ImageView image4;
+
     private TaskService taskService = new DefaultTaskService();
     private UserService userService = new DefaultUserService();
     private BidService bidService = new DefaultBidService();
@@ -69,6 +81,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_task_view);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Get the task id
         Intent taskIntent = getIntent();
@@ -76,7 +90,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         if (this.taskID == null){
             setResult(RESULT_CANCELED);
             finish();
-        } //TODO: uncomment
+        }
 
         currentBid = findViewById(R.id.my_task_view_current_bid);
         title = findViewById(R.id.my_task_view_title);
@@ -86,6 +100,13 @@ public class MyTaskViewActivity extends AppCompatActivity {
         seeBidsButton = findViewById(R.id.my_task_view_see_bids_button);
         cancelTaskButton = findViewById(R.id.my_task_view_set_requested);
         taskDoneButton = findViewById(R.id.my_task_view_set_done);
+
+        imageMain = findViewById(R.id.my_task_view_image_main);
+        image0 = findViewById(R.id.my_task_view_image_0);
+        image1 = findViewById(R.id.my_task_view_image_1);
+        image2 = findViewById(R.id.my_task_view_image_2);
+        image3 = findViewById(R.id.my_task_view_image_3);
+        image4 = findViewById(R.id.my_task_view_image_4);
     }
 
     /**
@@ -135,9 +156,31 @@ public class MyTaskViewActivity extends AppCompatActivity {
         else{
             assignedToUsername.setText(R.string.task_view_not_assigned);
         }
-        // TODO: Write image viewing code
+
+        setImages();
 
         setButtonVisibility();
+    }
+
+    private void setImages() {
+        PhotoGallery gallery = task.getPhotoGallery();
+
+        Bitmap image;
+        if ((image = gallery.get(0)) == null){
+            imageMain.setImageResource(R.drawable.ic_menu_gallery);
+            image0.setImageResource(R.drawable.ic_menu_gallery);
+        } else {
+            imageMain.setImageBitmap(image);
+            image0.setImageBitmap(image);
+        }
+        if ((image = gallery.get(1)) == null) image1.setImageResource(R.drawable.ic_menu_gallery);
+        else image1.setImageBitmap(image);
+        if ((image = gallery.get(2)) == null) image2.setImageResource(R.drawable.ic_menu_gallery);
+        else image2.setImageBitmap(image);
+        if ((image = gallery.get(3)) == null) image3.setImageResource(R.drawable.ic_menu_gallery);
+        else image3.setImageBitmap(image);
+        if ((image = gallery.get(4)) == null) image4.setImageResource(R.drawable.ic_menu_gallery);
+        else image4.setImageBitmap(image);
     }
 
     /**
@@ -157,6 +200,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
                 taskDoneButton.setVisibility(View.GONE);
                 break;
             case Requested:
+                // TODO: Maybe show a disabled "No Bids" button instead of hiding it
                 seeBidsButton.setVisibility(View.GONE);
                 cancelTaskButton.setVisibility(View.GONE);
                 taskDoneButton.setVisibility(View.GONE);
@@ -194,7 +238,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     public void onSeeBidButtonClick(View v){
         Intent intent = new Intent(this, BidListActivity.class);
         intent.putExtra(BidListActivity.TASK_ID, taskID);
-        startActivity(intent);
+        startActivityForResult(intent, 0);
     }
 
     /**
@@ -213,20 +257,15 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param v current view
      */
     public void onSetRequestedButtonClick(View v){
+        task.setAssignedBid(null);
+        task.setAssignedBidId(null);
+        task.setBids(null);
+        task.setLowestBid(null);
+        task.setStatus(TaskStatus.Requested);
 
-        // TODO: BUG: Cannot save assignedBidId as null!!!!!
-        Toast temp = Toast.makeText(this, "Button cannot be implemented yet", Toast.LENGTH_LONG);
-        temp.show();
-
-//        task.setAssignedBid(null);
-//        task.setAssignedBidId(null);
-//        task.setBids(null);
-//        task.setLowestBid(null);
-//        task.setStatus(TaskStatus.Requested);
-//
-//        bidService.deleteBidsByTask(taskID);
-//        taskService.update(task);
-//        refresh(task);
+        bidService.deleteBidsByTask(taskID);
+        taskService.update(task);
+        refresh(task);
     }
 
     /**
@@ -244,7 +283,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     /**
      * Called when an options menu item is selected
      * @param item The menu item selected
-     * @return The built in result of calling onOptionsItemSelected
+     * @return true if handled
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
@@ -255,25 +294,58 @@ public class MyTaskViewActivity extends AppCompatActivity {
             startActivityForResult(intent, 2);
         }
         else if (item.getItemId() == R.id.action_delete_task){
-            taskService.delete(taskID);
-            Toast postTask = Toast.makeText(this, "Task deleted", Toast.LENGTH_SHORT);
-            postTask.show();
-            setResult(RESULT_OK);
-            finish();
+            promptDelete();
         }
         else if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
             startActivity(intent);
         }
-        return super.onOptionsItemSelected(item);
+        else if (item.getItemId() == android.R.id.home){
+            setResult(RESULT_OK);
+            finish();
+        }
+        else{
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
     }
 
-    protected void onActivityResult(int requestCode, int resultCode,
-                                    Intent data) {
-        if (resultCode == RESULT_OK) {
-            Log.e("Debug", "on activity called");
-        }
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
+    }
 
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            refresh();
+        }
+    }
+
+    private void promptDelete(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Delete")
+            .setMessage("Are you sure you want to delete this task?")
+            .setCancelable(true)
+            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            })
+            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                    taskService.delete(taskID);
+                    Toast postTask = Toast.makeText(MyTaskViewActivity.this,
+                            "Task deleted", Toast.LENGTH_SHORT);
+                    postTask.show();
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }
+// TODO: Maybe set up RESULT_OK and RESULT_CANCELED appropriately so we don't redundantly refresh data

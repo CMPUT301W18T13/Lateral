@@ -23,7 +23,7 @@
         <item
             android:id="@+id/nav_qrcode"
             android:icon="@drawable/ic_menu_camera"
-            android:title="@string/qrcode_option" />
+            android:title="@string/qrcode_scan" />
         <item
             android:id="@+id/nav_logout"
             android:title="Logout" />

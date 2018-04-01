@@ -7,11 +7,13 @@
 package com.lateral.lateral.activity;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,8 +28,9 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
-// TODO: Autocapitalize in textboxes
 // TODO: Scroll View so keyboard doesn't cover images
+// TODO: Remove settings button on main activity
+// TODO: Fix the currently selected item highlight in main menu
 /**
  * Activity to add and edit tasks
  */
@@ -52,6 +55,8 @@ public class AddEditTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_add_edit_task);
 
         // Get the task id
@@ -120,6 +125,26 @@ public class AddEditTaskActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) { }
         });
+    }
+
+    /**
+     * Called when an options menu item is selected
+     * @param item The menu item selected
+     * @return The built in result of calling onOptionsItemSelected
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     /**

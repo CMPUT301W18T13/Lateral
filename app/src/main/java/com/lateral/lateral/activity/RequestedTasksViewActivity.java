@@ -161,11 +161,10 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
         addTasks(taskService.getAllTasksByRequesterID(query));
     }
 
-    // TODO update so only refreshes if new activity posted
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("activity result invoked", "OnActivityResult");
-        if (requestCode == VIEW_TASK_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
@@ -173,7 +172,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             Log.d("VIEW_TASK_REQUEST", "returned, update adapter");
             returnMatchingTasks(thisUserID);
 
-        } else if (requestCode == ADD_EDIT_TASK_CODE) {
+        } else if (resultCode == RESULT_OK && requestCode == ADD_EDIT_TASK_CODE) {
             // User wants to add a whole new task
             // if added, notify data set added
             // for now, refreshes entire list

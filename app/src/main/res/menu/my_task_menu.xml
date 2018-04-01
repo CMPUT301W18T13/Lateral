@@ -5,17 +5,17 @@
         android:id="@+id/action_edit_task"
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/edit_button_text"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="never|collapseActionView"/>
 
     <item
         android:id="@+id/action_delete_task"
         android:icon="@android:drawable/ic_menu_delete"
         android:title="@string/delete_button_text"
-        app:showAsAction="ifRoom|collapseActionView" />
+        app:showAsAction="never|collapseActionView"/>
     <item
         android:id="@+id/action_qrcode"
         android:icon="@drawable/ic_menu_camera"
-        android:title="@string/qrcode_option"
+        android:title="@string/qrcode_create"
         app:showAsAction="never|collapseActionView" />
 
 </menu>

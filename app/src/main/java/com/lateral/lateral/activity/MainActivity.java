@@ -27,6 +27,7 @@ import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
+// TODO: Make the homepage look nicer (make a cool background maybe)
 // TODO: Add hamburger menu on (almost) all pages
 /**
  * The main activity for the app
@@ -142,38 +143,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Called when the options menu is created
-     * @param menu Menu created
-     * @return True
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    /**
-     * Called when an options menu item is selected
-     * @param item Options menu item
-     * @return the built-in result of onOptionMenuItemSelected
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
      * Handles clicking of Navigation Drawer Items
      * @param item Navigation Drawer Item
      * @return True
@@ -197,7 +166,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_qrcode){
-            Intent intent = new Intent(MainActivity.this, QRCodeActivity.class);
+            Intent intent = new Intent(MainActivity.this, ScanQRCodeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){

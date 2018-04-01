@@ -40,7 +40,6 @@ public class Task extends BaseEntity {
     private transient Bid lowestBid;
 
     // TODO: Implement location variable
-    // TODO: Implement photo storage allocation
     private transient double latitude;
     private transient double longitude;
 

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 // Just ignore this activity for now
-
+// TODO: Need to show my own bid along with the current lowest (unless assigned)!
 /**
  * Activity for viewing any assigned/bidden on tasks
  */
@@ -111,7 +111,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 //        //SearchView searchView;
 //
 //        // Inflate the options menu from XML
-//        getMenuInflater().inflate(R.menu.task_view_menu, menu);
+//        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
 //
 //        // Get the SearchView and set the searchable configuration
 //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -154,7 +154,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VIEW_TASK_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO  --> eventually change to only update position clicked

@@ -56,6 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        setTitle(R.string.add_user_title);
 
         // Set up form views
         mUsername = findViewById(R.id.usernameSignUpForm);

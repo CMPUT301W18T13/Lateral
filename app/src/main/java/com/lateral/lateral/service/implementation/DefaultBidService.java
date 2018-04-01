@@ -62,7 +62,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Jest ID of the task
      */
     public void deleteBidsByTask(String taskID){
-        // TODO: Implement more efficiently!!!!!!
+        // TODO: Implement more efficiently! This could be done with one DB call
 
         ArrayList<Bid> taskBids = getAllBidsByTaskID(taskID);
 

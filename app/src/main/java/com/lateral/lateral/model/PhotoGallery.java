@@ -40,7 +40,7 @@ public class PhotoGallery {
      * Create a new Photo Gallery
      */
     public PhotoGallery() {
-        // TODO: Testing
+        // TODO: Testing default images
         String base64String =
                 "_9j_4AAQSkZJRgABAQAAAQABAAD_2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEB" +
                 "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH_2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEB" +
@@ -96,7 +96,9 @@ public class PhotoGallery {
 
         byte[] byteArray = Base64.decode(base64String, Base64.URL_SAFE);
         Bitmap image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        this.insert(image, 3);
+        this.insert(image, 0);
+        this.insert(image, 2);
+        this.insert(image, 4);
     }
 
     /**
@@ -144,7 +146,7 @@ public class PhotoGallery {
         @Override
         public JsonElement serialize(PhotoGallery gallery, Type type, JsonSerializationContext jsonSerializationContext) {
 
-            // TODO: Why does serialize append a space to the end???
+            // TODO: Investigate why serialize appends a space to the end
             JsonArray photoArray = new JsonArray();
 
             for (Bitmap bitmap : gallery.photoList) {
@@ -152,7 +154,7 @@ public class PhotoGallery {
                     photoArray.add(JsonNull.INSTANCE);
                 } else {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    // TODO: Use JPG instead
+                    // TODO: Use JPG instead (right now deserializing jpg creates black image)
                     // TODO: Play with quality!
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
@@ -188,14 +190,11 @@ public class PhotoGallery {
                 if (element == JsonNull.INSTANCE) {
                     gallery.photoList[i] = null;
                 } else {
-                    try {
-                        String base64String = element.getAsString();
-                        byte[] byteArray = Base64.decode(base64String, Base64.URL_SAFE);
-                        // TODO: Check if decode returns null!!
-                        gallery.photoList[i] = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-                    } catch (Exception e) {
-                        throw new JsonParseException("Base64 image could not be decoded");
-                    }
+                    String base64String = element.getAsString();
+                    byte[] byteArray = Base64.decode(base64String, Base64.URL_SAFE);
+                    Bitmap image = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+                    if (image == null) throw new JsonParseException("Base64 image could not be decoded");
+                    else gallery.photoList[i] = image;
                 }
             }
 

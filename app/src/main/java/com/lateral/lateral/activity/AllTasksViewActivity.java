@@ -43,7 +43,6 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
  */
 // TODO fix white bar at the top of this activity --> appeared on my original pull
 // TODO clicking seems to work but test more --> pass intents
-// TODO: Need to open MyTaskViewActivity if the task belongs to current user
 // TODO: Get the notification "x new bids!" working (or remove it)
 // TODO: Disable app rotation
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
@@ -212,7 +211,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VIEW_TASK_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO --> eventually change to only update position clicked

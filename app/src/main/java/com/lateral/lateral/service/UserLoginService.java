@@ -158,11 +158,8 @@ public class UserLoginService {
             out.write(user.getToken());
             out.flush();
 
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Log.e("UserLoginService", "Failed to save user token");
             throw new RuntimeException();
         }
     }
