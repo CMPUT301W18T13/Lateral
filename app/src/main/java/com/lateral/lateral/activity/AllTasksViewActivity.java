@@ -18,15 +18,21 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
+import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.model.TaskStatus.Bidded;
 
 /*
 Searching interface info
@@ -49,10 +55,25 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: Get the notification "x new bids!" working (or remove it)
 // TODO: Disable app rotation
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
+    // TODO tomorrow me
+    // (April 1 me)
+    // --> need to figure out logic of how to filter searched tasks
+    // --> should figure out why spinner is invoked on creation (list filled twice)
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();
     private PullRefreshLayout layout;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    // 0 - all tasks
+    // 1 - bidded tasks
+    private int currentFilter = 0;
+
+
+    private ArrayList<Task> allLocallyStoredTasks;
+    private ArrayList<Task> tasksWithBids;
+
+    private Spinner filterSpinner;
+
+
     /**
      * Gets the layout ID of the activity
      * @return The R-id of the activity
@@ -117,6 +138,40 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         // check how we got here
         handleIntent(getIntent());
 
+        filterSpinner = findViewById(R.id.allTasksSpinner);
+
+        final ArrayList<String> filters = new ArrayList<String>();
+        filters.add("All Tasks");
+        filters.add("Tasks with Bids");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filters);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        filterSpinner.setAdapter(spinnerAdapter);
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("FILTER", "Item selected = " + filters.get(position));
+                if (position == 0) {
+                    // All tasks selected
+                    currentFilter = 0;
+                    //tasksWithBids = allLocallyStoredTasks;
+                    addTasks(allLocallyStoredTasks);
+                } else {
+                    // Bidded tasks selected
+                    currentFilter = 1;
+                    //tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+                    addTasks(tasksWithBids);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("FILTER", "Item selected");
+
+            }
+        });
+
+
 
         // listen refresh event
         layout = (PullRefreshLayout) findViewById(R.id.allTasksSwipeRefreshLayout);
@@ -124,7 +179,13 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public void onRefresh() {
                 // start refresh
-                addTasks(defaultTaskService.getEveryTask());
+                allLocallyStoredTasks = defaultTaskService.getEveryTask();
+                tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+                if (currentFilter == 0) {
+                    addTasks(allLocallyStoredTasks);
+                } else {
+                    addTasks(tasksWithBids);
+                }
                 layout.setRefreshing(false);
             }
         });
@@ -177,6 +238,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
      */
     private void handleIntent(Intent intent) {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            //filterSpinner.setVisibility(View.GONE);
             Log.d("ALL TASKS", "Got here via search button");
             clearList();
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -191,6 +253,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             Log.d("ALL TASKS", "Got here via button, load all");
 
             ArrayList<Task> everyTask = defaultTaskService.getEveryTask();
+            allLocallyStoredTasks = everyTask;
             //Log.d("Number of tasks", Integer.toString(everyTask.size()));
             addTasks(everyTask);
         }
@@ -224,6 +287,18 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         }
     }
 
+    private ArrayList<Task> extractTasksWithBids(ArrayList<Task> tasksToFilter) {
+        ArrayList<Task> tasksWithBids = new ArrayList<Task>();
+
+        for (Task curTask : tasksToFilter) {
+            if (curTask.getStatus() == Bidded) {
+                // extract
+                tasksWithBids.add(curTask);
+            }
+        }
+
+        return tasksWithBids;
+    }
 
 
 
