@@ -237,6 +237,9 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
      * @param intent Intent and handles
      */
     private void handleIntent(Intent intent) {
+
+        ArrayList<Task> initializedTasks;
+
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             //filterSpinner.setVisibility(View.GONE);
             Log.d("ALL TASKS", "Got here via search button");
@@ -248,15 +251,30 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             String jsonQuery = "{\"query\": {\"multi_match\": {\"title\": {\"query\" : \"" + searchField + "\"," +
                 " \"fields\" : [\"title^3\", \"description\"]}}}}";
              */
-            returnMatchingTask(query);
+            //returnMatchingTask(query);
+            Log.d("QUERY ", query);
+            initializedTasks = defaultTaskService.getAllTasks(query);
+//            allLocallyStoredTasks = initializedTasks;
+//            tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+//            addTasks(initializedTasks);
+
         } else {
             Log.d("ALL TASKS", "Got here via button, load all");
 
-            ArrayList<Task> everyTask = defaultTaskService.getEveryTask();
-            allLocallyStoredTasks = everyTask;
-            //Log.d("Number of tasks", Integer.toString(everyTask.size()));
-            addTasks(everyTask);
+            //ArrayList<Task> everyTask = defaultTaskService.getEveryTask();
+            initializedTasks = defaultTaskService.getEveryTask();;
+//            allLocallyStoredTasks = initializedTasks;
+//            tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+//
+//            //Log.d("Number of tasks", Integer.toString(everyTask.size()));
+//            addTasks(initializedTasks);
         }
+
+
+        // initialized local storage of tasks
+        allLocallyStoredTasks = initializedTasks;
+        tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+        addTasks(initializedTasks);
     }
 
     /**
