@@ -21,6 +21,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
@@ -38,6 +42,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
 
+    private int PLACE_PICKER_REQUEST = 1;
     private String taskID;
     private Task editTask;
     private TaskService service;
@@ -46,6 +51,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private EditText title;
     private EditText description;
     private Button confirmButton;
+
 
     /**
      * Called when the activity is created
@@ -135,6 +141,20 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
         if (editTask == null) addNewTask(title, desc);
         else updateTask(title, desc);
+    }
+
+    public void onAddGeolocation(View v) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place selectedPlace = PlacePicker.getPlace(this, data);
+                Log.i("Geolocation", Double.toString(selectedPlace.getLatLng().latitude));
+            }
+        }
     }
 
     private void addNewTask(String title, String desc) {
