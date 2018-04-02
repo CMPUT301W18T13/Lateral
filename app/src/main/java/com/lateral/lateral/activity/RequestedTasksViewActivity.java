@@ -42,8 +42,11 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     private PullRefreshLayout layout;
     static final int ADD_EDIT_TASK_CODE = 2;
 
+    /* Filter related variables */
     private Spinner filterSpinner;
     private int currentFilter = 0;
+
+    /* local storage */
     private ArrayList<Task> allLocallyStoredTasks;
     private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
     private ArrayList<Task> assignedTasks = new ArrayList<Task>();
@@ -99,7 +102,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
         initializeLocalArrays();
 
-
         // Move to 'create new task' activity when fab pressed
         final FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
         addNewTaskFab.setOnClickListener(new View.OnClickListener() {
@@ -111,45 +113,16 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             }
         });
 
-        // display requested tasks from this user
-        //returnMatchingTasks(thisUserID);
-
-
         // listen refresh event
         layout = (PullRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // start refresh
-                //returnMatchingTasks(thisUserID);
-                // refreshes local arrays
                 initializeLocalArrays();
-
-//                if (currentFilter == 0) {
-//                    // display refreshed all
-//                    addTasks(allLocallyStoredTasks);
-//
-//                } else if (currentFilter == 1) {
-//                    // display refreshed bidded
-//                    addTasks(tasksWithBids);
-//
-//                } else if (currentFilter == 2) {
-//                    // display refreshed assigned
-//                    addTasks(assignedTasks);
-//
-//                } else if (currentFilter == 3) {
-//                    // display refreshed done
-//                    addTasks(doneTasks);
-//                }
-
                 displayResultsFromFilter();
-
-
-
                 layout.setRefreshing(false);
             }
         });
-
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -183,8 +156,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
         });
 
-
-
         filterSpinner = findViewById(R.id.filterTasksSpinner);
 
         final ArrayList<String> filters = new ArrayList<String>();
@@ -201,27 +172,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("FILTER", "Item selected = " + filters.get(position));
                 currentFilter = position;
-//                if (position == 0) {
-//                    // All tasks selected
-//                    currentFilter = 0;
-//                    //tasksWithBids = allLocallyStoredTasks;
-//                    addTasks(allLocallyStoredTasks);
-//                } else if (position == 1) {
-//                    // Bidded tasks selected
-//                    currentFilter = 1;
-//                    //tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
-//                    addTasks(tasksWithBids);
-//                } else if (position == 2) {
-//                    // Assigned Tasks selected
-//                    currentFilter = 2;
-//                    addTasks(assignedTasks);
-//
-//                } else if (position == 3) {
-//                    // Completed tasks selected
-//                    currentFilter = 3;
-//                    addTasks(doneTasks);
-//                }
-
                 displayResultsFromFilter();
             }
 
@@ -250,7 +200,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
      * @param query Query to check on
      */
     private void returnMatchingTasks(String query) {
-        //DefaultTaskService taskService = new DefaultTaskService();
         addTasks(defaultTaskService.getAllTasksByRequesterID(query));
     }
 
@@ -264,7 +213,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             //      -->does not work rn because list order changes when task updated
             // For now. refreshes entire list
             Log.d("VIEW_TASK_REQUEST", "returned, update adapter");
-            //returnMatchingTasks(thisUserID);
             initializeLocalArrays();
             displayResultsFromFilter();
 
@@ -273,17 +221,16 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             // if added, notify data set added
             // for now, refreshes entire list
             Log.d("ADD_EDIT_TASK_CODE", "returned");
-            //returnMatchingTasks(thisUserID);
             initializeLocalArrays();
             displayResultsFromFilter();
 
         }
     }
 
-
     /**
      * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
+     * --> Assumes globals are already correctly set
      */
     public void initializeLocalArrays() {
         allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(thisUserID);
@@ -308,10 +255,9 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
     }
 
-
     /**
      * displays correct tasks to recycler view based on the current filter
-     * assumes globals are already correctly set
+     * --> Assumes globals are already correctly set
      */
     public void displayResultsFromFilter() {
 
@@ -332,6 +278,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             addTasks(doneTasks);
         }
     }
+
 
 
 }

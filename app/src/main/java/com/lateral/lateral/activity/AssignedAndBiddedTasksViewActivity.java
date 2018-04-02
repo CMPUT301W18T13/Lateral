@@ -53,17 +53,15 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
 
-
-
+    /* Filter related variables */
     private Spinner filterSpinner;
     private int currentFilter = 0;
+
+    /* local storage */
     private ArrayList<Task> allLocallyStoredTasks;
     private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
     private ArrayList<Task> assignedTasks = new ArrayList<Task>();
     private ArrayList<Task> doneTasks = new ArrayList<Task>();
-
-
-
 
     /**
      * Gets the layout ID of the activity
