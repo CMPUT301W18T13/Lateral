@@ -33,9 +33,6 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
-// TODO: Repair this xml layout
-// TODO: Scroll View so keyboard doesn't cover images
-// TODO: Fix the currently selected item highlight in main menu
 /**
  * Activity to add and edit tasks
  */

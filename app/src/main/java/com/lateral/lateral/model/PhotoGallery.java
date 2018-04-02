@@ -24,8 +24,6 @@ import com.lateral.lateral.Constants;
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
 
-// TODO: Change ic_menu_gallery so blank ImageViews look nice
-// TODO: Add (+) icon for adding new images
 
 /**
  * Class to manage photos for tasks
@@ -154,7 +152,7 @@ public class PhotoGallery {
                     photoArray.add(JsonNull.INSTANCE);
                 } else {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    // TODO: Maybe use JPG if I can get it to stop losing quality on each save
+                    // TODO: Maybe use JPG if I can ensure quality isn't repeatedly lost
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
                     photoArray.add(Base64.encodeToString(byteArray, Base64.URL_SAFE));

@@ -6,6 +6,7 @@
 
 package com.lateral.lateral.activity;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,15 +38,13 @@ import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
+import com.lateral.lateral.widget.PhotoImageView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 // TODO: Don't bother refreshing after displaying QR code (use startActivityForResult with code)
-// TODO: Change lots of titles
 // TODO: Need progress bar in here
-// TODO: Need correct scale type for images
-// TODO: Change ImageButton to ImageView
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
@@ -64,12 +64,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private Button taskDoneButton;
     private Button cancelTaskButton;
 
-    private ImageView imageMain;
-    private ImageView image0;
-    private ImageView image1;
-    private ImageView image2;
-    private ImageView image3;
-    private ImageView image4;
+    private PhotoImageView imageMain;
+    private LinearLayout imageLayout;
 
     private TaskService taskService = new DefaultTaskService();
     private UserService userService = new DefaultUserService();
@@ -104,20 +100,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         taskDoneButton = findViewById(R.id.my_task_view_set_done);
 
         imageMain = findViewById(R.id.my_task_view_image_main);
-        image0 = findViewById(R.id.my_task_view_image_0);
-        image1 = findViewById(R.id.my_task_view_image_1);
-        image2 = findViewById(R.id.my_task_view_image_2);
-        image3 = findViewById(R.id.my_task_view_image_3);
-        image4 = findViewById(R.id.my_task_view_image_4);
-
-        // TODO: Testing, remove this
-        image2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(((BitmapDrawable)image2.getDrawable()).getBitmap());
-                dialog.show(getFragmentManager(), "dialog");
-            }
-        });
+        imageLayout = findViewById(R.id.my_task_view_imageLayout);
     }
 
     /**
@@ -170,27 +153,17 @@ public class MyTaskViewActivity extends AppCompatActivity {
         setImages();
 
         setButtonVisibility();
-    }
+    }// TODO: Realign upper left imageview since it's above the text
+
 
     private void setImages() {
         PhotoGallery gallery = task.getPhotoGallery();
 
-        Bitmap image;
-        if ((image = gallery.get(0)) == null){
-            imageMain.setImageResource(R.drawable.ic_menu_gallery);
-            image0.setImageResource(R.drawable.ic_menu_gallery);
-        } else {
-            imageMain.setImageBitmap(image);
-            image0.setImageBitmap(image);
+        imageMain.setImage(gallery.get(0));
+        for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++){
+            PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
+            view.setImage(gallery.get(i));
         }
-        if ((image = gallery.get(1)) == null) image1.setImageResource(R.drawable.ic_menu_gallery);
-        else image1.setImageBitmap(image);
-        if ((image = gallery.get(2)) == null) image2.setImageResource(R.drawable.ic_menu_gallery);
-        else image2.setImageBitmap(image);
-        if ((image = gallery.get(3)) == null) image3.setImageResource(R.drawable.ic_menu_gallery);
-        else image3.setImageBitmap(image);
-        if ((image = gallery.get(4)) == null) image4.setImageResource(R.drawable.ic_menu_gallery);
-        else image4.setImageBitmap(image);
     }
 
     /**
@@ -356,6 +329,20 @@ public class MyTaskViewActivity extends AppCompatActivity {
             });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+    // TODO: Add to task card too!
+    /**
+     * Called when photo is clicked
+     * @param v view
+     */
+    public void onPhotoImageViewClick(View v){
+
+        Bitmap image = ((PhotoImageView)v).getImage();
+
+        if (image != null){
+            PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(image);
+            dialog.show(getFragmentManager(), "photo_dialog");
+        }
     }
 }
 // TODO: Maybe set up RESULT_OK and RESULT_CANCELED appropriately so we don't redundantly refresh data

@@ -10,9 +10,11 @@ package com.lateral.lateral.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -27,13 +29,15 @@ import android.view.View;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.ItemClickSupport;
+import com.lateral.lateral.widget.PhotoImageView;
 
 import java.util.ArrayList;
 
 import static com.lateral.lateral.activity.TaskViewActivity.EXTRA_TASK_ID;
-
+// TODO: Maybe sort by newest first instead of oldest first
 /**
  * Base activity for dealing with TaskRecyclerViews
  */
@@ -221,6 +225,20 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
                 progressView.setVisibility(show ? View.VISIBLE : View.GONE);
             }
         });
+    }
+
+    /**
+     * Called when photo is clicked
+     * @param v view
+     */
+    public void onPhotoImageViewClick(View v){
+
+        Bitmap image = ((PhotoImageView)v).getImage();
+
+        if (image != null){
+            PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(image);
+            dialog.show(getFragmentManager(), "photo_dialog");
+        }
     }
 
 

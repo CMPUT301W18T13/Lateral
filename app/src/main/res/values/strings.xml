@@ -31,7 +31,8 @@
     <string name="filter_text">Filter</string>
     <string name="title_activity_all_tasks_view">All Tasks</string>
     <string name="search">Search</string>
-    <string name="title_activity_my_task_view">My Requested Tasks</string>
+    <string name="title_activity_my_task_view">My Task Details</string>
+    <string name="title_activity_task_view">Task Details</string>
     <string name="title_activity_display_qrcode">Task QR Code</string>
     <string name="title_activity_scan_qrcode">Scan Task QR Code</string>
     <string name="large_text">

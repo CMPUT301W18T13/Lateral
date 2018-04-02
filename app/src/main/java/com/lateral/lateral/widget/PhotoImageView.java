@@ -7,35 +7,78 @@
 package com.lateral.lateral.widget;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
+// TODO: Change ic_menu_gallery so blank ImageViews look nice
+// TODO: Add (+) icon for adding new images
+
+import com.lateral.lateral.R;
+
+/**
+ * Custom imageview for displaying task photos
+ */
 public class PhotoImageView extends AppCompatImageView{
+
+    /**
+     * Create PhotoImageView
+     * @param context context
+     */
     public PhotoImageView(Context context) {
         super(context);
         setProperties();
     }
 
+    /**
+     * Create PhotoImageView
+     * @param context context
+     * @param attrs attributes
+     */
     public PhotoImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setProperties();
     }
 
+    /**
+     * Create PhotoImageView
+     * @param context context
+     * @param attrs attributes
+     * @param defStyleAttr style attribute
+     */
     public PhotoImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setProperties();
+    }
+
+    /**
+     * Set image using bitmap, if passed null it will assign a default resource
+     * @param image bitmap image
+     */
+    public void setImage(Bitmap image){
+        if (image == null) setImageResource(R.drawable.ic_menu_gallery);
+        else setImageBitmap(image);
+    }
+
+    /**
+     * Get the bitmap image, or null is the image is not a bitmap
+     * @return Bitmap
+     */
+    public Bitmap getImage(){
+        Drawable drawable = getDrawable();
+        if (drawable instanceof BitmapDrawable){
+            return ((BitmapDrawable)drawable).getBitmap();
+        } else return null;
     }
 
     private void setProperties(){
         setScaleType(ScaleType.FIT_CENTER);
         setAdjustViewBounds(true);
         setBackgroundColor(Color.LTGRAY);
-        // TODO: Maybe layout?
-        // TODO: Set default image?
-        // TODO: Spacing between elements
-        // TODO: Fix the upper left images (also on task card)
-        // TODO: Ensure to not open dialog if fragment manager already sees it
+        setImageResource(R.drawable.ic_menu_gallery);
     }
 
     /**
@@ -52,4 +95,5 @@ public class PhotoImageView extends AppCompatImageView{
         setMeasuredDimension(width, width);
     }
     // TODO: Button presses are slow for some reason
+    // TODO: Fast double click may open the dialog twice
 }

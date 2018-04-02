@@ -7,10 +7,6 @@
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
-import android.app.ActivityManager;
-import android.app.Application;
-import android.app.DialogFragment;
-import android.content.ComponentName;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -23,20 +19,20 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.lateral.lateral.R;
-import com.lateral.lateral.dialog.UserInfoDialog;
-import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.dialog.PhotoViewerDialog;
+import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
+import com.lateral.lateral.widget.PhotoImageView;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
-// TODO: Title overflows on task card if too long
+// TODO: BUG: Title overflows on task card if too long
 /**
  * Adapter for the TaskRow RecyclerView
  */
@@ -55,7 +51,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
         // TODO: Write code to display main image
-        ImageView imageView;
+        PhotoImageView imageView;
         TextView tvTitle;
         TextView tvUsername;
         TextView tvDate;
@@ -141,10 +137,12 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // display number of new bids
        //
         // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
-// TODO: Testing
-//        Bitmap image = task.getPhotoGallery().get(0);
-//        if (image == null) holder.imageView.setImageResource(R.drawable.ic_menu_gallery);
-//        else holder.imageView.setImageBitmap(image);
+
+        PhotoGallery gallery = task.getPhotoGallery();
+        // TODO: REMOVE NULL CHECK
+        if (gallery != null){
+            holder.imageView.setImage(gallery.get(0));
+        }
     }
 
     /**
@@ -180,5 +178,4 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         }
         return statusColor;
     }
-
 }

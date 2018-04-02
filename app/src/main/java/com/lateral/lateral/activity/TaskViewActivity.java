@@ -6,8 +6,10 @@
 
 package com.lateral.lateral.activity;
 
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,12 +18,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
@@ -30,17 +35,14 @@ import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
+import com.lateral.lateral.widget.PhotoImageView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-// TODO: (devon) Make title either offset or single-line
 // TODO: (devon) BUG: Sometimes get after update fails to retrieve new changes
-// TODO: (devon) Change text field to the tools text field on all views
-// TODO: Set the imageView sizes correctly!
 
 // TODO: Need to overwrite your own bid
-// TODO: Ensure you can't bid on your own task
 /**
  * Activity for viewing a certain task
  */
@@ -61,12 +63,8 @@ public class TaskViewActivity extends AppCompatActivity {
     private TextView date;
     private TextView description;
 
-    private ImageView imageMain;
-    private ImageView image0;
-    private ImageView image1;
-    private ImageView image2;
-    private ImageView image3;
-    private ImageView image4;
+    private PhotoImageView imageMain;
+    private LinearLayout imageLayout;
 
     /**
      * Called when activity is created
@@ -94,11 +92,7 @@ public class TaskViewActivity extends AppCompatActivity {
         description = findViewById(R.id.task_view_description);
 
         imageMain = findViewById(R.id.task_view_image_main);
-        image0 = findViewById(R.id.task_view_image_0);
-        image1 = findViewById(R.id.task_view_image_1);
-        image2 = findViewById(R.id.task_view_image_2);
-        image3 = findViewById(R.id.task_view_image_3);
-        image4 = findViewById(R.id.task_view_image_4);
+        imageLayout = findViewById(R.id.task_view_imageLayout);
     }
 
     /**
@@ -136,26 +130,13 @@ public class TaskViewActivity extends AppCompatActivity {
     }
 
     private void setImages() {
-        // TODO: Testing
-        return;
-//        PhotoGallery gallery = task.getPhotoGallery();
-//
-//        Bitmap image;
-//        if ((image = gallery.get(0)) == null){
-//            imageMain.setImageResource(R.drawable.ic_menu_gallery);
-//            image0.setImageResource(R.drawable.ic_menu_gallery);
-//        } else {
-//            imageMain.setImageBitmap(image);
-//            image0.setImageBitmap(image);
-//        }
-//        if ((image = gallery.get(1)) == null) image1.setImageResource(R.drawable.ic_menu_gallery);
-//        else image1.setImageBitmap(image);
-//        if ((image = gallery.get(2)) == null) image2.setImageResource(R.drawable.ic_menu_gallery);
-//        else image2.setImageBitmap(image);
-//        if ((image = gallery.get(3)) == null) image3.setImageResource(R.drawable.ic_menu_gallery);
-//        else image3.setImageBitmap(image);
-//        if ((image = gallery.get(4)) == null) image4.setImageResource(R.drawable.ic_menu_gallery);
-//        else image4.setImageBitmap(image);
+        PhotoGallery gallery = task.getPhotoGallery();
+
+        imageMain.setImage(gallery.get(0));
+        for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++){
+            PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
+            view.setImage(gallery.get(i));
+        }
     }
 
     /**
@@ -248,5 +229,19 @@ public class TaskViewActivity extends AppCompatActivity {
         });
         bidCreationDialog.show();
         refresh();
+    }
+
+    /**
+     * Called when photo is clicked
+     * @param v view
+     */
+    public void onPhotoImageViewClick(View v){
+
+        Bitmap image = ((PhotoImageView)v).getImage();
+
+        if (image != null){
+            PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(image);
+            dialog.show(getFragmentManager(), "photo_dialog");
+        }
     }
 }

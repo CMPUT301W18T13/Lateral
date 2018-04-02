@@ -30,7 +30,7 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import java.util.ArrayList;
 
 //TODO: fix bid limit problem
-// TODO: When you decline all bids, need to set status back to Requested and update task in DB
+// TODO: BUG: When you decline all bids, need to set status back to Requested and update task in DB
 
 /**
  * Activity to display the list of bids
@@ -89,7 +89,6 @@ public class BidListActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            // TODO: Send canceled unless bid has been declined
             setResult(RESULT_OK);
             finish();
         } else return super.onOptionsItemSelected(item);
@@ -98,7 +97,6 @@ public class BidListActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // TODO: Send canceled unless bid has been declined
         setResult(RESULT_OK);
         super.onBackPressed();
     }

@@ -76,7 +76,7 @@
         </activity>
         <activity
             android:name=".activity.TaskViewActivity"
-            android:label="change this title" />
+            android:label="@string/title_activity_task_view"/>
         <activity
             android:name=".activity.MyTaskViewActivity"
             android:label="@string/title_activity_my_task_view" />
