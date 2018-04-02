@@ -13,15 +13,22 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
 import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.model.TaskStatus.Assigned;
+import static com.lateral.lateral.model.TaskStatus.Bidded;
+import static com.lateral.lateral.model.TaskStatus.Done;
 
 /**
  * Activity to view all requested tasks
@@ -29,10 +36,19 @@ import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
+    private DefaultTaskService defaultTaskService = new DefaultTaskService();
 
     private String thisUserID = LOGGED_IN_USER;             // class spec       // for testing
     private PullRefreshLayout layout;
     static final int ADD_EDIT_TASK_CODE = 2;
+
+    private Spinner filterSpinner;
+    private int currentFilter = 0;
+    private ArrayList<Task> allLocallyStoredTasks;
+    private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
+    private ArrayList<Task> assignedTasks = new ArrayList<Task>();
+    private ArrayList<Task> doneTasks = new ArrayList<Task>();
+
 
     /**
      * Gets the layout ID of the activity
@@ -80,7 +96,11 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Move to create new task activity when fab pressed
+
+        initializeLocalArrays();
+
+
+        // Move to 'create new task' activity when fab pressed
         final FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
         addNewTaskFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +121,31 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public void onRefresh() {
                 // start refresh
-                returnMatchingTasks(thisUserID);
+                //returnMatchingTasks(thisUserID);
+                // refreshes local arrays
+                initializeLocalArrays();
+
+//                if (currentFilter == 0) {
+//                    // display refreshed all
+//                    addTasks(allLocallyStoredTasks);
+//
+//                } else if (currentFilter == 1) {
+//                    // display refreshed bidded
+//                    addTasks(tasksWithBids);
+//
+//                } else if (currentFilter == 2) {
+//                    // display refreshed assigned
+//                    addTasks(assignedTasks);
+//
+//                } else if (currentFilter == 3) {
+//                    // display refreshed done
+//                    addTasks(doneTasks);
+//                }
+
+                displayResultsFromFilter();
+
+
+
                 layout.setRefreshing(false);
             }
         });
@@ -139,6 +183,55 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
         });
 
+
+
+        filterSpinner = findViewById(R.id.filterTasksSpinner);
+
+        final ArrayList<String> filters = new ArrayList<String>();
+        filters.add("All Tasks");
+        filters.add("Tasks with Bids");
+        filters.add("Assigned Tasks");
+        filters.add("Completed Tasks");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filters);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        filterSpinner.setAdapter(spinnerAdapter);
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("FILTER", "Item selected = " + filters.get(position));
+                currentFilter = position;
+//                if (position == 0) {
+//                    // All tasks selected
+//                    currentFilter = 0;
+//                    //tasksWithBids = allLocallyStoredTasks;
+//                    addTasks(allLocallyStoredTasks);
+//                } else if (position == 1) {
+//                    // Bidded tasks selected
+//                    currentFilter = 1;
+//                    //tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+//                    addTasks(tasksWithBids);
+//                } else if (position == 2) {
+//                    // Assigned Tasks selected
+//                    currentFilter = 2;
+//                    addTasks(assignedTasks);
+//
+//                } else if (position == 3) {
+//                    // Completed tasks selected
+//                    currentFilter = 3;
+//                    addTasks(doneTasks);
+//                }
+
+                displayResultsFromFilter();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("FILTER", "Item selected");
+
+            }
+        });
+
     }
 
     /**
@@ -157,8 +250,8 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
      * @param query Query to check on
      */
     private void returnMatchingTasks(String query) {
-        DefaultTaskService taskService = new DefaultTaskService();
-        addTasks(taskService.getAllTasksByRequesterID(query));
+        //DefaultTaskService taskService = new DefaultTaskService();
+        addTasks(defaultTaskService.getAllTasksByRequesterID(query));
     }
 
     // TODO update so only refreshes if new activity posted
@@ -171,14 +264,72 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             //      -->does not work rn because list order changes when task updated
             // For now. refreshes entire list
             Log.d("VIEW_TASK_REQUEST", "returned, update adapter");
-            returnMatchingTasks(thisUserID);
+            //returnMatchingTasks(thisUserID);
+            initializeLocalArrays();
+            displayResultsFromFilter();
 
         } else if (requestCode == ADD_EDIT_TASK_CODE) {
             // User wants to add a whole new task
             // if added, notify data set added
             // for now, refreshes entire list
             Log.d("ADD_EDIT_TASK_CODE", "returned");
-            returnMatchingTasks(thisUserID);
+            //returnMatchingTasks(thisUserID);
+            initializeLocalArrays();
+            displayResultsFromFilter();
+
+        }
+    }
+
+
+    /**
+     * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
+     * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
+     */
+    public void initializeLocalArrays() {
+        allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(thisUserID);
+
+        // clear in case we are refreshing
+        tasksWithBids.clear();
+        assignedTasks.clear();
+        doneTasks.clear();
+
+        for (Task curTask : allLocallyStoredTasks) {
+            TaskStatus status = curTask.getStatus();
+            if (status == Bidded) {
+                // extract
+                tasksWithBids.add(curTask);
+            } else if (status == Assigned) {
+                assignedTasks.add(curTask);
+            } else if (status == Done) {
+                doneTasks.add(curTask);
+            }
+        }
+
+
+    }
+
+
+    /**
+     * displays correct tasks to recycler view based on the current filter
+     * assumes globals are already correctly set
+     */
+    public void displayResultsFromFilter() {
+
+        if (currentFilter == 0) {
+            // display refreshed all
+            addTasks(allLocallyStoredTasks);
+
+        } else if (currentFilter == 1) {
+            // display refreshed bidded
+            addTasks(tasksWithBids);
+
+        } else if (currentFilter == 2) {
+            // display refreshed assigned
+            addTasks(assignedTasks);
+
+        } else if (currentFilter == 3) {
+            // display refreshed done
+            addTasks(doneTasks);
         }
     }
 
