@@ -40,7 +40,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
-    static final int PLACE_PICKER_REQUEST = 1;
+    public static final int PLACE_PICKER_REQUEST = 1;
 
     private String taskID;
     private Task editTask;
@@ -180,7 +180,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
                 Place selectedPlace = PlacePicker.getPlace(this, data);
                 latLng = selectedPlace.getLatLng();
                 addGeoLocationButton.setText(selectedPlace.getName());
-                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_blue_24dp, 0, 0, 0);
+                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
 
             }
         }
@@ -192,7 +192,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             Task newTask = new Task(title, desc);
             newTask.setRequestingUserId(LOGGED_IN_USER);
 
-            // nick stuff
+            // TODO: nick stuff
             // TODO create variable LOGGED_IN_USER_USERNAME which specifies the current users username
             DefaultUserService defaultUserService = new DefaultUserService();
             String username = defaultUserService.getUserByID(LOGGED_IN_USER).getUsername();

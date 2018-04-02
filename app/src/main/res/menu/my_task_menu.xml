@@ -6,7 +6,6 @@
         android:icon="@android:drawable/ic_menu_edit"
         android:title="@string/edit_button_text"
         app:showAsAction="never|collapseActionView"/>
-
     <item
         android:id="@+id/action_delete_task"
         android:icon="@android:drawable/ic_menu_delete"
@@ -17,5 +16,10 @@
         android:icon="@drawable/ic_menu_camera"
         android:title="@string/qrcode_create"
         app:showAsAction="never|collapseActionView" />
+    <item
+        android:id="@+id/action_geo_location"
+        android:icon="@drawable/ic_place_white_24dp"
+        android:title="@string/geo_button_title"
+        app:showAsAction="ifRoom" />
 
 </menu>

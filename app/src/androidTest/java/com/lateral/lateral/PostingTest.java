@@ -113,7 +113,13 @@ public class PostingTest {
 //        for (Task task : allTasks) {
 //            taskId = task.getId();
 //            defaultTaskService.delete(taskId);
-//        }
+       }
+
+    @Test
+    public void testNullPost(){
+        //
+        //
+
     }
 
 

@@ -26,22 +26,21 @@ public class Task extends BaseEntity {
     private String description;
     private String requestingUserId;
     private String assignedBidId;
-    private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
+    private String geo_location; // TODO: string so that we can easily serialize a tasks latitude and longitude for geosearch
     private int bidsNotViewed;
     private int bidsPendingNotification;
     private String requestingUserUsername;
     private BigDecimal lowestBidValue;
     private PhotoGallery photoGallery;
 
+    private double latitude;
+    private double longitude;
+
     // Extra fields
     private transient User requestingUser;
     private transient Bid assignedBid;
     private transient ArrayList<Bid> bids;
     private transient Bid lowestBid;
-
-    // TODO: Implement location variable
-    private transient double latitude;
-    private transient double longitude;
 
     // Private constructor for Jest to use
     private Task(){}
@@ -267,6 +266,14 @@ public class Task extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
+    }
+
+    public double getLat(){
+        return latitude;
+    }
+
+    public double getLon(){
+        return longitude;
     }
 
     /**

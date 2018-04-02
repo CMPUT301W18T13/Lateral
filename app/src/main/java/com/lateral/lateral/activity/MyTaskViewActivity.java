@@ -10,18 +10,15 @@ import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -276,6 +273,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
         }
         else if (item.getItemId() == R.id.action_delete_task){
             promptDelete();
+        }
+        else if (item.getItemId() == R.id.action_geo_location){
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra(MapActivity.EXTRA_TASK_ID, taskID);
+            startActivity(intent);
         }
         else if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);

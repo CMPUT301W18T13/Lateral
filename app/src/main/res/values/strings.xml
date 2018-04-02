@@ -100,6 +100,8 @@
     <string name="no_camera_permission">Permission to open camera not granted!</string>
     <string name="low_storage_error">Your device doesn\'t have enough storage!</string>
     <string name="add_geolocation">Add Geolocation</string>
+    <string name="geo_button_title">View on map</string>
+    <string name="title_activity_map">Task Location</string>
 
 
 </resources>

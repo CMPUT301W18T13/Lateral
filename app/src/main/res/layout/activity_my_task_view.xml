@@ -257,7 +257,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
-
     <Button
         android:id="@+id/my_task_view_set_done"
         android:layout_width="0dp"

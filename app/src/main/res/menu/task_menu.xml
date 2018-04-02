@@ -12,5 +12,10 @@
         android:icon="@drawable/ic_menu_camera"
         android:title="@string/qrcode_create"
         app:showAsAction="never|collapseActionView" />
+    <item
+        android:id="@+id/action_geo_location"
+        android:icon="@drawable/ic_place_white_24dp"
+        android:title="@string/geo_button_title"
+        app:showAsAction="ifRoom" />
 
 </menu>

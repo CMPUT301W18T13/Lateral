@@ -6,6 +6,11 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.
+   READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
 
     <application
         android:allowBackup="true"
@@ -14,12 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB6cZ7Tn_OFF6wfnwRpvtiZF0RHAjB5xf0" />
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+        <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -40,7 +45,6 @@
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:parentActivityName=".activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Just added this -->
@@ -106,6 +110,8 @@
         <activity
             android:name=".activity.DisplayQRCodeActivity"
             android:label="@string/title_activity_display_qrcode"/>
+        <activity android:name=".activity.MapActivity"
+            android:label="@string/title_activity_map"></activity>
     </application>
 
 </manifest>

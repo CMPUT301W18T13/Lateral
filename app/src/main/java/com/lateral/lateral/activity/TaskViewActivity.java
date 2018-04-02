@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -175,6 +174,11 @@ public class TaskViewActivity extends AppCompatActivity {
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
             startActivity(intent);
         }
+        else if (item.getItemId() == R.id.action_geo_location){
+            Intent intent = new Intent(this, MapActivity.class);
+            intent.putExtra(MapActivity.EXTRA_TASK_ID, taskID);
+            startActivity(intent);
+        }
         else if (item.getItemId() == android.R.id.home){
             setResult(RESULT_OK);
             finish();
@@ -235,11 +239,11 @@ public class TaskViewActivity extends AppCompatActivity {
      * Called when photo is clicked
      * @param v view
      */
-    public void onPhotoImageViewClick(View v){
+    public void onPhotoImageViewClick(View v) {
 
-        Bitmap image = ((PhotoImageView)v).getImage();
+        Bitmap image = ((PhotoImageView) v).getImage();
 
-        if (image != null){
+        if (image != null) {
             PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(image);
             dialog.show(getFragmentManager(), "photo_dialog");
         }
