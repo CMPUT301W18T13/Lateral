@@ -112,7 +112,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
         });
 
         // display requested tasks from this user
-        returnMatchingTasks(thisUserID);
+        //returnMatchingTasks(thisUserID);
 
 
         // listen refresh event
