@@ -26,6 +26,7 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskList;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
@@ -273,6 +274,13 @@ public class MyTaskViewActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             Log.e("Debug", "on activity called");
         }
+
+    }
+
+    public void onSeeTaskOnMap(View v){
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(MapActivity.EXTRA_TASK_ID, taskID);
+        startActivity(intent);
 
     }
 }

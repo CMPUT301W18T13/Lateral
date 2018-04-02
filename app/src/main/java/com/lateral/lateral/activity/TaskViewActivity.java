@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.MainActivity;
+import com.lateral.lateral.model.TaskList;
 import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
 import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
@@ -218,5 +219,13 @@ public class TaskViewActivity extends AppCompatActivity {
         });
         bidCreationDialog.show();
         refresh();
+    }
+
+    // for testing
+    public void onSeeTaskOnMap(View v){
+        Intent intent = new Intent(this, MapActivity.class);
+        intent.putExtra(MapActivity.EXTRA_TASK_ID, taskID);
+        startActivity(intent);
+
     }
 }

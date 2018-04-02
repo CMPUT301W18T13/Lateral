@@ -104,6 +104,7 @@
     <string name="permission_camera_rationale">Needed to access the camera to scan a QR code</string>
     <string name="no_camera_permission">Permission to open camera not granted!</string>
     <string name="low_storage_error">Your device doesn\'t have enough storage!</string>
+    <string name="add_geolocation">Add Geolocation</string>
 
 
 </resources>

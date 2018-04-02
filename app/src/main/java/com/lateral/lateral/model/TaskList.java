@@ -6,18 +6,24 @@
 
 package com.lateral.lateral.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  * Represents a list of tasks
  */
-public class TaskList {
+public class TaskList{
     private ArrayList<Task> tasks = new ArrayList<Task>();
 
     /**
      * Adds a task to the list
-     * @param task Task to be added
+     * @param tasks Task to be added
      */
+
+    public void setTasks(ArrayList<Task> tasks){
+        this.tasks = tasks;
+    }
+
     public void add(Task task){
         tasks.add(task);
     }

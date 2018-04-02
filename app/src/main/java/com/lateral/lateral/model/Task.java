@@ -39,10 +39,9 @@ public class Task extends BaseEntity {
     private transient ArrayList<Bid> bids;
     private transient Bid lowestBid;
 
-    // TODO: Implement location variable
     // TODO: Implement photo storage allocation
-    private transient double latitude;
-    private transient double longitude;
+    private double latitude;
+    private double longitude;
     //
     // Private constructor for Jest to use
     private Task(){}
@@ -268,6 +267,14 @@ public class Task extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
+    }
+
+    public double getLat(){
+        return latitude;
+    }
+
+    public double getLon(){
+        return longitude;
     }
 
     /**

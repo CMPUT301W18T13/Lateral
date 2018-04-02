@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
@@ -47,7 +48,9 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
     // Stores T.class since java doesn't let you call T.class
     private final Class<T> typeArgument;
 
-    Gson gson = new Gson();
+    private GsonBuilder gsonBuilder = new GsonBuilder().serializeNulls();
+
+    Gson gson = gsonBuilder.create();
 
     /**
      * Constructor for the service
