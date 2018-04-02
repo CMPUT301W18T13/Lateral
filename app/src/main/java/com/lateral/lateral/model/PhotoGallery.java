@@ -154,8 +154,7 @@ public class PhotoGallery {
                     photoArray.add(JsonNull.INSTANCE);
                 } else {
                     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    // TODO: Use JPG instead (right now deserializing jpg creates black image)
-                    // TODO: Play with quality!
+                    // TODO: Maybe use JPG if I can get it to stop losing quality on each save
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                     byte[] byteArray = stream.toByteArray();
                     photoArray.add(Base64.encodeToString(byteArray, Base64.URL_SAFE));

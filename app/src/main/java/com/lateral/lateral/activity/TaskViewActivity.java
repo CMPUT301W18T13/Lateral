@@ -6,10 +6,8 @@
 
 package com.lateral.lateral.activity;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,8 +19,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lateral.lateral.model.PhotoGallery;
-import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
 import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;

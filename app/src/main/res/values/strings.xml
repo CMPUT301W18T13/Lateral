@@ -4,9 +4,6 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
-    <string name="title_activity_login">Sign in</string>
-
     <!-- Strings related to login -->
     <string name="edit_user_title">Edit User</string>
     <string name="add_user_title">Sign Up</string>
@@ -27,9 +24,6 @@
     <string name="error_no_match_email">Email addresses do not match</string>
     <string name="error_no_match_password">Passwords do not match</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
     <string name="signup_link_prompt"><u>Don\'t have an account? Sign up!</u></string>
     <string name="confirm">Confirm</string>
     <string name="title_activity_requested_tasks_view">My Requested Tasks</string>
@@ -37,7 +31,6 @@
     <string name="filter_text">Filter</string>
     <string name="title_activity_all_tasks_view">All Tasks</string>
     <string name="search">Search</string>
-    <string name="title_activity_task_view">All Tasks</string>
     <string name="title_activity_my_task_view">My Requested Tasks</string>
     <string name="title_activity_display_qrcode">Task QR Code</string>
     <string name="title_activity_scan_qrcode">Scan Task QR Code</string>
@@ -51,21 +44,18 @@
     <string name="temp_username">\@cmerkosky</string>
     <string name="temp_date">Jun 24, 2018</string>
     <string name="temp_bid">$45.00</string>
-    <string name="temp_new_bid_prompt">1 new bid!</string>
 
     <!-- Strings for tasks -->
     <string name="add_task_confirm">Post Task</string>
     <string name="edit_task_confirm">Confirm Changes</string>
     <string name="add_task_title">Add Task</string>
     <string name="edit_task_title">Edit Task</string>
+    <string name="add_edit_temp_title">Add/Edit Task</string>
     <string name="delete_button_text">Delete Task</string>
     <string name="edit_button_text">Edit Task</string>
 
     <!-- Strings related to searching -->
     <string name="search_hint">Search all tasks</string>
-    <string name="title_activity_assigned_tasks_view">AssignedTasksViewActivity</string>
-    <string name="title_activity_bid_pop_up">BidPopUpActivity</string>
-    <string name="title_activity_test">test</string>
 
     <!-- Strings for Bid Dialog -->
     <string name="bid_dialog_title">Place Your Bid</string>
@@ -108,6 +98,7 @@
     <string name="permission_camera_rationale">Needed to access the camera to scan a QR code</string>
     <string name="no_camera_permission">Permission to open camera not granted!</string>
     <string name="low_storage_error">Your device doesn\'t have enough storage!</string>
+    <string name="add_geolocation">Add Geolocation</string>
 
 
 </resources>

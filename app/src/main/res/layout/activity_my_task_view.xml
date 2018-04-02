@@ -28,15 +28,17 @@
             tools:layout_conversion_absoluteHeight="120dp"
             tools:layout_conversion_absoluteWidth="384dp">
 
-            <ImageView
+            <com.lateral.lateral.widget.PhotoImageView
                 android:id="@+id/my_task_view_image_main"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_menu_gallery"
                 tools:layout_conversion_absoluteHeight="48dp"
                 tools:layout_conversion_absoluteWidth="48dp" />
@@ -156,50 +158,40 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <ImageButton
+            <com.lateral.lateral.widget.PhotoImageView
                 android:id="@+id/my_task_view_image_0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
                 app:srcCompat="@drawable/ic_menu_gallery" />
 
-            <ImageButton
+            <com.lateral.lateral.widget.PhotoImageView
                 android:id="@+id/my_task_view_image_1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                app:srcCompat="@drawable/ic_menu_gallery"/>
 
-            <ImageButton
+            <com.lateral.lateral.widget.PhotoImageView
                 android:id="@+id/my_task_view_image_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                app:srcCompat="@drawable/ic_menu_gallery"/>
 
-            <ImageButton
+            <com.lateral.lateral.widget.PhotoImageView
                 android:id="@+id/my_task_view_image_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                app:srcCompat="@drawable/ic_menu_gallery"/>
 
-            <ImageButton
+            <com.lateral.lateral.widget.PhotoImageView
                 android:id="@+id/my_task_view_image_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                app:srcCompat="@drawable/ic_menu_gallery"/>
         </LinearLayout>
 
         <ScrollView

@@ -19,6 +19,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
@@ -28,8 +33,8 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
+// TODO: Repair this xml layout
 // TODO: Scroll View so keyboard doesn't cover images
-// TODO: Remove settings button on main activity
 // TODO: Fix the currently selected item highlight in main menu
 /**
  * Activity to add and edit tasks
@@ -38,15 +43,19 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    static final int PLACE_PICKER_REQUEST = 1;
 
     private String taskID;
     private Task editTask;
     private TaskService service;
+    private LatLng latLng;
+    private CharSequence address;
 
     // UI elements
     private EditText title;
     private EditText description;
     private Button confirmButton;
+    private Button addGeoLocationButton;
 
     /**
      * Called when the activity is created
@@ -66,6 +75,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
         title = findViewById(R.id.add_edit_task_title);
         description = findViewById(R.id.add_edit_task_description);
         confirmButton = findViewById(R.id.add_edit_task_confirm_button);
+        addGeoLocationButton = findViewById(R.id.add_geolocatio_button);
         setInputFilters();
 
         service = new DefaultTaskService();
@@ -75,6 +85,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
+        latLng = null;
         if (taskID == null){
             // Add new task
             confirmButton.setText(R.string.add_task_confirm);
@@ -160,6 +171,24 @@ public class AddEditTaskActivity extends AppCompatActivity {
         else updateTask(title, desc);
     }
 
+    public void onAddGeolocation(View v) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place selectedPlace = PlacePicker.getPlace(this, data);
+                latLng = selectedPlace.getLatLng();
+                addGeoLocationButton.setText(selectedPlace.getName());
+                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_blue_24dp, 0, 0, 0);
+
+            }
+        }
+    }
+
     private void addNewTask(String title, String desc) {
 
         try {
@@ -173,7 +202,10 @@ public class AddEditTaskActivity extends AppCompatActivity {
             newTask.setRequestingUserUsername(username);
 
             // TODO: Testing
-            newTask.setLocation(53.644250, -113.652206);
+            if(latLng != null){
+                newTask.setLocation(latLng.latitude, latLng.longitude);
+            }
+
             service.post(newTask);
             Toast postTask = Toast.makeText(this, "Task added", Toast.LENGTH_SHORT);
             postTask.show();

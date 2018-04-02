@@ -9,23 +9,23 @@ package com.lateral.lateral.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
@@ -43,6 +43,8 @@ import java.util.Locale;
 // TODO: Don't bother refreshing after displaying QR code (use startActivityForResult with code)
 // TODO: Change lots of titles
 // TODO: Need progress bar in here
+// TODO: Need correct scale type for images
+// TODO: Change ImageButton to ImageView
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
@@ -107,6 +109,15 @@ public class MyTaskViewActivity extends AppCompatActivity {
         image2 = findViewById(R.id.my_task_view_image_2);
         image3 = findViewById(R.id.my_task_view_image_3);
         image4 = findViewById(R.id.my_task_view_image_4);
+
+        // TODO: Testing, remove this
+        image2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(((BitmapDrawable)image2.getDrawable()).getBitmap());
+                dialog.show(getFragmentManager(), "dialog");
+            }
+        });
     }
 
     /**
@@ -115,7 +126,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e("debug", "onStart called");
         refresh();
     }
 
