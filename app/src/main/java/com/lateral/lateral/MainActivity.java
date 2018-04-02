@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lateral.lateral.activity.AllTasksViewActivity;
 import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
@@ -83,10 +84,21 @@ public class MainActivity extends AppCompatActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        usernameView.setText(getString(R.string.username_display, user.getUsername()));
+        if(user != null) {
+            usernameView.setText(getString(R.string.username_display, user.getUsername()));
+        } else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        emailView.setText(user.getEmailAddress());
+        if(user != null) {
+            emailView.setText(user.getEmailAddress());
+        }
+        else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
 
         navigationView.setNavigationItemSelectedListener(this);
     }

@@ -106,5 +106,7 @@
     <string name="low_storage_error">Your device doesn\'t have enough storage!</string>
     <string name="add_geolocation">Add Geolocation</string>
 
+    <string name="error_unknown_message">An error occurred</string>
+
 
 </resources>

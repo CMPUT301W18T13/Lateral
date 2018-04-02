@@ -16,7 +16,6 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 
 import static android.graphics.Color.BLACK;

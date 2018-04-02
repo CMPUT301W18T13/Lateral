@@ -13,11 +13,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 
 import com.lateral.lateral.MainActivity;
@@ -72,9 +70,6 @@ public class QRCodeActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    //TODO: Handle QR Code Result
-//                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
-//                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     String url = barcode.displayValue;
                     if(url.startsWith("http://lateral.lateral.com/")){
                         String taskId = url.substring(27); // Length of URL string
@@ -99,7 +94,6 @@ public class QRCodeActivity extends AppCompatActivity {
                         else{
                             Toast.makeText(this, "Could not load task!", Toast.LENGTH_LONG).show();
                         }
-
                     }
                     else{
                         Toast.makeText(this, "Couldn't get task data!", Toast.LENGTH_LONG).show();
