@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.nio.charset.CharacterCodingException;
@@ -32,7 +33,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
+import static com.lateral.lateral.model.TaskStatus.Done;
 
 /*
 Searching interface info
@@ -69,9 +72,10 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
 
     private ArrayList<Task> allLocallyStoredTasks;
-    private ArrayList<Task> tasksWithBids;
+    private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
 
     private Spinner filterSpinner;
+    private boolean userIsInteracting;
 
 
     /**
@@ -151,17 +155,26 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("FILTER", "Item selected = " + filters.get(position));
-                if (position == 0) {
-                    // All tasks selected
-                    currentFilter = 0;
-                    //tasksWithBids = allLocallyStoredTasks;
-                    addTasks(allLocallyStoredTasks);
-                } else {
-                    // Bidded tasks selected
-                    currentFilter = 1;
-                    //tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
-                    addTasks(tasksWithBids);
+                //currentFilter = position;
+
+//                if (currentFilter == 0) {
+//                    // All tasks selected
+//                    //currentFilter = 0;
+//                    //tasksWithBids = allLocallyStoredTasks;
+//                    addTasks(allLocallyStoredTasks);
+//                } else {
+//                    // Bidded tasks selected
+//                    //currentFilter = 1;
+//                    //tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+//                    addTasks(tasksWithBids);
+//                }
+                //refreshLocalArrays();
+                //displayResultsFromFilter();
+                if (userIsInteracting) {
+                    currentFilter = position;
+                    displayResultsFromFilter();
                 }
+
             }
 
             @Override
@@ -179,13 +192,16 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public void onRefresh() {
                 // start refresh
-                allLocallyStoredTasks = defaultTaskService.getEveryTask();
-                tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
-                if (currentFilter == 0) {
-                    addTasks(allLocallyStoredTasks);
-                } else {
-                    addTasks(tasksWithBids);
-                }
+//                allLocallyStoredTasks = defaultTaskService.getEveryTask();
+//                tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+//                if (currentFilter == 0) {
+//                    addTasks(allLocallyStoredTasks);
+//                } else {
+//                    addTasks(tasksWithBids);
+//                }
+                refreshLocalArrays(null);
+                displayResultsFromFilter();
+
                 layout.setRefreshing(false);
             }
         });
@@ -239,12 +255,13 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     private void handleIntent(Intent intent) {
 
         ArrayList<Task> initializedTasks;
+        String query = null;
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             //filterSpinner.setVisibility(View.GONE);
             Log.d("ALL TASKS", "Got here via search button");
             clearList();
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            query = intent.getStringExtra(SearchManager.QUERY);
             // TODO handle exception (no internet access crashes app)
             /*
             Leave for now
@@ -253,28 +270,32 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
              */
             //returnMatchingTask(query);
             Log.d("QUERY ", query);
-            initializedTasks = defaultTaskService.getAllTasks(query);
+            ////initializedTasks = defaultTaskService.getAllTasks(query);
 //            allLocallyStoredTasks = initializedTasks;
 //            tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
 //            addTasks(initializedTasks);
 
-        } else {
-            Log.d("ALL TASKS", "Got here via button, load all");
+        } //else {
+            //Log.d("ALL TASKS", "Got here via button, load all");
 
             //ArrayList<Task> everyTask = defaultTaskService.getEveryTask();
-            initializedTasks = defaultTaskService.getEveryTask();;
+            ////initializedTasks = defaultTaskService.getEveryTask();;
 //            allLocallyStoredTasks = initializedTasks;
 //            tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
 //
 //            //Log.d("Number of tasks", Integer.toString(everyTask.size()));
 //            addTasks(initializedTasks);
-        }
+        //}
 
 
         // initialized local storage of tasks
-        allLocallyStoredTasks = initializedTasks;
-        tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
-        addTasks(initializedTasks);
+//        allLocallyStoredTasks = initializedTasks;
+//        tasksWithBids = extractTasksWithBids(allLocallyStoredTasks);
+//        addTasks(initializedTasks);
+        refreshLocalArrays(query);
+        displayResultsFromFilter();
+
+
     }
 
     /**
@@ -300,22 +321,80 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
-            addTasks(defaultTaskService.getEveryTask());
+            ////addTasks(defaultTaskService.getEveryTask());
+            refreshLocalArrays(null);
+            displayResultsFromFilter();
 
         }
     }
 
-    private ArrayList<Task> extractTasksWithBids(ArrayList<Task> tasksToFilter) {
-        ArrayList<Task> tasksWithBids = new ArrayList<Task>();
+//    private ArrayList<Task> extractTasksWithBids(ArrayList<Task> tasksToFilter) {
+//        ArrayList<Task> tasksWithBids = new ArrayList<Task>();
+//
+//        for (Task curTask : tasksToFilter) {
+//            if (curTask.getStatus() == Bidded) {
+//                // extract
+//                tasksWithBids.add(curTask);
+//            }
+//        }
+//
+//        return tasksWithBids;
+//    }
 
-        for (Task curTask : tasksToFilter) {
-            if (curTask.getStatus() == Bidded) {
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userIsInteracting = true;
+    }
+
+
+    /**
+     * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
+     * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
+     */
+    public void refreshLocalArrays(String query) {
+
+        if (query == null) {
+            // did not get here via search, display all
+            allLocallyStoredTasks = defaultTaskService.getEveryTask();
+        } else {
+            // user gave search query
+            allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
+        }
+
+
+        // clear in case we are refreshing
+        tasksWithBids.clear();
+        //assignedTasks.clear();
+        //doneTasks.clear();
+
+        for (Task curTask : allLocallyStoredTasks) {
+            TaskStatus status = curTask.getStatus();
+            if (status == Bidded) {
                 // extract
                 tasksWithBids.add(curTask);
             }
         }
 
-        return tasksWithBids;
+
+    }
+
+
+
+    /**
+     * displays correct tasks to recycler view based on the current filter
+     * assumes globals are already correctly set
+     */
+    public void displayResultsFromFilter() {
+
+        if (currentFilter == 0) {
+            // display refreshed all
+            addTasks(allLocallyStoredTasks);
+
+        } else if (currentFilter == 1) {
+            // display refreshed bidded
+            addTasks(tasksWithBids);
+        }
     }
 
 
