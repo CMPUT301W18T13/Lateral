@@ -130,7 +130,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
      */
     private void refresh(Task task) {
 
-        if (task.getLowestBid() == null){
+        if (task.getLowestBid() == null) {
             currentBid.setText(R.string.task_view_no_bids);
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
@@ -142,18 +142,16 @@ public class MyTaskViewActivity extends AppCompatActivity {
         description.setText(task.getDescription());
 
         final Bid assignedBid = task.getAssignedBid();
-        if (assignedBid != null){
+        if (assignedBid != null) {
             String assignedUsername = assignedBid.getBidder().getUsername();
             assignedToUsername.setText(getString(R.string.username_display, assignedUsername));
-        }
-        else{
+        } else {
             assignedToUsername.setText(R.string.task_view_not_assigned);
         }
 
         setImages();
-
         setButtonVisibility();
-    }// TODO: Realign upper left imageview since it's above the text
+    }
 
 
     private void setImages() {
@@ -330,7 +328,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         AlertDialog alert = builder.create();
         alert.show();
     }
-    // TODO: Add to task card too!
+
     /**
      * Called when photo is clicked
      * @param v view

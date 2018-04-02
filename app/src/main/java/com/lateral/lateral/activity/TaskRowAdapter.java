@@ -50,7 +50,6 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
      */
     public static class ViewHolder extends RecyclerView.ViewHolder{
 
-        // TODO: Write code to display main image
         PhotoImageView imageView;
         TextView tvTitle;
         TextView tvUsername;
@@ -139,10 +138,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
 
         PhotoGallery gallery = task.getPhotoGallery();
-        // TODO: REMOVE NULL CHECK
-        if (gallery != null){
-            holder.imageView.setImage(gallery.get(0));
-        }
+        holder.imageView.setImage(gallery.get(0));
     }
 
     /**

@@ -28,7 +28,7 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
 // TODO: Make the homepage look nicer (make a cool background maybe)
 // TODO: Add hamburger menu on (almost) all pages
-// TODO: FRemove or fix the highlight of currently selected item in menu
+// TODO: Remove or fix the highlight of currently selected item in menu
 /**
  * The main activity for the app
  */
