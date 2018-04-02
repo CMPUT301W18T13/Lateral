@@ -6,12 +6,14 @@
 
 package com.lateral.lateral.model;
 
+import java.io.Serializable;
+
 import io.searchbox.annotations.JestId;
 
 /**
  * Represents an element that will be pushed to the ElasticSearch server
  */
-public abstract class BaseEntity {
+public abstract class BaseEntity{
 
     @JestId
     private String id;

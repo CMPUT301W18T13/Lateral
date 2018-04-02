@@ -42,7 +42,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
-    static final int PLACE_PICKER_REQUEST = 1;
+    public static final int PLACE_PICKER_REQUEST = 1;
 
     private String taskID;
     private Task editTask;
