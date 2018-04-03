@@ -15,16 +15,29 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
+import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
+import java.util.List;
+
+//import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.model.TaskStatus.Assigned;
+import static com.lateral.lateral.model.TaskStatus.Bidded;
+import static com.lateral.lateral.model.TaskStatus.Done;
+
 
 /*
 Searching interface info
@@ -51,6 +64,22 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     DefaultTaskService defaultTaskService = new DefaultTaskService();
     private PullRefreshLayout layout;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    // 0 - all tasks
+    // 1 - bidded tasks
+    private int currentFilter = 0;
+
+    /* Filter related variables*/
+    private Spinner filterSpinner;
+    //private boolean userIsInteracting;
+
+    /* local storage */
+    private ArrayList<Task> allLocallyStoredTasks;
+    private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
+
+    /* Searching variables */
+    SearchView searchView;
+
+
     /**
      * Gets the layout ID of the activity
      * @return The R-id of the activity
@@ -90,6 +119,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
         Class targetClass;
 
+
         if (clickedTask.getRequestingUserId().equals(MainActivity.LOGGED_IN_USER)) {
 
             // user clicked on own task
@@ -97,7 +127,6 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
         } else {
             // user clicked on someone else's task
-
             targetClass = TaskViewActivity.class;
         }
 
@@ -115,6 +144,34 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         // check how we got here
         handleIntent(getIntent());
 
+        filterSpinner = findViewById(R.id.allTasksSpinner);
+
+        final ArrayList<String> filters = new ArrayList<String>();
+        filters.add("All Tasks");
+        filters.add("Tasks with Bids");
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filters);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        filterSpinner.setAdapter(spinnerAdapter);
+
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("FILTER", "Item selected = " + filters.get(position));
+
+                if (getUserIsInteracting()) {
+                    currentFilter = position;
+                    displayResultsFromFilter();
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d("FILTER", "Item selected");
+
+            }
+        });
+
 
         // listen refresh event
         layout = (PullRefreshLayout) findViewById(R.id.allTasksSwipeRefreshLayout);
@@ -122,7 +179,8 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public void onRefresh() {
                 // start refresh
-                addTasks(defaultTaskService.getEveryTask());
+                refreshLocalArrays(null);
+                displayResultsFromFilter();
                 layout.setRefreshing(false);
             }
         });
@@ -144,6 +202,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 //                }
 //        );
 
+
     }
 
     /**
@@ -154,8 +213,67 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // could do initial searching in here instead --> if we are for sure removing
+                // search icon from every recycler view
+                Log.d("OnQueryListener", "TEXT SUBMITTED");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("OnQueryListener", "TEXT CHANGED|" + newText + "|");
+//                if (newText.equals("")) {
+//                    Log.d("null text", "this is null text");
+//                    newText = null;
+//                }
+//                refreshLocalArrays(newText);
+//                displayResultsFromFilter();
+                searchNeeded(newText);
+
+
+                return false;
+            }
+        });
+
         return true;
     }
+
+
+    // determins if a search should be executed given the previous query, and the new query
+    public void searchNeeded(String newQuery) {
+        boolean search = false;
+
+        // user pressed space, search
+        if (newQuery.length() > 0) {
+
+            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!newQuery.substring(newQuery.length() - 2).equals(" "))) {
+                search = true;
+        }
+
+        } else if (newQuery.equals("")) {
+            newQuery = null;
+            search = true;
+        }
+
+        // search needed
+        if (search) {
+            refreshLocalArrays(newQuery);
+            displayResultsFromFilter();
+        }
+
+    }
+
 
 
     /**
@@ -171,27 +289,32 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     // meat and potatoes of the search
     /**
      * Handles any search intents
+     * NOTE: if you search by pressing return on a keyboard, the search is executed TWICE
      * @param intent Intent and handles
      */
     private void handleIntent(Intent intent) {
+
+        ArrayList<Task> initializedTasks;
+        String query = null;
+
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            Log.d("ALL TASKS", "Got here via search button");
+            //Log.d("ALL TASKS", "Got here via search button");
             clearList();
-            String query = intent.getStringExtra(SearchManager.QUERY);
+            query = intent.getStringExtra(SearchManager.QUERY);
             // TODO handle exception (no internet access crashes app)
             /*
             Leave for now
             String jsonQuery = "{\"query\": {\"multi_match\": {\"title\": {\"query\" : \"" + searchField + "\"," +
                 " \"fields\" : [\"title^3\", \"description\"]}}}}";
              */
-            returnMatchingTask(query);
-        } else {
-            Log.d("ALL TASKS", "Got here via button, load all");
+            Log.d("QUERY ", query);
 
-            ArrayList<Task> everyTask = defaultTaskService.getEveryTask();
-            //Log.d("Number of tasks", Integer.toString(everyTask.size()));
-            addTasks(everyTask);
         }
+
+        refreshLocalArrays(query);
+        displayResultsFromFilter();
+
+
     }
 
     /**
@@ -206,22 +329,83 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
 
 
-    /*
-    Called when user returns from viewing a task (assuming they got to it from a recyclerView)
-    Can modify to catch specific results if needed
-    */
+    /**
+     * Called when user returns from viewing a task (assuming they got to it from a recyclerView)
+     * Can modify to catch specific results if needed
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //mAdapter.notifyItemChanged(clickedItemPosition);
-            // TODO --> eventually change to only update position clicked
-            //      -->does not work rn because list order changes when task updated
-            addTasks(defaultTaskService.getEveryTask());
+            // TODO --> update task clicked when user returns
+            ////refreshLocalArrays(null);
+            displayResultsFromFilter();
 
         }
     }
 
+
+//    /**
+//     * Avoids onItemSelected call during initialization (spinner related)
+//     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
+//     * Answered by User: Bill Mote
+//     * April 2, 2018
+//     */
+//    @Override
+//    public void onUserInteraction() {
+//        super.onUserInteraction();
+//        userIsInteracting = true;
+//    }
+
+
+    /**
+     * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
+     * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
+     * --> Assumes globals are correctly set prior to call
+     * @param query if null, indicates user got to AllTasksViewActivity from button, therefore load all tasks,
+     *              if not null, indicates user got to activity from a searchbar, therefore load tasks from query
+     */
+    public void refreshLocalArrays(String query) {
+
+        if (query == null) {
+            // did not get here via search, display all
+            allLocallyStoredTasks = defaultTaskService.getEveryTask();
+        } else {
+            // user gave search query
+            allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
+        }
+
+
+        // clear in case we are refreshing
+        tasksWithBids.clear();
+
+        for (Task curTask : allLocallyStoredTasks) {
+            TaskStatus status = curTask.getStatus();
+            if (status == Bidded) {
+                // extract bidded tasks
+                tasksWithBids.add(curTask);
+            }
+        }
+
+
+    }
+
+    /**
+     * displays correct tasks to recycler view based on the current filter
+     * --> Assumes globals are already correctly set
+     */
+    public void displayResultsFromFilter() {
+
+        if (currentFilter == 0) {
+            // display refreshed all
+            addTasks(allLocallyStoredTasks);
+
+        } else if (currentFilter == 1) {
+            // display refreshed bidded
+            addTasks(tasksWithBids);
+        }
+    }
 
 
 
