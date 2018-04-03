@@ -293,4 +293,7 @@ public class Task extends BaseEntity {
     public PhotoGallery getPhotoGallery() {
         return photoGallery;
     }
+    public void setPhotoGallery(PhotoGallery gallery) {
+        photoGallery = gallery;
+    }
 }

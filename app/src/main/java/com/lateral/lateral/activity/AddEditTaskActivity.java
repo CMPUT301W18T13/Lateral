@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +27,9 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.service.PhotoGenerator;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
@@ -46,7 +49,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private Task editTask;
     private TaskService service;
     private LatLng latLng;
-    private CharSequence address;
+    private PhotoGallery gallery;
 
     // UI elements
     private EditText title;
@@ -56,6 +59,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     /**
      * Called when the activity is created
+     *
      * @param savedInstanceState The saved instance
      */
     @Override
@@ -79,24 +83,27 @@ public class AddEditTaskActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart(){
+    protected void onStart() {
         super.onStart();
 
         latLng = null;
-        if (taskID == null){
+        if (taskID == null) {
             // Add new task
             confirmButton.setText(R.string.add_task_confirm);
             setTitle(R.string.add_task_title);
             editTask = null;
-        }
-        else{
+            gallery = new PhotoGallery();
+            // TODO: Generate photo
+            gallery.insert(new PhotoGenerator().generate(), 0);
+        } else {
             // Edit existing task
             confirmButton.setText(R.string.edit_task_confirm);
             setTitle(R.string.edit_task_title);
-            try{
+            try {
                 editTask = service.getById(taskID);
-            } catch (Exception e){
-                Toast errorToast = Toast.makeText(this,"Task failed to load", Toast.LENGTH_SHORT);
+                gallery = editTask.getPhotoGallery();
+            } catch (Exception e) {
+                Toast errorToast = Toast.makeText(this, "Task failed to load", Toast.LENGTH_SHORT);
                 errorToast.show();
                 setResult(RESULT_CANCELED);
                 finish();
@@ -109,7 +116,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     /**
      * Sets the input filters for the fields
      */
-    protected void setInputFilters(){
+    protected void setInputFilters() {
         InputFilter[] titleFilter = new InputFilter[1];
         titleFilter[0] = new InputFilter.LengthFilter(Constants.TITLE_CHAR_LIMIT);
         title.setFilters(titleFilter);
@@ -123,26 +130,29 @@ public class AddEditTaskActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                if(s.toString().trim().length()==0) confirmButton.setEnabled(false);
+                if (s.toString().trim().length() == 0) confirmButton.setEnabled(false);
                 else confirmButton.setEnabled(true);
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
         });
     }
 
     /**
      * Called when an options menu item is selected
+     *
      * @param item The menu item selected
      * @return The built in result of calling onOptionsItemSelected
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if (item.getItemId() == android.R.id.home){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -159,7 +169,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
      * Called when the Add/Edit Confirm button is clicked
      * @param v The current view
      */
-    public void onAddEditConfirmClick(View v){
+    public void onAddEditConfirmClick(View v) {
 
         String title = this.title.getText().toString().trim();
         String desc = this.description.getText().toString().trim();
@@ -168,16 +178,23 @@ public class AddEditTaskActivity extends AppCompatActivity {
         else updateTask(title, desc);
     }
 
-    public void onAddGeolocation(View v) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
+    public void onAddGeolocation(View v) {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-        startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (Exception e) {
+            String error = "Error occurred loading PlacePicker";
+            Log.i("AddEditTaskActivity", error);
+            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Place selectedPlace = PlacePicker.getPlace(this, data);
+                // TODO: Redo, Remove local variable, just set on task
                 latLng = selectedPlace.getLatLng();
                 addGeoLocationButton.setText(selectedPlace.getName());
                 addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
@@ -192,16 +209,19 @@ public class AddEditTaskActivity extends AppCompatActivity {
             Task newTask = new Task(title, desc);
             newTask.setRequestingUserId(LOGGED_IN_USER);
 
-            // TODO: nick stuff
-            // TODO create variable LOGGED_IN_USER_USERNAME which specifies the current users username
+            // TODO vvvvvvvvvv create variable LOGGED_IN_USER_USERNAME which specifies the current users username
+            // TODO: Actually, no, LOGGED_IN_USER should be a User object, not a String
             DefaultUserService defaultUserService = new DefaultUserService();
             String username = defaultUserService.getUserByID(LOGGED_IN_USER).getUsername();
             newTask.setRequestingUserUsername(username);
 
+            // TODO: Redo, don't create here
             // TODO: Testing
-            if(latLng != null){
+            if (latLng != null) {
                 newTask.setLocation(latLng.latitude, latLng.longitude);
             }
+
+            newTask.setPhotoGallery(this.gallery);
 
             service.post(newTask);
             Toast postTask = Toast.makeText(this, "Task added", Toast.LENGTH_SHORT);
@@ -210,7 +230,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             setResult(RESULT_OK);
             finish();
         } catch (Exception e) {
-            Toast errorToast = Toast.makeText(this,"Task failed to be posted", Toast.LENGTH_SHORT);
+            Toast errorToast = Toast.makeText(this, "Task failed to be posted", Toast.LENGTH_SHORT);
             errorToast.show();
         }
     }
@@ -218,6 +238,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private void updateTask(String title, String desc) {
 
         try {
+            // TODO: Bug: Location isn't updated
             editTask.setTitle(title);
             editTask.setDescription(desc);
             service.update(editTask);
@@ -227,7 +248,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             setResult(RESULT_OK);
             finish();
         } catch (Exception e) {
-            Toast errorToast = Toast.makeText(this,"Task failed to update", Toast.LENGTH_SHORT);
+            Toast errorToast = Toast.makeText(this, "Task failed to update", Toast.LENGTH_SHORT);
             errorToast.show();
         }
     }

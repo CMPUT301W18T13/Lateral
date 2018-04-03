@@ -37,6 +37,8 @@ import static com.lateral.lateral.service.UserLoginService.login;
 import static com.lateral.lateral.service.UserLoginService.randomBytes;
 import static com.lateral.lateral.service.UserLoginService.saveUserToken;
 // TODO: Username should not be editable!!! It breaks other parts of the app if user changes name
+// TODO: Editing username gives "Username already taken error"
+// TODO: Wrong validation message for email address
 public class EditUserActivity extends AppCompatActivity {
 
     private EditText mUsername;
