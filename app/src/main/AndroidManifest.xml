@@ -92,7 +92,8 @@
         <activity android:name=".activity.EditUserActivity" />
         <activity android:name=".activity.ScanQRCodeActivity"
             android:label="@string/title_activity_scan_qrcode"/>
-        <activity android:name=".barcodereader.BarcodeCaptureActivity" />
+        <activity android:name=".barcodereader.BarcodeCaptureActivity"
+            android:label="@string/qrcode_scan"/>
 
         <service
             android:name=".service.notification.NewBidNotificationService"
