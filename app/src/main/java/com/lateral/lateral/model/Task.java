@@ -26,12 +26,15 @@ public class Task extends BaseEntity {
     private String description;
     private String requestingUserId;
     private String assignedBidId;
-    private String geo_location; // string so that we can easily serialize a tasks latitude and longitude for geosearch
+    private String geo_location; // TODO: string so that we can easily serialize a tasks latitude and longitude for geosearch
     private int bidsNotViewed;
     private int bidsPendingNotification;
-
     private String requestingUserUsername;
     private BigDecimal lowestBidValue;
+    private PhotoGallery photoGallery;
+
+    private double latitude;
+    private double longitude;
 
     // Extra fields
     private transient User requestingUser;
@@ -39,10 +42,6 @@ public class Task extends BaseEntity {
     private transient ArrayList<Bid> bids;
     private transient Bid lowestBid;
 
-    // TODO: Implement photo storage allocation
-    private double latitude;
-    private double longitude;
-    //
     // Private constructor for Jest to use
     private Task(){}
 
@@ -53,6 +52,7 @@ public class Task extends BaseEntity {
     public Task (String title) {
         this.setTitle(title);
         date = new Date();
+        this.photoGallery = new PhotoGallery();
         this.taskStatus = TaskStatus.Requested;
     }
 
@@ -64,7 +64,6 @@ public class Task extends BaseEntity {
     public Task (String title, String description) {
         this(title);
         this.setDescription(description);
-        this.taskStatus = TaskStatus.Requested;
     }
 
     /* Setters */
@@ -290,4 +289,8 @@ public class Task extends BaseEntity {
     public void setBidsPendingNotification(int bidsPendingNotification){this.bidsPendingNotification = bidsPendingNotification;}
 
     public int getBidsPendingNotification(){return this.bidsPendingNotification;}
+
+    public PhotoGallery getPhotoGallery() {
+        return photoGallery;
+    }
 }

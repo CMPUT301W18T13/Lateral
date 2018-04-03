@@ -6,24 +6,17 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.SearchManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
@@ -33,13 +26,14 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+//import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
 import static com.lateral.lateral.model.TaskStatus.Done;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 // Just ignore this activity for now
-
+// TODO: Need to show my own bid along with the current lowest (unless assigned)!
 /**
  * Activity for viewing any assigned/bidden on tasks
  */
@@ -184,7 +178,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 //        //SearchView searchView;
 //
 //        // Inflate the options menu from XML
-//        getMenuInflater().inflate(R.menu.task_view_menu, menu);
+//        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
 //
 //        // Get the SearchView and set the searchable configuration
 //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -227,7 +221,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == VIEW_TASK_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO  --> eventually change to only update position clicked

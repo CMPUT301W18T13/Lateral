@@ -1,4 +1,10 @@
-package com.lateral.lateral;
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
+package com.lateral.lateral.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,23 +16,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.lateral.lateral.activity.AllTasksViewActivity;
-import com.lateral.lateral.activity.AssignedAndBiddedTasksViewActivity;
-import com.lateral.lateral.activity.EditUserActivity;
-import com.lateral.lateral.activity.LoginActivity;
-import com.lateral.lateral.activity.QRCodeActivity;
-import com.lateral.lateral.activity.RequestedTasksViewActivity;
+import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.Notification.NotificationServiceScheduler;
+import com.lateral.lateral.service.notification.NotificationServiceScheduler;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
-
+// TODO: Make the homepage look nicer (make a cool background maybe)
+// TODO: Add hamburger menu on (almost) all pages
+// TODO: Remove or fix the highlight of currently selected item in menu
 /**
  * The main activity for the app
  */
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
 
-    public static String LOGGED_IN_USER = null;     // tyler AWItlpZ842PX8bQQT0oq nick AWItlpRj42PX8bQQT0op
+    public static String LOGGED_IN_USER = null;
 
     /**
      * Called when the activity is created
@@ -83,10 +86,21 @@ public class MainActivity extends AppCompatActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        usernameView.setText(getString(R.string.username_display, user.getUsername()));
+        if(user != null) {
+            usernameView.setText(getString(R.string.username_display, user.getUsername()));
+        } else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        emailView.setText(user.getEmailAddress());
+        if(user != null) {
+            emailView.setText(user.getEmailAddress());
+        }
+        else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
 
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -141,38 +155,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Called when the options menu is created
-     * @param menu Menu created
-     * @return True
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-    /**
-     * Called when an options menu item is selected
-     * @param item Options menu item
-     * @return the built-in result of onOptionMenuItemSelected
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    /**
      * Handles clicking of Navigation Drawer Items
      * @param item Navigation Drawer Item
      * @return True
@@ -196,7 +178,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_qrcode){
-            Intent intent = new Intent(MainActivity.this, QRCodeActivity.class);
+            Intent intent = new Intent(MainActivity.this, ScanQRCodeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){

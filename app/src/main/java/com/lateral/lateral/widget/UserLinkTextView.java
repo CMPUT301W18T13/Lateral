@@ -20,6 +20,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -154,8 +155,11 @@ public class UserLinkTextView extends AppCompatTextView {
             Activity parent = UserLinkTextView.getActivityFromContext(view.getContext());
             if (parent != null){
                 newFragment.show(parent.getFragmentManager(), "dialog");
+            }else{
+                String error = "View requires activity context";
+                Log.e("UserLinkTextView", error);
+                throw new RuntimeException(error);
             }
-            // TODO: Do something on error. This view needs to have activity parent
         }
 
         @Override

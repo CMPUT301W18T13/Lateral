@@ -7,14 +7,12 @@
 package com.lateral.lateral.activity;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -33,7 +31,7 @@ import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 /**
  * Activity to add and edit tasks
@@ -56,7 +54,6 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private Button confirmButton;
     private Button addGeoLocationButton;
 
-
     /**
      * Called when the activity is created
      * @param savedInstanceState The saved instance
@@ -64,6 +61,8 @@ public class AddEditTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_add_edit_task);
 
         // Get the task id
@@ -137,6 +136,26 @@ public class AddEditTaskActivity extends AppCompatActivity {
     }
 
     /**
+     * Called when an options menu item is selected
+     * @param item The menu item selected
+     * @return The built in result of calling onOptionsItemSelected
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home){
+            setResult(RESULT_CANCELED);
+            finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+    }
+
+    /**
      * Called when the Add/Edit Confirm button is clicked
      * @param v The current view
      */
@@ -161,7 +180,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
                 Place selectedPlace = PlacePicker.getPlace(this, data);
                 latLng = selectedPlace.getLatLng();
                 addGeoLocationButton.setText(selectedPlace.getName());
-                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_blue_24dp, 0, 0, 0);
+                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
 
             }
         }
@@ -173,7 +192,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             Task newTask = new Task(title, desc);
             newTask.setRequestingUserId(LOGGED_IN_USER);
 
-            // nick stuff
+            // TODO: nick stuff
             // TODO create variable LOGGED_IN_USER_USERNAME which specifies the current users username
             DefaultUserService defaultUserService = new DefaultUserService();
             String username = defaultUserService.getUserByID(LOGGED_IN_USER).getUsername();

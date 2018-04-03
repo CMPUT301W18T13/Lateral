@@ -27,7 +27,7 @@
         android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -41,11 +41,10 @@
         </activity>
         <activity
             android:name=".activity.SignUpActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activity.RequestedTasksViewActivity"
             android:label="@string/title_activity_requested_tasks_view"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
             <!-- Just added this -->
@@ -81,30 +80,26 @@
         </activity>
         <activity
             android:name=".activity.TaskViewActivity"
-            android:label="Task" />
-        <activity android:name=".activity.AddEditTaskActivity" />
+            android:label="@string/title_activity_task_view"/>
         <activity
             android:name=".activity.MyTaskViewActivity"
-            android:label="@string/title_activity_my_task_view"
-            android:parentActivityName=".activity.RequestedTasksViewActivity" />
+            android:label="@string/title_activity_my_task_view" />
         <activity
-            android:name=".activity.BidListActivity"
-            android:parentActivityName=".activity.MyTaskViewActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MyTaskViewActivity" />
-        </activity>
+            android:name=".activity.AddEditTaskActivity"
+            android:label="@string/add_edit_temp_title"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".activity.BidListActivity"/>
         <activity android:name=".activity.EditUserActivity" />
-        <activity android:name=".activity.QRCodeActivity" />
+        <activity android:name=".activity.ScanQRCodeActivity"
+            android:label="@string/title_activity_scan_qrcode"/>
         <activity android:name=".barcodereader.BarcodeCaptureActivity" />
-        <activity android:name=".activity.EditUserActivity" />
 
         <service
-            android:name=".service.Notification.NewBidNotificationService"
+            android:name=".service.notification.NewBidNotificationService"
             android:label="New Bid Notification Service"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
-        <receiver android:name=".service.Notification.StartServiceReceiver">
+        <receiver android:name=".service.notification.StartServiceReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
@@ -112,8 +107,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.DisplayQRCodeActivity" />
-        <activity android:name=".activity.MapActivity"></activity>
+        <activity
+            android:name=".activity.DisplayQRCodeActivity"
+            android:label="@string/title_activity_display_qrcode"/>
+        <activity android:name=".activity.MapActivity"
+            android:label="@string/title_activity_map"></activity>
     </application>
 
 </manifest>

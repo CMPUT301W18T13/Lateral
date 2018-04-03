@@ -7,27 +7,26 @@
 package com.lateral.lateral.activity;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.CommonStatusCodes;
-import com.google.android.gms.vision.Frame;
 import com.google.android.gms.vision.barcode.Barcode;
 
-import com.lateral.lateral.MainActivity;
 import com.lateral.lateral.R;
 import com.lateral.lateral.barcodereader.BarcodeCaptureActivity;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
-public class QRCodeActivity extends AppCompatActivity {
+public class ScanQRCodeActivity extends AppCompatActivity {
 
     private static final int RC_BARCODE_CAPTURE = 9001;
     private static final String TAG = "BarcodeMain";
@@ -39,7 +38,9 @@ public class QRCodeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_qrcode);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_scan_qrcode);
         startButton = findViewById(R.id.qrcode_button);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +62,26 @@ public class QRCodeActivity extends AppCompatActivity {
     }
 
     /**
+     * Called when a certain menu item is selected
+     * @param item The item selected
+     * @return true if handled
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
+            finish();
+        } else return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
+    }
+
+    /**
      * Adapted from https://github.com/googlesamples/android-vision
      * @param requestCode
      * @param resultCode
@@ -72,9 +93,6 @@ public class QRCodeActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    //TODO: Handle QR Code Result
-//                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
-//                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     String url = barcode.displayValue;
                     if(url.startsWith("http://lateral.lateral.com/")){
                         String taskId = url.substring(27); // Length of URL string
@@ -90,7 +108,7 @@ public class QRCodeActivity extends AppCompatActivity {
                                 Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_LONG).show();
                             }
                             else{
-                                Intent intent = new Intent(QRCodeActivity.this, TaskViewActivity.class);
+                                Intent intent = new Intent(ScanQRCodeActivity.this, TaskViewActivity.class);
                                 intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, taskId);
                                 startActivity(intent);
                                 finish();
@@ -99,7 +117,6 @@ public class QRCodeActivity extends AppCompatActivity {
                         else{
                             Toast.makeText(this, "Could not load task!", Toast.LENGTH_LONG).show();
                         }
-
                     }
                     else{
                         Toast.makeText(this, "Couldn't get task data!", Toast.LENGTH_LONG).show();

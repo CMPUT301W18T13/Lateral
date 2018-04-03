@@ -6,12 +6,15 @@
 
 package com.lateral.lateral.service.implementation;
 
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.google.common.reflect.TypeToken;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
@@ -29,16 +32,13 @@ import java.util.List;
  * Note; any failure to return results will return null, so check accordingly
  */
 public class DefaultTaskService extends DefaultBaseService<Task> implements TaskService {
-    /**
-     * Returns the Task based on the title
-     * @param title Title to use in query
-     * @return The associated task if it exists; null otherwise
-     */
-    public Task getTaskByTitle(String title){
-        String json = "{\"query\": {\"match\": {\"title\": \"" + title + "\"}}}";
-        return gson.fromJson(get(json), Task.class);
-    }
 
+    @Override
+    protected GsonBuilder buildGson() {
+        // Used to serialize PhotoGallery
+        return super.buildGson()
+                .registerTypeAdapter(PhotoGallery.class, new PhotoGallery.Serializer());
+    }
 
     /**
      * Returns the list of tasks matching the supplied query keywords

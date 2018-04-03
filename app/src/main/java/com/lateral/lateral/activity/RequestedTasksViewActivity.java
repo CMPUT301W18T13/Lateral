@@ -25,10 +25,11 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
 
-import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+//import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
 import static com.lateral.lateral.model.TaskStatus.Done;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 /**
  * Activity to view all requested tasks
@@ -38,7 +39,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     private ArrayList<Task> matchingTasks;
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
 
-    private String thisUserID = LOGGED_IN_USER;             // class spec       // for testing
+    private String thisUserID = LOGGED_IN_USER;
     private PullRefreshLayout layout;
     static final int ADD_EDIT_TASK_CODE = 2;
 
@@ -203,11 +204,10 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
         addTasks(defaultTaskService.getAllTasksByRequesterID(query));
     }
 
-    // TODO update so only refreshes if new activity posted
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("activity result invoked", "OnActivityResult");
-        if (requestCode == VIEW_TASK_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
@@ -216,7 +216,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             initializeLocalArrays();
             displayResultsFromFilter();
 
-        } else if (requestCode == ADD_EDIT_TASK_CODE) {
+        } else if (resultCode == RESULT_OK && requestCode == ADD_EDIT_TASK_CODE) {
             // User wants to add a whole new task
             // if added, notify data set added
             // for now, refreshes entire list

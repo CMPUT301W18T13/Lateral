@@ -8,6 +8,7 @@ package com.lateral.lateral.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,13 +30,13 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import java.util.ArrayList;
 
 //TODO: fix bid limit problem
+// TODO: BUG: When you decline all bids, need to set status back to Requested and update task in DB
 
 /**
  * Activity to display the list of bids
  */
 public class BidListActivity extends AppCompatActivity {
     public static final String TASK_ID = "com.lateral.lateral.TASK_ID_INTERESTED_IN";
-
     private ListView bidListView;
     private BidRowAdapter adapter;
     private String taskID;
@@ -47,6 +48,8 @@ public class BidListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         bidListView = findViewById(R.id.bid_lv);
         setContentView(R.layout.activity_bid_list); // This will call onContentChanged
     }
@@ -81,39 +84,21 @@ public class BidListActivity extends AppCompatActivity {
     /**
      * Called when a certain menu item is selected
      * @param item The item selected
-     * @return True
+     * @return true if handled
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            Intent returnIntent = new Intent(this, MyTaskViewActivity.class);
-            returnIntent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, taskID);
-            returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            startActivity(returnIntent);
-        }
-        return true; //returning true produces the onActivityResult event needed
+            setResult(RESULT_OK);
+            finish();
+        } else return super.onOptionsItemSelected(item);
+        return true;
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
-        if (Integer.parseInt(android.os.Build.VERSION.SDK) > 5
-                && keyCode == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() == 0) {
-            Log.d("CDA", "onKeyDown Called");
-            onBackPressed();
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
 
     @Override
     public void onBackPressed() {
-        Log.d("CDA", "onBackPressed Called");
-        Intent returnIntent = new Intent(this, MyTaskViewActivity.class);
-        returnIntent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, taskID);
-        returnIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        startActivity(returnIntent);
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 
     @Override

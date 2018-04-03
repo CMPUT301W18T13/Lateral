@@ -28,18 +28,19 @@
             tools:layout_conversion_absoluteHeight="120dp"
             tools:layout_conversion_absoluteWidth="384dp">
 
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+            <com.lateral.lateral.widget.PhotoImageView
+                android:id="@+id/my_task_view_image_main"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
-                android:scaleType="centerCrop"
+                android:layout_marginTop="22dp"
+                android:onClick="onPhotoImageViewClick"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@drawable/ic_menu_gallery"
-                tools:layout_conversion_absoluteHeight="48dp"
-                tools:layout_conversion_absoluteWidth="48dp" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraintLayout4"
@@ -58,12 +59,9 @@
                     android:layout_height="wrap_content"
                     android:text="@string/temp_bid"
                     android:textAppearance="@android:style/TextAppearance.Large.Inverse"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7"
-                    tools:layout_conversion_absoluteHeight="30dp"
-                    tools:layout_conversion_absoluteWidth="68dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <TextView
                     android:id="@+id/textView7"
@@ -88,7 +86,7 @@
                 android:layout_marginTop="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/constraintLayout4"
-                app:layout_constraintStart_toEndOf="@+id/imageView3"
+                app:layout_constraintStart_toEndOf="@+id/my_task_view_image_main"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:layout_conversion_absoluteHeight="72dp"
                 tools:layout_conversion_absoluteWidth="231dp">
@@ -146,7 +144,7 @@
 
 
         <LinearLayout
-            android:id="@+id/imageLayout"
+            android:id="@+id/my_task_view_imageLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -159,50 +157,61 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
-            <ImageButton
-                android:id="@+id/image6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.lateral.lateral.widget.PhotoImageView
+                android:id="@+id/my_task_view_image_0"
+                android:tag="image0"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                android:onClick="onPhotoImageViewClick"/>
 
-            <ImageButton
-                android:id="@+id/image7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
 
-            <ImageButton
-                android:id="@+id/image8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.lateral.lateral.widget.PhotoImageView
+                android:id="@+id/my_task_view_image_1"
+                android:tag="image1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                android:onClick="onPhotoImageViewClick"/>
 
-            <ImageButton
-                android:id="@+id/image9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
 
-            <ImageButton
-                android:id="@+id/image10"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.lateral.lateral.widget.PhotoImageView
+                android:id="@+id/my_task_view_image_2"
+                android:tag="image2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/ic_menu_gallery" />
+                android:onClick="onPhotoImageViewClick"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
+            <com.lateral.lateral.widget.PhotoImageView
+                android:id="@+id/my_task_view_image_3"
+                android:tag="image3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onPhotoImageViewClick"/>
+
+            <android.support.v4.widget.Space
+                android:layout_width="4dp"
+                android:layout_height="match_parent" />
+
+            <com.lateral.lateral.widget.PhotoImageView
+                android:id="@+id/my_task_view_image_4"
+                android:tag="image4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="onPhotoImageViewClick"/>
         </LinearLayout>
 
         <ScrollView
@@ -213,7 +222,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/imageLayout"
+            app:layout_constraintBottom_toTopOf="@+id/my_task_view_imageLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout5">
@@ -247,19 +256,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
-
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="184dp"
-        android:layout_marginRight="328dp"
-        android:onClick="onSeeTaskOnMap"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_place_blue_24dp" />
 
     <Button
         android:id="@+id/my_task_view_set_done"

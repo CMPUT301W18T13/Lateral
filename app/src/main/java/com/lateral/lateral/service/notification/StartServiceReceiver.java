@@ -4,7 +4,7 @@
  * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
  */
 
-package com.lateral.lateral.service.Notification;
+package com.lateral.lateral.service.notification;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

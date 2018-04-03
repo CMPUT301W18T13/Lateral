@@ -11,7 +11,7 @@ import android.util.Log;
 import android.content.Context;
 
 import com.lateral.lateral.Constants;
-import com.lateral.lateral.MainActivity;
+import com.lateral.lateral.activity.MainActivity;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
@@ -158,11 +158,8 @@ public class UserLoginService {
             out.write(user.getToken());
             out.flush();
 
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            throw new RuntimeException();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+            Log.e("UserLoginService", "Failed to save user token");
             throw new RuntimeException();
         }
     }

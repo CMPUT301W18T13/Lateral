@@ -6,9 +6,11 @@
 
 package com.lateral.lateral.activity;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,6 +37,8 @@ public class MapActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_map);
 
         taskId = getIntent().getStringExtra(EXTRA_TASK_ID);
@@ -55,5 +59,25 @@ public class MapActivity extends AppCompatActivity
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(taskCoords));
         googleMap.animateCamera(CameraUpdateFactory.zoomIn());
         googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+    }
+
+    /**
+     * Called when an options menu item is selected
+     * @param item The menu item selected
+     * @return true if handled
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        if (item.getItemId() == android.R.id.home){
+            setResult(RESULT_OK);
+            finish();
+        } else return super.onOptionsItemSelected(item);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 }
