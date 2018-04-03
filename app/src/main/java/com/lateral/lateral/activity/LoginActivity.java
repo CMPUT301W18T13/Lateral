@@ -265,10 +265,15 @@ public class LoginActivity extends AppCompatActivity{
                 DefaultUserService defaultUserService = new DefaultUserService();
                 User user = defaultUserService.getById(mId);
 
-
-                saveUserToken(user, getApplicationContext());
-                login(mId, getApplicationContext());
-                finish();
+                if(user != null) {
+                    saveUserToken(user, getApplicationContext());
+                    login(mId, getApplicationContext());
+                    finish();
+                }
+                else{
+                    mUsernameView.setError(getString(R.string.error_unknown_message));
+                    mUsernameView.requestFocus();
+                }
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

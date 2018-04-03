@@ -93,9 +93,6 @@ public class ScanQRCodeActivity extends AppCompatActivity {
             if (resultCode == CommonStatusCodes.SUCCESS) {
                 if (data != null) {
                     Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    //TODO: Handle QR Code Result
-//                    Toast.makeText(this, barcode.displayValue, Toast.LENGTH_LONG).show();
-//                    Log.d(TAG, "Barcode read: " + barcode.displayValue);
                     String url = barcode.displayValue;
                     if(url.startsWith("http://lateral.lateral.com/")){
                         String taskId = url.substring(27); // Length of URL string
@@ -120,7 +117,6 @@ public class ScanQRCodeActivity extends AppCompatActivity {
                         else{
                             Toast.makeText(this, "Could not load task!", Toast.LENGTH_LONG).show();
                         }
-
                     }
                     else{
                         Toast.makeText(this, "Couldn't get task data!", Toast.LENGTH_LONG).show();

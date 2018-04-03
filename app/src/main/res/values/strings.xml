@@ -103,5 +103,7 @@
     <string name="geo_button_title">View on map</string>
     <string name="title_activity_map">Task Location</string>
 
+    <string name="error_unknown_message">An error occurred</string>
+
 
 </resources>
