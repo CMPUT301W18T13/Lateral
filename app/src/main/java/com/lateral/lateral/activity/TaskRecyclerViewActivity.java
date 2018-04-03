@@ -59,6 +59,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     private PullRefreshLayout layout;
 
     private static int firstVisibleInListview;
+    private boolean userIsInteracting;
 
     /*
     public RecyclerView.Adapter getmAdapter(){
@@ -149,15 +150,22 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        //SearchView searchView;
-
         // Inflate the options menu from XML
-        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
 
-        // Get the SearchView and set the searchable configuration
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//        /* uncomment to add search bar icon to every child recycler view */
+//
+//        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
+//
+//        // Get the SearchView and set the searchable configuration
+//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+//
+//        /* also remove the code from the onCreateOptionsMenu in AllTasksViewActivity */
+
+
+
+
         //searchView.setIconifiedByDefault(true);
 
         return true;
@@ -242,8 +250,26 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Avoids onItemSelected call during initialization (spinner related)
+     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
+     * Answered by User: Bill Mote
+     * April 2, 2018
+     */
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        userIsInteracting = true;
+    }
 
-
+    /**
+     * prevents filter from re-filling recyclerview on creation (since default filter is all tasks,
+     * display all tasks was being invoked again)
+     * @return false during creating, true if user changed filter
+     */
+    public boolean getUserIsInteracting() {
+        return this.userIsInteracting;
+    }
 
 
 

@@ -46,6 +46,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
     /* Filter related variables */
     private Spinner filterSpinner;
     private int currentFilter = 0;
+    //private boolean userIsInteracting;
 
     /* local storage */
     private ArrayList<Task> allLocallyStoredTasks;
@@ -102,6 +103,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
         super.onCreate(savedInstanceState);
 
         initializeLocalArrays();
+        displayResultsFromFilter();
 
         // Move to 'create new task' activity when fab pressed
         final FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
@@ -172,8 +174,10 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("FILTER", "Item selected = " + filters.get(position));
-                currentFilter = position;
-                displayResultsFromFilter();
+                if (getUserIsInteracting()) {
+                    currentFilter = position;
+                    displayResultsFromFilter();
+                }
             }
 
             @Override
@@ -226,6 +230,18 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity {
 
         }
     }
+
+//    /**
+//     * Avoids onItemSelected call during initialization (spinner related)
+//     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
+//     * Answered by User: Bill Mote
+//     * April 2, 2018
+//     */
+//    @Override
+//    public void onUserInteraction() {
+//        super.onUserInteraction();
+//        userIsInteracting = true;
+//    }
 
     /**
      * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with

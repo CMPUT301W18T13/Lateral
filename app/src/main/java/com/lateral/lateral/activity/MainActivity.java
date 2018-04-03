@@ -23,8 +23,8 @@ import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.notification.NotificationServiceScheduler;
 import com.lateral.lateral.service.implementation.DefaultUserService;
+import com.lateral.lateral.service.notification.NotificationServiceScheduler;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
 // TODO: Make the homepage look nicer (make a cool background maybe)

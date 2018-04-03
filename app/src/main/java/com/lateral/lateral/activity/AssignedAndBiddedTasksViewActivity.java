@@ -110,7 +110,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         //returnMatchingTasks(thisUserID);
 
         initializeLocalArrays();
-        //displayResultsFromFilter();
+        displayResultsFromFilter();
 
 
         // listen refresh event
@@ -142,10 +142,10 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("FILTER", "Item selected = " + filters.get(position));
-                currentFilter = position;
-
-
-                displayResultsFromFilter();
+                if (getUserIsInteracting()) {
+                    currentFilter = position;
+                    displayResultsFromFilter();
+                }
             }
 
             @Override
@@ -154,16 +154,6 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
             }
         });
-
-
-
-
-
-
-
-
-
-
 
     }
 

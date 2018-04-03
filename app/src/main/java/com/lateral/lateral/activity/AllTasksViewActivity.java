@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -69,11 +70,15 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     /* Filter related variables*/
     private Spinner filterSpinner;
-    private boolean userIsInteracting;
+    //private boolean userIsInteracting;
 
     /* local storage */
     private ArrayList<Task> allLocallyStoredTasks;
     private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
+
+    /* Searching variables */
+    SearchView searchView;
+
 
     /**
      * Gets the layout ID of the activity
@@ -153,7 +158,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d("FILTER", "Item selected = " + filters.get(position));
 
-                if (userIsInteracting) {
+                if (getUserIsInteracting()) {
                     currentFilter = position;
                     displayResultsFromFilter();
                 }
@@ -197,6 +202,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 //                }
 //        );
 
+
     }
 
     /**
@@ -207,8 +213,51 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
+
+        // Get the SearchView and set the searchable configuration
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // could do initial searching in here instead --> if we are for sure removing
+                // search icon from every recycler view
+                Log.d("OnQueryListener", "TEXT SUBMITTED");
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d("OnQueryListener", "TEXT CHANGED: " + newText);
+                if (newText.equals("")) {
+                    Log.d("null text", "this is null text");
+                    newText = null;
+                }
+                refreshLocalArrays(newText);
+                displayResultsFromFilter();
+                return false;
+            }
+        });
+
         return true;
     }
+
+
+    // determins if a search should be executed given the previous query, and the new query
+    public boolean searchNeeded(String previousQuery, String newQuery) {
+        boolean search = true;
+
+        // user pressed space
+        if (previousQuery.equals(newQuery)) {
+
+        }
+
+    }
+
 
 
     /**
@@ -224,6 +273,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     // meat and potatoes of the search
     /**
      * Handles any search intents
+     * NOTE: if you search by pressing return on a keyboard, the search is executed TWICE
      * @param intent Intent and handles
      */
     private void handleIntent(Intent intent) {
@@ -232,7 +282,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         String query = null;
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            Log.d("ALL TASKS", "Got here via search button");
+            //Log.d("ALL TASKS", "Got here via search button");
             clearList();
             query = intent.getStringExtra(SearchManager.QUERY);
             // TODO handle exception (no internet access crashes app)
@@ -280,17 +330,17 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
 
-    /**
-     * Avoids onItemSelected call during initialization (spinner related)
-     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
-     * Answered by User: Bill Mote
-     * April 2, 2018
-     */
-    @Override
-    public void onUserInteraction() {
-        super.onUserInteraction();
-        userIsInteracting = true;
-    }
+//    /**
+//     * Avoids onItemSelected call during initialization (spinner related)
+//     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
+//     * Answered by User: Bill Mote
+//     * April 2, 2018
+//     */
+//    @Override
+//    public void onUserInteraction() {
+//        super.onUserInteraction();
+//        userIsInteracting = true;
+//    }
 
 
     /**
