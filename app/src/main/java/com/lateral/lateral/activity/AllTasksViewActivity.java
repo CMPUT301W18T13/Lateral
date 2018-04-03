@@ -253,7 +253,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     // determins if a search should be executed given the previous query, and the new query
     public void searchNeeded(String newQuery) {
         boolean search = false;
-        
+
         // user pressed space, search
         if (newQuery.length() > 0) {
 
