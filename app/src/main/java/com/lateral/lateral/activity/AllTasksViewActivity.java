@@ -232,13 +232,16 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("OnQueryListener", "TEXT CHANGED: " + newText);
-                if (newText.equals("")) {
-                    Log.d("null text", "this is null text");
-                    newText = null;
-                }
-                refreshLocalArrays(newText);
-                displayResultsFromFilter();
+                Log.d("OnQueryListener", "TEXT CHANGED|" + newText + "|");
+//                if (newText.equals("")) {
+//                    Log.d("null text", "this is null text");
+//                    newText = null;
+//                }
+//                refreshLocalArrays(newText);
+//                displayResultsFromFilter();
+                searchNeeded(newText);
+
+
                 return false;
             }
         });
@@ -248,12 +251,25 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
 
     // determins if a search should be executed given the previous query, and the new query
-    public boolean searchNeeded(String previousQuery, String newQuery) {
-        boolean search = true;
+    public void searchNeeded(String newQuery) {
+        boolean search = false;
+        
+        // user pressed space, search
+        if (newQuery.length() > 0) {
 
-        // user pressed space
-        if (previousQuery.equals(newQuery)) {
+            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!newQuery.substring(newQuery.length() - 2).equals(" "))) {
+                search = true;
+        }
 
+        } else if (newQuery.equals("")) {
+            newQuery = null;
+            search = true;
+        }
+
+        // search needed
+        if (search) {
+            refreshLocalArrays(newQuery);
+            displayResultsFromFilter();
         }
 
     }
