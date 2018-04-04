@@ -8,4 +8,9 @@
     <color name="red">#FF0000</color>
     <color name="blue">#56A5EC</color>
     <color name="yellow">#FFCC00</color>
+
+    <color name="statusRequested">#FF2196F3</color>
+    <color name="statusBidded">#FF3F51B5</color>
+    <color name="statusAssigned">#FF4CAF50</color>
+    <color name="statusDone">#FFF44336</color>
 </resources>
