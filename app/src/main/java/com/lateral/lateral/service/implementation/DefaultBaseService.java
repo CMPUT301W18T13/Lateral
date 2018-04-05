@@ -114,6 +114,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             data = getData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
+            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
         }
         return data;
     }
@@ -137,7 +138,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             id = postData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
-            // TODO: Need to rethrow custom exception
+            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
         }
         obj.setId(id);
         setDocId(id);
@@ -162,7 +163,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             id = updateData.get();
         } catch (Exception e){
             Log.i("Error", "Failed to get task from async object");
-            // TODO: Need to rethrow custom exception
+            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
         }
     }
 
@@ -182,6 +183,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             testId = updateData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
+            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
         }
 
     }
@@ -200,7 +202,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             String success = deleteData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
-            // TODO: Need to rethrow custom exception
+            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
         }
     }
 
@@ -265,7 +267,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     }
                 } catch (Exception e) {
                     Log.i("Error", "Application failed to send user to server");
-                    // TODO: Need to rethrow custom exception
+                    // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
                 }
             }
             return id;
@@ -310,7 +312,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 }
             } catch (Exception e) {
                 Log.i("Error", "Error communicating with the elasticsearch server!");
-                // TODO: Need to rethrow custom exception
+                // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
             }
 
             return get;
@@ -356,7 +358,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 }
             } catch (Exception e) {
                 Log.i("Error", "Application failed to send user to server");
-                // TODO: Need to rethrow custom exception
+                // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
             }
             return id;
         }
@@ -397,7 +399,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     }
                 } catch (Exception e) {
                     Log.i("Error", "Application failed to send user to server");
-                    // TODO: Need to rethrow custom exception
+                    // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
                 }
             return "Success";
         }
