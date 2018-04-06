@@ -246,12 +246,11 @@
 
     <Button
         android:id="@+id/my_task_view_see_bids_button"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
         android:onClick="onSeeBidButtonClick"
         android:text="@string/see_bids_btn_text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
         app:layout_constraintBottom_toTopOf="@+id/my_task_view_set_requested"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -259,12 +258,11 @@
 
     <Button
         android:id="@+id/my_task_view_set_done"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
         android:onClick="onSetDoneButtonClick"
         android:text="@string/set_done_btn_text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -272,12 +270,11 @@
 
     <Button
         android:id="@+id/my_task_view_set_requested"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorPrimary"
         android:onClick="onSetRequestedButtonClick"
         android:text="@string/set_requested_btn_text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Widget.Button.Inverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/my_task_view_set_done"
         app:layout_constraintHorizontal_bias="0.5"

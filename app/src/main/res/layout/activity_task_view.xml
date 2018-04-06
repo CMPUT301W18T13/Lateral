@@ -217,9 +217,10 @@
 
     <Button
         android:id="@+id/task_view_bid_button"
+        style="@style/ButtonColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/green"
+        android:backgroundTint="@color/colorAccent"
         android:onClick="onBidButtonClick"
         android:text="@string/bid_button_label"
         app:layout_constraintBottom_toBottomOf="parent"

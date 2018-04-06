@@ -10,6 +10,7 @@
 
     <Button
         android:id="@+id/ViewRequestedTasksButton"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -22,6 +23,7 @@
 
     <Button
         android:id="@+id/ViewAllTasksButton"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
@@ -34,6 +36,7 @@
 
     <Button
         android:id="@+id/ViewAssignedTasksButton"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
