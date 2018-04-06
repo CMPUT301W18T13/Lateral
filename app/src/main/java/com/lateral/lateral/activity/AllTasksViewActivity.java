@@ -233,13 +233,15 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d("OnQueryListener", "TEXT CHANGED|" + newText + "|");
-//                if (newText.equals("")) {
-//                    Log.d("null text", "this is null text");
-//                    newText = null;
-//                }
-//                refreshLocalArrays(newText);
-//                displayResultsFromFilter();
-                searchNeeded(newText);
+                if (newText.equals("")) {
+                    Log.d("null text", "this is null text");
+                    newText = null;
+                }
+                Log.d("onQueryTextChange", "refreshing arrays");
+                refreshLocalArrays(newText);
+                Log.d("onQueryTextChange", "display array from filter");
+                displayResultsFromFilter();
+                //searchNeeded(newText);
 
 
                 return false;
@@ -250,14 +252,14 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
 
-    // determins if a search should be executed given the previous query, and the new query
+    // determines if a search should be executed given the previous query, and the new query
     public void searchNeeded(String newQuery) {
         boolean search = false;
 
         // user pressed space, search
-        if (newQuery.length() > 0) {
+        if (newQuery.length() > 1) {
 
-            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!newQuery.substring(newQuery.length() - 2).equals(" "))) {
+            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!(newQuery.substring(newQuery.length() - 2).equals(" ")))) {
                 search = true;
         }
 
@@ -268,7 +270,9 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
         // search needed
         if (search) {
+            Log.d("search needed", "refreshing arrays");
             refreshLocalArrays(newQuery);
+            Log.d("display array", "display array from filter");
             displayResultsFromFilter();
         }
 

@@ -135,7 +135,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
         // display number of new bids
        //
-        // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
+        //holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
 
         PhotoGallery gallery = task.getPhotoGallery();
         holder.imageView.setImage(gallery.get(0));
@@ -157,7 +157,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
         switch (status) {
             case Requested:
-                statusColor = Color.GREEN;
+                statusColor = Color.parseColor("#9e9e9e");
                 break;
 
             case Bidded:

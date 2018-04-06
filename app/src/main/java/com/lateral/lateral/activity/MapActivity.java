@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -56,9 +57,12 @@ public class MapActivity extends AppCompatActivity
         googleMap.addMarker(new MarkerOptions().position(taskCoords)
                 .title(task.getTitle())
                 .snippet(task.getStatus().toString()));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(taskCoords));
-        googleMap.animateCamera(CameraUpdateFactory.zoomIn());
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLng(taskCoords));
+
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(taskCoords, 13);
+        googleMap.animateCamera(cameraUpdate);
+        //googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+        //googleMap.animateCamera(CameraUpdateFactory.zoomTo(15), 2000, null);
     }
 
     /**
