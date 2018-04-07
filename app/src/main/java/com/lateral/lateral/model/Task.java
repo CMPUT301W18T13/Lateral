@@ -31,6 +31,7 @@ public class Task extends BaseEntity {
     private String requestingUserUsername;
     private BigDecimal lowestBidValue;
     private PhotoGallery photoGallery;
+    private String address;
 
     private double latitude;
     private double longitude;
@@ -261,9 +262,10 @@ public class Task extends BaseEntity {
      * @param latitude Latitude to be set
      * @param longitude Longitude to be set
      */
-    public void setLocation(double latitude, double longitude){
+    public void setLocation(double latitude, double longitude,String address){
         this.latitude = latitude;
         this.longitude = longitude;
+        this.address = address;
     }
 
     public double getLat(){
@@ -272,6 +274,14 @@ public class Task extends BaseEntity {
 
     public double getLon(){
         return longitude;
+    }
+
+    public boolean checkGeo(){
+        return address != null;
+    }
+
+    public String getAddress(){
+        return address;
     }
 
     /**

@@ -59,6 +59,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private Task editTask;
     private TaskService service;
     private LatLng latLng;
+    private String address;
     private PhotoGallery gallery;
 
     // UI elements
@@ -121,6 +122,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
             title.setText(editTask.getTitle());
             description.setText(editTask.getDescription());
             gallery = editTask.getPhotoGallery();
+            if(editTask.checkGeo()){
+                addGeoLocationButton.setText(editTask.getAddress());
+            }
         }
         refreshImages();
     }
@@ -227,7 +231,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
             // TODO: Testing
             if (latLng != null) {
-                newTask.setLocation(latLng.latitude, latLng.longitude);
+                newTask.setLocation(latLng.latitude, latLng.longitude, address);
             }
 
             newTask.setPhotoGallery(this.gallery);
@@ -250,6 +254,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             // TODO: BUG: Location isn't updated
             editTask.setTitle(title);
             editTask.setDescription(desc);
+            editTask.setLocation(latLng.latitude, latLng.longitude, address);
             service.update(editTask);
             Toast postTask = Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT);
             postTask.show();
@@ -316,7 +321,8 @@ public class AddEditTaskActivity extends AppCompatActivity {
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             Place selectedPlace = PlacePicker.getPlace(this, data);
             latLng = selectedPlace.getLatLng();
-            addGeoLocationButton.setText(selectedPlace.getName());
+            address = selectedPlace.getName().toString();
+            addGeoLocationButton.setText(address);
             addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
         } else if (requestCode >= PHOTO_REQUEST && resultCode == RESULT_OK) {
             // Adding new image

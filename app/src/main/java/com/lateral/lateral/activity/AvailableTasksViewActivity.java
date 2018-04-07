@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -63,6 +64,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: BUG: getAllTasks() uses different number than getEveryTask()
 public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
 
+    public static String INTENT_OPEN_SEARCH = "com.lateral.lateral.OPEN_SEARCH";
     DefaultTaskService defaultTaskService = new DefaultTaskService();
     private PullRefreshLayout layout;
     // 0 - available tasks
@@ -142,6 +144,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         // check how we got here
         handleIntent(getIntent());
 
@@ -199,7 +202,8 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        searchView = (SearchView) searchItem.getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 
 
@@ -223,6 +227,11 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
             }
         });
 
+        // Open search immediately
+        if (INTENT_OPEN_SEARCH.equals(getIntent().getAction())){
+            searchItem.expandActionView();
+            searchView.requestFocus();
+        }
         return true;
     }
 
@@ -270,6 +279,13 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
      * @param intent Intent and handles
      */
     private void handleIntent(Intent intent) {
+
+        if (INTENT_OPEN_SEARCH.equals(intent.getAction())){
+            clearList();
+            // Search will be opened in onCreateOptionsMenu
+            return;
+        }
+
 
         ArrayList<Task> initializedTasks;
         String query = null;

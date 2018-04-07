@@ -89,6 +89,9 @@
             android:name=".activity.AddEditTaskActivity"
             android:label="@string/add_edit_temp_title"
             android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".activity.TaskMapActivity"
+            android:label="@string/title_activity_task_map" />
         <activity android:name=".activity.BidListActivity"/>
         <activity android:name=".activity.EditUserActivity" />
         <activity android:name=".activity.ScanQRCodeActivity"

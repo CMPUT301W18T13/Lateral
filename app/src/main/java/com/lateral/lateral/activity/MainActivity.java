@@ -116,7 +116,9 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.button_search:
-                // TODO: Implement
+                intent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
+                intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
+                startActivity(intent);
                 break;
 
             case R.id.button_assigned:
@@ -125,7 +127,8 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.button_map:
-                // TODO: Implement
+                intent = new Intent(MainActivity.this, TaskMapActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.button_QR:
@@ -161,7 +164,6 @@ public class MainActivity extends AppCompatActivity
      * @param item Navigation Drawer Item
      * @return True
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -191,7 +193,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
             }
-        }
+        } else return false;
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
