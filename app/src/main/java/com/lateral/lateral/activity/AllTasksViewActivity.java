@@ -58,7 +58,8 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO clicking seems to work but test more --> pass intents
 // TODO: Get the notification "x new bids!" working (or remove it)
 // TODO: Disable app rotation
-// TODO: Show some info stating what the status colors mean!
+// TODO: Show some info in the filter stating what the status colors mean!
+// TODO: Load all record, not just top 10
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();

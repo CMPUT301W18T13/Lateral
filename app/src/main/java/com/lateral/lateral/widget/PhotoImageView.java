@@ -77,7 +77,7 @@ public class PhotoImageView extends AppCompatImageView{
     private void setProperties(){
         setScaleType(ScaleType.FIT_CENTER);
         setAdjustViewBounds(true);
-        setBackgroundColor(Color.LTGRAY);
+        setBackgroundColor(Color.TRANSPARENT);
         setImageResource(R.drawable.ic_menu_gallery);
     }
 
