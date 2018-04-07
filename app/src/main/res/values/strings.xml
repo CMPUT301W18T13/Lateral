@@ -27,9 +27,11 @@
     <string name="signup_link_prompt"><u>Don\'t have an account? Sign up!</u></string>
     <string name="confirm">Confirm</string>
     <string name="title_activity_requested_tasks_view">My Requested Tasks</string>
-    <string name="title_activity_assigned_and_bidded_tasks_view">My Assigned Tasks</string>
+    <string name="title_activity_assigned_and_bidded_tasks_view">Bids and Assigned Tasks</string>
     <string name="filter_text">Filter</string>
-    <string name="title_activity_all_tasks_view">All Tasks</string>
+    <string name="edit_user">Edit User</string>
+    <string name="logout">Logout</string>
+    <string name="title_activity_available_tasks_view">Available Tasks</string>
     <string name="search">Search</string>
     <string name="title_activity_my_task_view">My Task Details</string>
     <string name="title_activity_task_view">Task Details</string>
@@ -56,7 +58,7 @@
     <string name="edit_button_text">Edit Task</string>
 
     <!-- Strings related to searching -->
-    <string name="search_hint">Search all tasks</string>
+    <string name="search_hint">Search available tasks</string>
 
     <!-- Strings for Bid Dialog -->
     <string name="bid_dialog_title">Place Your Bid</string>

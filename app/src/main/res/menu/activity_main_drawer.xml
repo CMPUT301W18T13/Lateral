@@ -7,26 +7,26 @@
         <item
             android:id="@+id/nav_edit_user"
             android:icon="@drawable/ic_edit_user"
-            android:title="Edit User" />
+            android:title="@string/edit_user" />
         <item
             android:id="@+id/nav_req_tasks"
             android:icon="@drawable/ic_requested_tasks"
-            android:title="Requested Tasks" />
+            android:title="@string/title_activity_requested_tasks_view" />
         <item
-            android:id="@+id/nav_all_tasks"
-            android:icon="@drawable/ic_all_tasks"
-            android:title="All Tasks" />
+            android:id="@+id/nav_available_tasks"
+            android:icon="@drawable/ic_available_tasks"
+            android:title="@string/title_activity_available_tasks_view" />
         <item
             android:id="@+id/nav_bidded_tasks"
             android:icon="@drawable/ic_bidded_tasks"
-            android:title="Bidded and Assigned Tasks" />
+            android:title="@string/title_activity_assigned_and_bidded_tasks_view" />
         <item
             android:id="@+id/nav_qrcode"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/qrcode_scan" />
         <item
             android:id="@+id/nav_logout"
-            android:title="Logout" />
+            android:title="@string/logout" />
 
     </group>
 

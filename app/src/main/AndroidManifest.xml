@@ -51,7 +51,7 @@
             <!-- Just added this -->
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".activity.AllTasksViewActivity" />
+                android:value=".activity.AvailableTasksViewActivity" />
         </activity>
         <activity
             android:name=".activity.AssignedAndBiddedTasksViewActivity"
@@ -61,12 +61,12 @@
             <!-- Just added this -->
             <meta-data
                 android:name="android.app.default_searchable"
-                android:value=".activity.AllTasksViewActivity" />
+                android:value=".activity.AvailableTasksViewActivity" />
         </activity>
         <activity
-            android:name=".activity.AllTasksViewActivity"
+            android:name=".activity.AvailableTasksViewActivity"
             android:exported="true"
-            android:label="@string/title_activity_all_tasks_view"
+            android:label="@string/title_activity_available_tasks_view"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -113,7 +113,7 @@
             android:name=".activity.DisplayQRCodeActivity"
             android:label="@string/title_activity_display_qrcode"/>
         <activity android:name=".activity.MapActivity"
-            android:label="@string/title_activity_map"></activity>
+            android:label="@string/title_activity_map"/>
     </application>
 
 </manifest>

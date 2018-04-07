@@ -6,13 +6,9 @@
 
 package com.lateral.lateral.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
@@ -29,14 +25,10 @@ import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
-import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 //import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
-import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
-import static com.lateral.lateral.model.TaskStatus.Done;
 
 
 /*
@@ -54,22 +46,24 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 /**
  * Activity for viewing all available tasks
  */
+
 // TODO fix white bar at the top of this activity --> appeared on my original pull
 // TODO clicking seems to work but test more --> pass intents
 // TODO: Get the notification "x new bids!" working (or remove it)
 // TODO: Disable app rotation
+// TODO: BUG: Filter isn't working anymore
 // TODO: Show some info in the filter stating what the status colors mean!
-// TODO: BUG: Load all record, not just top 10
-// TODO: BUG: All Tasks still shows Assigned and Done tasks
-// TODO: Change this screen to Available Tasks, not All Tasks. Providers aren't supposed to see Assigned/Done tasks
+// TODO: BUG: Load all records, not just top 10
+// TODO: BUG: Available Tasks still shows Assigned and Done tasks (they shouldn't be displayed here)
+// TODO: --> Change getEveryTask/getAllTask to getEveryAvailableTask/getAllAvailableTask
 // TODO: BUG: Filter on all screens missing "Tasks without bids (only requested)" option
 // TODO: BUG: Still able to bid on assigned and done tasks
-public class AllTasksViewActivity extends TaskRecyclerViewActivity {
+// TODO: BUG: getAllTasks() uses different number than getEveryTask()
+public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();
     private PullRefreshLayout layout;
-    private SwipeRefreshLayout mySwipeRefreshLayout;
-    // 0 - all tasks
+    // 0 - available tasks
     // 1 - bidded tasks
     private int currentFilter = 0;
 
@@ -91,7 +85,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
      */
     @Override
     protected int getResourceLayoutID(){
-        return R.layout.activity_all_tasks_view;
+        return R.layout.activity_available_tasks_view;
     }
 
     /**
@@ -104,7 +98,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     }
 
     @Override
-    protected int getProgressBarID() { return R.id.all_task_view_progress; }
+    protected int getProgressBarID() { return R.id.available_task_view_progress; }
 
     /**
      * Gets the context of the current activity
@@ -112,7 +106,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
      */
     @Override
     protected Context currentActivityContext(){
-        return AllTasksViewActivity.this;
+        return AvailableTasksViewActivity.this;
     }
 
     /**
@@ -149,12 +143,12 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         // check how we got here
         handleIntent(getIntent());
 
-        filterSpinner = findViewById(R.id.allTasksSpinner);
+        filterSpinner = findViewById(R.id.availableFilterTasksSpinner);
 
-        final ArrayList<String> filters = new ArrayList<String>();
+        final ArrayList<String> filters = new ArrayList<>();
         filters.add("All Tasks");
         filters.add("Tasks with Bids");
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filters);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filters);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         filterSpinner.setAdapter(spinnerAdapter);
 
@@ -179,7 +173,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 
 
         // listen refresh event
-        layout = (PullRefreshLayout) findViewById(R.id.allTasksSwipeRefreshLayout);
+        layout = findViewById(R.id.availableTasksSwipeRefreshLayout);
         layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -189,25 +183,6 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
                 layout.setRefreshing(false);
             }
         });
-
-//        mySwipeRefreshLayout = findViewById(R.id.swiperefresh);
-//        mySwipeRefreshLayout.setOnRefreshListener(
-//                new SwipeRefreshLayout.OnRefreshListener() {
-//                    @Override
-//                    public void onRefresh() {
-//                        //Log.i(LOG_TAG, "onRefresh called from SwipeRefreshLayout");
-//
-//                        // This method performs the actual data-refresh operation.
-//                        // The method calls setRefreshing(false) when it's finished.
-//                        //myUpdateOperation();
-//                        addTasks(defaultTaskService.getEveryTask());
-//                        //Log.d("ALL TASKS", "All tasks stop refreshing");
-//                        mySwipeRefreshLayout.setRefreshing(false);
-//                    }
-//                }
-//        );
-
-
     }
 
     /**
@@ -218,7 +193,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
+        getMenuInflater().inflate(R.menu.available_task_view_menu, menu);
 
         // Get the SearchView and set the searchable configuration
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -238,12 +213,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d("OnQueryListener", "TEXT CHANGED|" + newText + "|");
-//                if (newText.equals("")) {
-//                    Log.d("null text", "this is null text");
-//                    newText = null;
-//                }
-//                refreshLocalArrays(newText);
-//                displayResultsFromFilter();
+
                 searchNeeded(newText);
 
 
@@ -303,7 +273,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         String query = null;
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            //Log.d("ALL TASKS", "Got here via search button");
+            //Log.d("Available Tasks", "Got here via search button");
             clearList();
             query = intent.getStringExtra(SearchManager.QUERY);
             // TODO handle exception (no internet access crashes app)
@@ -368,7 +338,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
      * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      * --> Assumes globals are correctly set prior to call
-     * @param query if null, indicates user got to AllTasksViewActivity from button, therefore load all tasks,
+     * @param query if null, indicates user got to AvailableTasksViewActivity from button, therefore load all tasks,
      *              if not null, indicates user got to activity from a searchbar, therefore load tasks from query
      */
     public void refreshLocalArrays(String query) {
