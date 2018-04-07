@@ -61,6 +61,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: Show some info in the filter stating what the status colors mean!
 // TODO: BUG: Load all record, not just top 10
 // TODO: BUG: All Tasks still shows Assigned and Done tasks
+// TODO: Change this screen to Available Tasks, not All Tasks. Providers aren't supposed to see Assigned/Done tasks
 // TODO: BUG: Filter on all screens missing "Tasks without bids (only requested)" option
 // TODO: BUG: Still able to bid on assigned and done tasks
 public class AllTasksViewActivity extends TaskRecyclerViewActivity {
