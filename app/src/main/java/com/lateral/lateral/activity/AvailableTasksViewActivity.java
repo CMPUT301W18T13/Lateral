@@ -46,7 +46,6 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 /**
  * Activity for viewing all available tasks
  */
-
 // TODO fix white bar at the top of this activity --> appeared on my original pull
 // TODO clicking seems to work but test more --> pass intents
 // TODO: Get the notification "x new bids!" working (or remove it)
@@ -54,9 +53,11 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: BUG: Filter isn't working anymore
 // TODO: Show some info in the filter stating what the status colors mean!
 // TODO: BUG: Load all records, not just top 10
+// TODO: Probably remove incremental searching
 // TODO: BUG: Available Tasks still shows Assigned and Done tasks (they shouldn't be displayed here)
-// TODO: --> Change getEveryTask/getAllTask to getEveryAvailableTask/getAllAvailableTask
-// TODO: BUG: Filter on all screens missing "Tasks without bids (only requested)" option
+// TODO: --> Change getEveryTask/getAllTask to getEveryAvailableTask/getAllAvailableTask and add "Requested or Bidded" to the query
+// TODO: --> Change getAllTasksByDistance to getAvailableTasksByDistance and add "Requested or Bidded" to the query
+// TODO: BUG: All filters are missing "Tasks without bids (only requested)" option
 // TODO: BUG: Still able to bid on assigned and done tasks
 // TODO: BUG: getAllTasks() uses different number than getEveryTask()
 public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
