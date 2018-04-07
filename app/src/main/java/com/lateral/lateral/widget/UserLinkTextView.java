@@ -11,6 +11,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -55,7 +56,7 @@ public class UserLinkTextView extends AppCompatTextView {
 
     // Set extra properties for this custom view
     private void setProperties() {
-        setLinkTextColor(ContextCompat.getColor(getContext(), R.color.highlight));
+//        setLinkTextColor(ContextCompat.getColor(getContext(), R.color.highlight));
         setHighlightColor(Color.TRANSPARENT); // prevent TextView change background when highlight
 
         // Source: https://stackoverflow.com/questions/16792963
@@ -171,6 +172,8 @@ public class UserLinkTextView extends AppCompatTextView {
         public void updateDrawState(TextPaint ds) {
             super.updateDrawState(ds);
             ds.setUnderlineText(false);
+            ds.setTypeface(Typeface.DEFAULT_BOLD);
+            ds.setColor(ContextCompat.getColor(getContext(), R.color.highlight));
         }
     }
 

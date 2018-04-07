@@ -74,6 +74,10 @@ public class MainActivity extends AppCompatActivity
         Button ViewAssignedTasksButton = findViewById(R.id.ViewAssignedTasksButton);
         ViewAssignedTasksButton.setOnClickListener(this);
 
+
+        DefaultUserService defaultUserService = new DefaultUserService();
+        User user = defaultUserService.getById(LOGGED_IN_USER);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -81,9 +85,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
@@ -160,7 +161,6 @@ public class MainActivity extends AppCompatActivity
      * @param item Navigation Drawer Item
      * @return True
      */
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.

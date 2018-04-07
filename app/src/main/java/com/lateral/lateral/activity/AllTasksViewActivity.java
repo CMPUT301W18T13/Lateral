@@ -14,26 +14,38 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
+import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
+import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 //import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.Constants.USER_FILE_NAME;
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
 import static com.lateral.lateral.model.TaskStatus.Done;
@@ -59,7 +71,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: Get the notification "x new bids!" working (or remove it)
 // TODO: Disable app rotation
 // TODO: Show some info stating what the status colors mean!
-public class AllTasksViewActivity extends TaskRecyclerViewActivity {
+public class AllTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();
     private PullRefreshLayout layout;
@@ -120,7 +132,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         Class targetClass;
 
 
-        if (clickedTask.getRequestingUserId().equals(MainActivity.LOGGED_IN_USER)) {
+        if (clickedTask.getRequestingUserId().equals(LOGGED_IN_USER)) {
 
             // user clicked on own task
             targetClass = MyTaskViewActivity.class;
@@ -140,6 +152,8 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);;
 
         // check how we got here
         handleIntent(getIntent());
@@ -202,6 +216,37 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
 //                }
 //        );
 
+        DefaultUserService defaultUserService = new DefaultUserService();
+        User user = defaultUserService.getById(LOGGED_IN_USER);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+
+        View hView = navigationView.getHeaderView(0);
+        TextView usernameView = hView.findViewById(R.id.nav_header_username);
+        if(user != null) {
+            usernameView.setText(getString(R.string.username_display, user.getUsername()));
+        } else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
+
+        TextView emailView = hView.findViewById(R.id.nav_header_email);
+        if(user != null) {
+            emailView.setText(user.getEmailAddress());
+        }
+        else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
+
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -407,6 +452,68 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity {
         }
     }
 
+
+    /**
+     * Handles pressing of the back button
+     */
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    /**
+     * Handles clicking of Navigation Drawer Items
+     * @param item Navigation Drawer Item
+     * @return True
+     */
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        Log.i("AllTasksView", "Nav Item Selected 1!");
+
+        if (id == R.id.nav_edit_user) {
+            Log.i("AllTasksView", "Nav Item Selected!");
+            Intent intent = new Intent(AllTasksViewActivity.this, EditUserActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_req_tasks) {
+            Log.i("AllTasksView", "Nav Item Selected!");
+            Intent intent = new Intent(AllTasksViewActivity.this, RequestedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_all_tasks) {
+            Log.i("AllTasksView", "Nav Item Selected!");
+            Intent intent = new Intent(AllTasksViewActivity.this, AllTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_bidded_tasks) {
+            Log.i("AllTasksView", "Nav Item Selected!");
+            Intent intent = new Intent(AllTasksViewActivity.this, AssignedAndBiddedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_qrcode){
+            Log.i("AllTasksView", "Nav Item Selected!");
+            Intent intent = new Intent(AllTasksViewActivity.this, ScanQRCodeActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_logout) {
+            Log.i("AllTasksView", "Nav Item Selected!");
+            if(getApplicationContext().deleteFile(USER_FILE_NAME)){
+                LOGGED_IN_USER = null;
+                Log.i("AllTasksViewActivity", "File deleted");
+                Intent intent = new Intent(AllTasksViewActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 
 }
