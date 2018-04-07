@@ -39,7 +39,7 @@ import com.lateral.lateral.widget.PhotoImageView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-// TODO: (devon) BUG: Sometimes get after update fails to retrieve new changes
+// TODO: MAJOR BUG: Sometimes get after update fails to retrieve new changes
 
 // TODO: Need to overwrite your own bid
 /**

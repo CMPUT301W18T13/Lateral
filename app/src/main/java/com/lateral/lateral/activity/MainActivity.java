@@ -30,7 +30,6 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
 // TODO: Make the homepage look nicer (make a cool background maybe)
 // TODO: Add hamburger menu on (almost) all pages
 // TODO: Remove or fix the highlight of currently selected item in menu
-// TODO: Replace Android icon in hamburger menu with our app icon
 /**
  * The main activity for the app
  */

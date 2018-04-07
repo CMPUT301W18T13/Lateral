@@ -51,9 +51,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
-    private static final String PHOTO_INDEX = "com.lateral.lateral.PHOTO_INDEX";
-    public static final int PHOTO_REQUEST = 0;
-    public static final int PLACE_PICKER_REQUEST = 1;
+    public static final int PLACE_PICKER_REQUEST = 0;
+    // Note: This occupies 1000 - 1005 for each photo
+    public static final int PHOTO_REQUEST = 1000;
 
     private String taskID;
     private Task editTask;
@@ -92,12 +92,11 @@ public class AddEditTaskActivity extends AppCompatActivity {
         setInputFilters();
 
         service = new DefaultTaskService();
+
+        refresh();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    protected void refresh() {
         latLng = null;
         if (taskID == null) {
             // Add new task
@@ -129,8 +128,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private void refreshImages() {
         for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++) {
             PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
-            // TODO: Maybe set (+) instead of default image?
-            view.setImage(gallery.get(i));
+            Bitmap image = gallery.get(i);
+            if (image == null) view.setImageResource(R.drawable.ic_add_image);
+            else view.setImage(image);
         }
     }
 
@@ -307,26 +307,28 @@ public class AddEditTaskActivity extends AppCompatActivity {
         // Send intent to get image
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        photoPickerIntent.putExtra(PHOTO_INDEX, photoIndex);
-        startActivityForResult(photoPickerIntent, PHOTO_REQUEST);
+        startActivityForResult(photoPickerIntent, PHOTO_REQUEST + photoIndex);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             Place selectedPlace = PlacePicker.getPlace(this, data);
             latLng = selectedPlace.getLatLng();
             addGeoLocationButton.setText(selectedPlace.getName());
             addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
-        } else if (requestCode == PHOTO_REQUEST && resultCode == RESULT_OK) {
+        } else if (requestCode >= PHOTO_REQUEST && resultCode == RESULT_OK) {
             // Adding new image
 
             // Source: https://stackoverflow.com/questions/38352148
             Uri selectedImage = data.getData();
             try {
                 Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                int photoIndex = data.getIntExtra(PHOTO_INDEX, -1);
-                gallery.insert(image, photoIndex);
+                if (image == null) throw new IOException("Image failed to load");
+                // Shrink the bitmap so it fits in the database nicely
+                image = PhotoGallery.shrinkBitmap(image);
+                gallery.insert(image, requestCode - PHOTO_REQUEST);
                 refreshImages();
             } catch (IOException e) {
                 Log.i("AddEditTaskActivity", "Failed to load image");

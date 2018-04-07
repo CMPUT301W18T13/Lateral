@@ -26,7 +26,6 @@ public class Task extends BaseEntity {
     private String description;
     private String requestingUserId;
     private String assignedBidId;
-    private String geo_location; // TODO: string so that we can easily serialize a tasks latitude and longitude for geosearch
     private int bidsNotViewed;
     private int bidsPendingNotification;
     private String requestingUserUsername;
@@ -265,7 +264,6 @@ public class Task extends BaseEntity {
     public void setLocation(double latitude, double longitude){
         this.latitude = latitude;
         this.longitude = longitude;
-        this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
     }
 
     public double getLat(){

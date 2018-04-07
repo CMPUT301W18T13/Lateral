@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class PhotoGenerator {
 
-    private static final int size = 8;
+    private static final int size = 2;
 
     private static final ArrayList<Integer> colorPalette = new ArrayList<Integer>() {{
         // From Material Design level 300 colors
