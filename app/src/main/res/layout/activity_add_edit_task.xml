@@ -53,6 +53,7 @@
 
             <Button
                 android:id="@+id/add_geolocatio_button"
+                style="@style/ButtonColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
@@ -63,8 +64,6 @@
                 android:onClick="onAddGeolocation"
                 android:paddingLeft="16dp"
                 android:text="@string/add_geolocation"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,6 +136,7 @@
 
     <Button
         android:id="@+id/add_edit_task_confirm_button"
+        style="@style/ButtonColor"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

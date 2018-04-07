@@ -13,6 +13,7 @@ import android.content.ContextWrapper;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -54,10 +55,14 @@ public class UserLinkTextView extends AppCompatTextView {
 
     // Set extra properties for this custom view
     private void setProperties() {
-        setLinkTextColor(getResources().getColor(R.color.blue));
+        setLinkTextColor(ContextCompat.getColor(getContext(), R.color.highlight));
         setHighlightColor(Color.TRANSPARENT); // prevent TextView change background when highlight
-        setMovementMethod(LinkMovementMethod.getInstance());
-        setClickable(true);
+
+        // Source: https://stackoverflow.com/questions/16792963
+        // This allows clicks to be passed to parent layout if not on ClickableSpan
+        setMovementMethod(ClickableMovementMethod.getInstance());
+        setClickable(false);
+        setLongClickable(false);
     }
 
     @Override
@@ -168,4 +173,6 @@ public class UserLinkTextView extends AppCompatTextView {
             ds.setUnderlineText(false);
         }
     }
+
+
 }

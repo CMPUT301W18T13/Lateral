@@ -23,6 +23,7 @@
 
     <Button
         android:id="@+id/confirmButton"
+        style="@style/ButtonColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

@@ -14,7 +14,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_lateral_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -92,7 +92,8 @@
         <activity android:name=".activity.EditUserActivity" />
         <activity android:name=".activity.ScanQRCodeActivity"
             android:label="@string/title_activity_scan_qrcode"/>
-        <activity android:name=".barcodereader.BarcodeCaptureActivity" />
+        <activity android:name=".barcodereader.BarcodeCaptureActivity"
+            android:label="@string/qrcode_scan"/>
 
         <service
             android:name=".service.notification.NewBidNotificationService"

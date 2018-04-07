@@ -30,13 +30,14 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
 // TODO: Make the homepage look nicer (make a cool background maybe)
 // TODO: Add hamburger menu on (almost) all pages
 // TODO: Remove or fix the highlight of currently selected item in menu
+// TODO: Replace Android icon in hamburger menu with our app icon
 /**
  * The main activity for the app
  */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
-
+    // TODO: Don't store string, use User object instead so we can get username and other info too!
     public static String LOGGED_IN_USER = null;
 
     /**
@@ -47,7 +48,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Receive intent

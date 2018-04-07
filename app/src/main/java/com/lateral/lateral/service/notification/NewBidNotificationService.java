@@ -19,6 +19,7 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.lateral.lateral.R;
 import com.lateral.lateral.activity.MainActivity;
 import com.lateral.lateral.activity.MyTaskViewActivity;
 import com.lateral.lateral.model.Bid;
@@ -147,7 +148,7 @@ public class NewBidNotificationService extends JobService{
                 + task.getTitle() ;
 
         builder.setContentTitle(title)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setSmallIcon(R.drawable.ic_lateral_notification)
                 .setContentText(details)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)

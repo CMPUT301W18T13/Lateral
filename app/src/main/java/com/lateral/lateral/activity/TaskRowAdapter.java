@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.PhotoGallery;
@@ -33,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 // TODO: BUG: Title overflows on task card if too long
+
 /**
  * Adapter for the TaskRow RecyclerView
  */
@@ -48,7 +51,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
      * Complex data items may need more than one view per item, and
      * you provide access to all the views for a data item in a view holder
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         PhotoImageView imageView;
         TextView tvTitle;
@@ -60,6 +63,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
         /**
          * Constructor for the ViewHolder
+         *
          * @param itemView View for the Item
          */
         public ViewHolder(View itemView) {
@@ -78,6 +82,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
     /**
      * Constructor for the TaskRowAdapter
+     *
      * @param mTasks List of tasks to set
      */
     public TaskRowAdapter(ArrayList<Task> mTasks, Context context) {
@@ -89,7 +94,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
     /**
      * Create new views (invoked by the layout manager)
-     * @param parent Parent view
+     *
+     * @param parent   Parent view
      * @param viewType Type of view
      * @return The created ViewHolder
      */
@@ -102,7 +108,8 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
     /**
      * Replace the contents of a view (invoked by the layout manager)
-     * @param holder The ViewHolder for the Item
+     *
+     * @param holder   The ViewHolder for the Item
      * @param position The position of the Item in the List
      */
     @Override
@@ -119,7 +126,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         String bidText = "No Bids";
         if (bid != null) {
             //bidText = String.valueOf(bid.getAmount());
-            bidText =  String.valueOf(bid);
+            bidText = String.valueOf(bid);
         }
         holder.tvCurBid.setText(bidText);
         //holder.tvDate.setText((task.getDate()).toString() );
@@ -136,13 +143,16 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // display number of new bids
        //
         //holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
+        //
+        // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
 
         PhotoGallery gallery = task.getPhotoGallery();
-        holder.imageView.setImage(gallery.get(0));
+        //holder.imageView.setImage(gallery.get(0));
     }
 
     /**
      * Return the size of the dataset
+     *
      * @return List of tasks
      */
     @Override
@@ -152,26 +162,17 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
 
 
     private int getColorValueFromTaskStatus(TaskStatus status) {
-
-        int statusColor = Color.BLACK;      // default in case no status match
-
         switch (status) {
             case Requested:
-                statusColor = Color.parseColor("#9e9e9e");
-                break;
-
+                return ContextCompat.getColor(context, R.color.statusRequested);
             case Bidded:
-                statusColor = Color.YELLOW;
-                break;
-
-            case Done:
-                statusColor = Color.RED;
-                break;
-
+                return ContextCompat.getColor(context, R.color.statusBidded);
             case Assigned:
-                statusColor = Color.BLUE;
-                break;
+                return ContextCompat.getColor(context, R.color.statusAssigned);
+            case Done:
+                return ContextCompat.getColor(context, R.color.statusDone);
+            default:
+                return Color.BLACK;
         }
-        return statusColor;
     }
 }
