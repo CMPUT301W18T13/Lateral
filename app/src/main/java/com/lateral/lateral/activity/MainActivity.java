@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity
         //Start sending notifications
         NotificationServiceScheduler.scheduleNewBid(getApplicationContext());
 
+        DefaultUserService defaultUserService = new DefaultUserService();
+        User user = defaultUserService.getById(LOGGED_IN_USER);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -70,9 +73,6 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
@@ -151,15 +151,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Called when the activity is started
-     */
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    /**
      * Handles clicking of Navigation Drawer Items
      * @param item Navigation Drawer Item
      * @return True
@@ -168,28 +159,33 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        // TODO: Add map activity link in menu
-        // TODO: Add search button link in menu
         if (id == R.id.nav_edit_user) {
-            Intent intent = new Intent(MainActivity.this, EditUserActivity.class);
+            Intent intent = new Intent(this, EditUserActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_req_tasks) {
-            Intent intent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
+            Intent intent = new Intent(this, RequestedTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_available_tasks) {
-            Intent intent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
+            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bidded_tasks) {
-            Intent intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
+            Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_qrcode){
-            Intent intent = new Intent(MainActivity.this, ScanQRCodeActivity.class);
+        } else if (id == R.id.nav_qrcode) {
+            Intent intent = new Intent(this, ScanQRCodeActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_search_tasks) {
+            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
+            intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
+            startActivity(intent);
+        } else if (id == R.id.nav_task_map){
+            Intent intent = new Intent(this, TaskMapActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
                 LOGGED_IN_USER = null;
                 Log.i("MainActivity", "File deleted");
-                Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }

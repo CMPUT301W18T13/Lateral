@@ -21,6 +21,14 @@
             android:icon="@drawable/ic_bidded_tasks"
             android:title="@string/title_activity_assigned_and_bidded_tasks_view" />
         <item
+            android:id="@+id/nav_search_tasks"
+            android:icon="@drawable/ic_search_black"
+            android:title="@string/search_title" />
+        <item
+            android:id="@+id/nav_task_map"
+            android:icon="@drawable/ic_task_map"
+            android:title="@string/title_activity_task_map" />
+        <item
             android:id="@+id/nav_qrcode"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/qrcode_scan" />

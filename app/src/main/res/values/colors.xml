@@ -9,10 +9,11 @@
     <color name="yellow">#FFCC00</color>
     <color name="soft_white">#FFECEFF1</color>
 
-    <color name="dialog_photo_viewer_background">#E0000000</color>
-    <color name="highlight">#FF56A5EC</color>
-    <color name="statusRequested">#FF2196F3</color>
-    <color name="statusBidded">#FF3F51B5</color>
-    <color name="statusAssigned">#FF4CAF50</color>
-    <color name="statusDone">#FFF44336</color>
+    <color name="dialog_photo_viewer_background">#000000</color>
+    <!--<color name="highlight">#00008b</color>-->
+    <color name="highlight">#000033</color>
+    <color name="statusRequested">#2196F3</color>
+    <color name="statusBidded">#3F51B5</color>
+    <color name="statusAssigned">#4CAF50</color>
+    <color name="statusDone">#F44336</color>
 </resources>

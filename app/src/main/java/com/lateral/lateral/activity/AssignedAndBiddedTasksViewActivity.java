@@ -9,24 +9,35 @@ package com.lateral.lateral.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
+import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
+import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
 //import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
 import static com.lateral.lateral.model.TaskStatus.Done;
@@ -37,10 +48,7 @@ import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 /**
  * Activity for viewing any assigned/bidden on tasks
  */
-public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity {
-    private RecyclerView.Adapter mAdapter;
-    private ArrayList<Task> matchingTasks;
-    //private String thisUserID = "npwhite";          // for testing
+public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private String thisUserID = LOGGED_IN_USER;
     private PullRefreshLayout layout;
@@ -106,6 +114,9 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         Log.d("LOGGED IN USER", thisUserID);
         //returnMatchingTasks(thisUserID);
 
@@ -154,6 +165,38 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
             }
         });
+
+        DefaultUserService defaultUserService = new DefaultUserService();
+        User user = defaultUserService.getById(LOGGED_IN_USER);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+
+        View hView = navigationView.getHeaderView(0);
+        TextView usernameView = hView.findViewById(R.id.nav_header_username);
+        if(user != null) {
+            usernameView.setText(getString(R.string.username_display, user.getUsername()));
+        } else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
+
+        TextView emailView = hView.findViewById(R.id.nav_header_email);
+        if(user != null) {
+            emailView.setText(user.getEmailAddress());
+        }
+        else{
+            usernameView.setText("ERROR!");
+            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
+        }
+
+        navigationView.setNavigationItemSelectedListener(this);
 
     }
 
@@ -276,6 +319,67 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         }
     }
 
+
+    /**
+     * Handles pressing of the back button
+     */
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+
+    /**
+     * Handles clicking of Navigation Drawer Items
+     * @param item Navigation Drawer Item
+     * @return True
+     */
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_edit_user) {
+            Intent intent = new Intent(this, EditUserActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_req_tasks) {
+            Intent intent = new Intent(this, RequestedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_available_tasks) {
+            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_bidded_tasks) {
+            Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_qrcode){
+            Intent intent = new Intent(this, ScanQRCodeActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_search_tasks) {
+            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
+            intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
+            startActivity(intent);
+        } else if (id == R.id.nav_task_map){
+            Intent intent = new Intent(this, TaskMapActivity.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_logout) {
+            if(getApplicationContext().deleteFile(USER_FILE_NAME)){
+                MainActivity.LOGGED_IN_USER = null;
+                Log.i("AssignedAndBiddedTasks", "File deleted");
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 }
 
