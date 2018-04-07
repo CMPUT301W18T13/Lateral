@@ -371,8 +371,8 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         } else if (id == R.id.nav_req_tasks) {
             Intent intent = new Intent(RequestedTasksViewActivity.this, RequestedTasksViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_all_tasks) {
-            Intent intent = new Intent(RequestedTasksViewActivity.this, AllTasksViewActivity.class);
+        } else if (id == R.id.nav_available_tasks) {
+            Intent intent = new Intent(RequestedTasksViewActivity.this, AvailableTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bidded_tasks) {
             Intent intent = new Intent(RequestedTasksViewActivity.this, AssignedAndBiddedTasksViewActivity.class);
@@ -390,7 +390,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             }
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

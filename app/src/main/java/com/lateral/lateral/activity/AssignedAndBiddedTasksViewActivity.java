@@ -353,8 +353,8 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         } else if (id == R.id.nav_req_tasks) {
             Intent intent = new Intent(AssignedAndBiddedTasksViewActivity.this, RequestedTasksViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_all_tasks) {
-            Intent intent = new Intent(AssignedAndBiddedTasksViewActivity.this, AllTasksViewActivity.class);
+        } else if (id == R.id.nav_available_tasks) {
+            Intent intent = new Intent(AssignedAndBiddedTasksViewActivity.this, AvailableTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bidded_tasks) {
             Intent intent = new Intent(AssignedAndBiddedTasksViewActivity.this, AssignedAndBiddedTasksViewActivity.class);

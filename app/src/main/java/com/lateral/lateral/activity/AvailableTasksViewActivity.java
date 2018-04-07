@@ -76,7 +76,6 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: Get the notification "x new bids!" working (or remove it)
 // TODO: Disable app rotation
 // TODO: Show some info stating what the status colors mean!
-public class AllTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 // TODO: BUG: Filter isn't working anymore
 // TODO: No need to store extra lists for each filter, just filter the list (which is cheap) when changing the filter
 // TODO: Show some info in the filter stating what the status colors mean!
@@ -88,7 +87,7 @@ public class AllTasksViewActivity extends TaskRecyclerViewActivity implements Na
 // TODO: BUG: All filters are missing "Tasks without bids (only requested)" option
 // TODO: BUG: Still able to bid on assigned and done tasks
 // TODO: BUG: getAllTasks() uses different number than getEveryTask()
-public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
+public class AvailableTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     DefaultTaskService defaultTaskService = new DefaultTaskService();
     private PullRefreshLayout layout;
@@ -168,6 +167,8 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         // check how we got here
         handleIntent(getIntent());
@@ -449,7 +450,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
      */
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -472,30 +473,30 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity {
 
         if (id == R.id.nav_edit_user) {
             Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(AllTasksViewActivity.this, EditUserActivity.class);
+            Intent intent = new Intent(AvailableTasksViewActivity.this, EditUserActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_req_tasks) {
             Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(AllTasksViewActivity.this, RequestedTasksViewActivity.class);
+            Intent intent = new Intent(AvailableTasksViewActivity.this, RequestedTasksViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_all_tasks) {
+        } else if (id == R.id.nav_available_tasks) {
             Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(AllTasksViewActivity.this, AllTasksViewActivity.class);
+            Intent intent = new Intent(AvailableTasksViewActivity.this, AvailableTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bidded_tasks) {
             Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(AllTasksViewActivity.this, AssignedAndBiddedTasksViewActivity.class);
+            Intent intent = new Intent(AvailableTasksViewActivity.this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_qrcode){
             Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(AllTasksViewActivity.this, ScanQRCodeActivity.class);
+            Intent intent = new Intent(AvailableTasksViewActivity.this, ScanQRCodeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             Log.i("AllTasksView", "Nav Item Selected!");
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
                 LOGGED_IN_USER = null;
                 Log.i("AllTasksViewActivity", "File deleted");
-                Intent intent = new Intent(AllTasksViewActivity.this, LoginActivity.class);
+                Intent intent = new Intent(AvailableTasksViewActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
