@@ -172,14 +172,14 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         });
 
-        filterSpinner = findViewById(R.id.filterTasksSpinner);
+        filterSpinner = findViewById(R.id.requestedFilterTasksSpinner);
 
-        final ArrayList<String> filters = new ArrayList<String>();
+        final ArrayList<String> filters = new ArrayList<>();
         filters.add("All Tasks");
         filters.add("Tasks with Bids");
         filters.add("Assigned Tasks");
         filters.add("Completed Tasks");
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filters);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filters);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         filterSpinner.setAdapter(spinnerAdapter);
 

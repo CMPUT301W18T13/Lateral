@@ -6,7 +6,11 @@
 
 package com.lateral.lateral.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,21 +22,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.ImageSelectionDialog;
+import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.PhotoGenerator;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
+import com.lateral.lateral.widget.PhotoImageView;
+
+import java.io.IOException;
 
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
@@ -43,12 +51,15 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     // Pass null (or nothing) to add a new task, otherwise edit the given task
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
-    public static final int PLACE_PICKER_REQUEST = 1;
+    public static final int PLACE_PICKER_REQUEST = 0;
+    // Note: This occupies 1000 - 1005 for each photo
+    public static final int PHOTO_REQUEST = 1000;
 
     private String taskID;
     private Task editTask;
     private TaskService service;
     private LatLng latLng;
+    private String address;
     private PhotoGallery gallery;
 
     // UI elements
@@ -56,6 +67,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private EditText description;
     private Button confirmButton;
     private Button addGeoLocationButton;
+    private LinearLayout imageLayout;
 
     /**
      * Called when the activity is created
@@ -77,15 +89,15 @@ public class AddEditTaskActivity extends AppCompatActivity {
         description = findViewById(R.id.add_edit_task_description);
         confirmButton = findViewById(R.id.add_edit_task_confirm_button);
         addGeoLocationButton = findViewById(R.id.add_geolocatio_button);
+        imageLayout = findViewById(R.id.add_edit_task_imageLayout);
         setInputFilters();
 
         service = new DefaultTaskService();
+
+        refresh();
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    protected void refresh() {
         latLng = null;
         if (taskID == null) {
             // Add new task
@@ -93,7 +105,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             setTitle(R.string.add_task_title);
             editTask = null;
             gallery = new PhotoGallery();
-            // TODO: Generate photo
+            // Generate default photo
             gallery.insert(new PhotoGenerator().generate(), 0);
         } else {
             // Edit existing task
@@ -101,7 +113,6 @@ public class AddEditTaskActivity extends AppCompatActivity {
             setTitle(R.string.edit_task_title);
             try {
                 editTask = service.getById(taskID);
-                gallery = editTask.getPhotoGallery();
             } catch (Exception e) {
                 Toast errorToast = Toast.makeText(this, "Task failed to load", Toast.LENGTH_SHORT);
                 errorToast.show();
@@ -110,6 +121,20 @@ public class AddEditTaskActivity extends AppCompatActivity {
             }
             title.setText(editTask.getTitle());
             description.setText(editTask.getDescription());
+            gallery = editTask.getPhotoGallery();
+            if(editTask.checkGeo()){
+                addGeoLocationButton.setText(editTask.getAddress());
+            }
+        }
+        refreshImages();
+    }
+
+    private void refreshImages() {
+        for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++) {
+            PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
+            Bitmap image = gallery.get(i);
+            if (image == null) view.setImageResource(R.drawable.ic_add_image);
+            else view.setImage(image);
         }
     }
 
@@ -167,6 +192,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
     /**
      * Called when the Add/Edit Confirm button is clicked
+     *
      * @param v The current view
      */
     public void onAddEditConfirmClick(View v) {
@@ -179,6 +205,8 @@ public class AddEditTaskActivity extends AppCompatActivity {
     }
 
     public void onAddGeolocation(View v) {
+        // TODO: BUG: Need to be able to edit this field
+        // TODO: BUG: Button states shows up incorrectly when editing
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
@@ -186,20 +214,6 @@ public class AddEditTaskActivity extends AppCompatActivity {
             String error = "Error occurred loading PlacePicker";
             Log.i("AddEditTaskActivity", error);
             Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Place selectedPlace = PlacePicker.getPlace(this, data);
-                // TODO: Redo, Remove local variable, just set on task
-                latLng = selectedPlace.getLatLng();
-                addGeoLocationButton.setText(selectedPlace.getName());
-                addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
-
-            }
         }
     }
 
@@ -215,10 +229,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
             String username = defaultUserService.getUserByID(LOGGED_IN_USER).getUsername();
             newTask.setRequestingUserUsername(username);
 
-            // TODO: Redo, don't create here
             // TODO: Testing
             if (latLng != null) {
-                newTask.setLocation(latLng.latitude, latLng.longitude);
+                newTask.setLocation(latLng.latitude, latLng.longitude, address);
             }
 
             newTask.setPhotoGallery(this.gallery);
@@ -238,9 +251,10 @@ public class AddEditTaskActivity extends AppCompatActivity {
     private void updateTask(String title, String desc) {
 
         try {
-            // TODO: Bug: Location isn't updated
+            // TODO: BUG: Location isn't updated
             editTask.setTitle(title);
             editTask.setDescription(desc);
+            editTask.setLocation(latLng.latitude, latLng.longitude, address);
             service.update(editTask);
             Toast postTask = Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT);
             postTask.show();
@@ -250,6 +264,82 @@ public class AddEditTaskActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast errorToast = Toast.makeText(this, "Task failed to update", Toast.LENGTH_SHORT);
             errorToast.show();
+        }
+    }
+
+    /**
+     * Called when photo is clicked
+     *
+     * @param v view
+     */
+    public void onPhotoImageViewClick(View v) {
+
+        PhotoImageView view = (PhotoImageView) v;
+        Bitmap image = view.getImage();
+        String tag = view.getTag().toString();
+        // Gets the image number 0 through 4 that matches PhotoGallery index
+        int photoIndex = Integer.parseInt(tag.replaceAll("\\D", ""));
+
+        if (image != null) {
+            ImageSelectionDialog dialog = new ImageSelectionDialog(this, photoIndex, image);
+            dialog.setOnOptionSelectedListener(new ImageSelectionDialog.SelectionListener() {
+                @Override
+                public void onOptionSelected(DialogInterface dialog, int selection, int photoIndex, Bitmap image) {
+                    dialog.dismiss();
+                    if (selection == ImageSelectionDialog.MODE_IMAGE) {
+                        PhotoViewerDialog viewDialog = PhotoViewerDialog.newInstance(image);
+                        viewDialog.show(getFragmentManager(), "photo_dialog");
+                    } else if (selection == ImageSelectionDialog.MODE_REPLACE) {
+                        addNewImage(photoIndex);
+                    } else if (selection == ImageSelectionDialog.MODE_DELETE) {
+                        // Insert null to delete
+                        AddEditTaskActivity.this.gallery.insert(null, photoIndex);
+                        refreshImages();
+                    }
+                }
+            });
+            dialog.show();
+
+        } else {
+            addNewImage(photoIndex);
+        }
+    }
+
+    private void addNewImage(int photoIndex) {
+        if (photoIndex < 0 || photoIndex >= PhotoGallery.MAX_PHOTOS)
+            throw new IllegalArgumentException("Index out of range");
+
+        // Send intent to get image
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, PHOTO_REQUEST + photoIndex);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
+            Place selectedPlace = PlacePicker.getPlace(this, data);
+            latLng = selectedPlace.getLatLng();
+            address = selectedPlace.getName().toString();
+            addGeoLocationButton.setText(address);
+            addGeoLocationButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_place_white_24dp, 0, 0, 0);
+        } else if (requestCode >= PHOTO_REQUEST && resultCode == RESULT_OK) {
+            // Adding new image
+
+            // Source: https://stackoverflow.com/questions/38352148
+            Uri selectedImage = data.getData();
+            try {
+                Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
+                if (image == null) throw new IOException("Image failed to load");
+                // Shrink the bitmap so it fits in the database nicely
+                image = PhotoGallery.shrinkBitmap(image);
+                gallery.insert(image, requestCode - PHOTO_REQUEST);
+                refreshImages();
+            } catch (IOException e) {
+                Log.i("AddEditTaskActivity", "Failed to load image");
+                Toast.makeText(this, "Image could not be loaded", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

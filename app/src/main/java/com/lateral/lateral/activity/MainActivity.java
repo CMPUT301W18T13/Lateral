@@ -30,7 +30,6 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
 // TODO: Make the homepage look nicer (make a cool background maybe)
 // TODO: Add hamburger menu on (almost) all pages
 // TODO: Remove or fix the highlight of currently selected item in menu
-// TODO: Replace Android icon in hamburger menu with our app icon
 /**
  * The main activity for the app
  */
@@ -122,7 +121,7 @@ public class MainActivity extends AppCompatActivity
                 break;
 
             case R.id.ViewAllTasksButton:
-                Intent viewAllTasksIntent = new Intent(MainActivity.this, AllTasksViewActivity.class);
+                Intent viewAllTasksIntent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
                 startActivity(viewAllTasksIntent);
                 break;
 
@@ -172,8 +171,8 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_req_tasks) {
             Intent intent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_all_tasks) {
-            Intent intent = new Intent(MainActivity.this, AllTasksViewActivity.class);
+        } else if (id == R.id.nav_available_tasks) {
+            Intent intent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_bidded_tasks) {
             Intent intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);

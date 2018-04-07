@@ -141,7 +141,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         });
 
 
-        filterSpinner = findViewById(R.id.filterTasksSpinner);
+        filterSpinner = findViewById(R.id.assignedFilterTasksSpinner);
 
         final ArrayList<String> filters = new ArrayList<String>();
         filters.add("All Tasks");
@@ -214,7 +214,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 //        //SearchView searchView;
 //
 //        // Inflate the options menu from XML
-//        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
+//        getMenuInflater().inflate(R.menu.available_task_view_menu, menu);
 //
 //        // Get the SearchView and set the searchable configuration
 //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);

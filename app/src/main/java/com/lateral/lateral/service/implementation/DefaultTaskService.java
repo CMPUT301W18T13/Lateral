@@ -124,9 +124,6 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
 
         for (Bid bid : userBids) {
-            /*
-            should be substituted with bid.getTaskBidOn() but doesnt appear to be implemented
-             */
             Task task = getTaskByTaskID(bid.getTaskId());           // Search query
             biddedTasks.add(task);
         }

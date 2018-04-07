@@ -14,9 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-// TODO: Change ic_menu_gallery so blank ImageViews look nice
-// TODO: Add (+) icon for adding new images
-
 import com.lateral.lateral.R;
 
 /**
@@ -77,7 +74,7 @@ public class PhotoImageView extends AppCompatImageView{
     private void setProperties(){
         setScaleType(ScaleType.FIT_CENTER);
         setAdjustViewBounds(true);
-        setBackgroundColor(Color.LTGRAY);
+        setBackgroundColor(Color.TRANSPARENT);
         setImageResource(R.drawable.ic_menu_gallery);
     }
 
@@ -94,6 +91,4 @@ public class PhotoImageView extends AppCompatImageView{
         //noinspection SuspiciousNameCombination
         setMeasuredDimension(width, width);
     }
-    // TODO: Button presses are slow for some reason
-    // TODO: Fast double click may open the dialog twice
 }
