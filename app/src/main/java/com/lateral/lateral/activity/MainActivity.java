@@ -34,7 +34,7 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
  * The main activity for the app
  */
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     // TODO: Don't store string, use User object instead so we can get username and other info too!
     public static String LOGGED_IN_USER = null;
@@ -62,16 +62,6 @@ public class MainActivity extends AppCompatActivity
 
         //Start sending notifications
         NotificationServiceScheduler.scheduleNewBid(getApplicationContext());
-
-        // Define buttons
-        Button ViewRequestedTasksButton = findViewById(R.id.ViewRequestedTasksButton);
-        ViewRequestedTasksButton.setOnClickListener(this);
-
-        Button ViewAllTasksButton = findViewById(R.id.ViewAllTasksButton);
-        ViewAllTasksButton.setOnClickListener(this);
-
-        Button ViewAssignedTasksButton = findViewById(R.id.ViewAssignedTasksButton);
-        ViewAssignedTasksButton.setOnClickListener(this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -108,28 +98,40 @@ public class MainActivity extends AppCompatActivity
     // handles onClick events
 
     /**
-     * Handles onClick events
+     * Handles button onClick events
      * @param view The clicked view
      */
-    @Override
-    public void onClick(View view) {
+    public void onButtonClick(View view) {
+        Intent intent;
         switch (view.getId()) {
-            case R.id.ViewRequestedTasksButton:
-                Intent ViewRequestedTasksIntent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
-                startActivity(ViewRequestedTasksIntent);
+
+            case R.id.button_available:
+                intent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
+                startActivity(intent);
                 break;
 
-            case R.id.ViewAllTasksButton:
-                Intent viewAllTasksIntent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
-                startActivity(viewAllTasksIntent);
+            case R.id.button_requested:
+                intent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
+                startActivity(intent);
                 break;
 
-            case R.id.ViewAssignedTasksButton:
-                Intent AssignedAndBiddedTasksViewActivity = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
-                startActivity(AssignedAndBiddedTasksViewActivity);
+            case R.id.button_search:
+                // TODO: Implement
                 break;
+
+            case R.id.button_assigned:
+                intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
+                startActivity(intent);
+                break;
+
+            case R.id.button_map:
+                // TODO: Implement
+                break;
+
+            case R.id.button_QR:
+                intent = new Intent(MainActivity.this, ScanQRCodeActivity.class);
+                startActivity(intent);
         }
-
     }
 
     /**
@@ -164,7 +166,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
+        // TODO: Add map activity link in menu
+        // TODO: Add search button link in menu
         if (id == R.id.nav_edit_user) {
             Intent intent = new Intent(MainActivity.this, EditUserActivity.class);
             startActivity(intent);

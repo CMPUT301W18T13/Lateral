@@ -58,7 +58,7 @@
     <string name="edit_button_text">Edit Task</string>
 
     <!-- Strings related to searching -->
-    <string name="search_hint">Search available tasks</string>
+    <string name="search_hint">Search Available Tasks</string>
 
     <!-- Strings for Bid Dialog -->
     <string name="bid_dialog_title">Place Your Bid</string>

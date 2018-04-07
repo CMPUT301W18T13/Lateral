@@ -7,6 +7,7 @@
     <color name="red">#FF0000</color>
     <color name="blue">#56A5EC</color>
     <color name="yellow">#FFCC00</color>
+    <color name="soft_white">#FFECEFF1</color>
 
     <color name="dialog_photo_viewer_background">#E0000000</color>
     <color name="highlight">#FF56A5EC</color>
