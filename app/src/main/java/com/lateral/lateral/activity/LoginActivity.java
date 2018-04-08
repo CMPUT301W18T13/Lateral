@@ -52,6 +52,7 @@ public class LoginActivity extends AppCompatActivity{
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private View mLogoView;
 
     /**
      * Called when the activity is started
@@ -95,6 +96,7 @@ public class LoginActivity extends AppCompatActivity{
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+        mLogoView = findViewById(R.id.logo_view);
 
         String userId = loadUserFromToken(getApplicationContext());
         if (userId != null){
@@ -190,10 +192,12 @@ public class LoginActivity extends AppCompatActivity{
         int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
 
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        mLogoView.setVisibility(show ? View.GONE : View.VISIBLE);
         mLoginFormView.animate().setDuration(shortAnimTime).alpha(
                 show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
+                mLogoView.setVisibility(show ? View.GONE : View.VISIBLE);
                 mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
             }
         });
