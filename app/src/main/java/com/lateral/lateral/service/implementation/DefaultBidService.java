@@ -43,8 +43,10 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Task ID to get Bids from
      * @return The list of Bids
      */
-    public ArrayList<Bid> getAllBidsByTaskID(String taskID) {
-        String json = "{\"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}}";
+    public ArrayList<Bid> getAllBidsByTaskID(String taskID, int offset) {
+        Integer next = offset * 10;
+        String json = "{\"from\" : " + next.toString() + ", \"size\" : 10, \"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}, " +
+                "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}]}" ;
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
     }
@@ -64,7 +66,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
     public void deleteBidsByTask(String taskID){
         // TODO: Implement more efficiently! This could be done with one DB call
 
-        ArrayList<Bid> taskBids = getAllBidsByTaskID(taskID);
+        ArrayList<Bid> taskBids = getAllBidsByTaskID(taskID, 0);
 
         if(taskBids != null) {
             for (Bid bid : taskBids) {
