@@ -8,6 +8,7 @@
     <color name="blue">#56A5EC</color>
     <color name="yellow">#FFCC00</color>
     <color name="soft_white">#FFECEFF1</color>
+    <color name="mainButtonCard">#99000000</color>
 
     <color name="dialog_photo_viewer_background">#000000</color>
     <color name="highlight">#FF0000EE</color>
