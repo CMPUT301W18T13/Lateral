@@ -21,8 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.lateral.lateral.R;
-import com.lateral.lateral.activity.MainActivity;
-import com.lateral.lateral.activity.MyTaskViewActivity;
+import com.lateral.lateral.activity.RequestedTasksViewActivity;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
@@ -35,35 +34,53 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
+import static com.lateral.lateral.service.UserLoginService.loadUserFromToken;
+
 public class NewBidNotificationService extends JobService{
     private static final String newBidChannelID = "new_bid";
     private static final String groupID = "new_bid_group";
     private static NotificationManager notificationManager;
     private static int notifyID = 0;
     private static boolean initialized = false;
+    private static long time_initialized;
+    private static String previousUserID = null;
 
     @Override
     public boolean onStartJob(JobParameters params) {
-        String userID = MainActivity.LOGGED_IN_USER;
+        String userID = loadUserFromToken(getApplicationContext());
+
+        /*ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);
+
+        ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
+        if(!componentInfo.getPackageName().equals("com.lateral.lateral")) {
+            Log.e("test", "background");
+        }*/
 
         // stop scheduling the class if user has logged out
         if (userID == null){
-            if (initialized) {
-                finish();
-                initialized = false;
-            }
+            notificationManager = null;
+            notifyID = 0;
+            initialized = false;
             Log.i("Notification End", "No new notifications will be produced");
-            return true;
+            return false;
         }
 
         // Initialize if onStartJob called for the first time after login
-        if (!initialized){
+        if (!initialized || previousUserID.compareTo(userID) != 0){
             createNewBidChannel();
             resetPendingBids(userID);
+            time_initialized = System.currentTimeMillis();
             initialized = true;
         }
 
-        displayNotifications(buildNotifications(userID));
+        // If we have given enough time for the database to reset pending bids,
+        // check for pending notifications, and then , build, and display them
+        if ((System.currentTimeMillis() - time_initialized) > 5000){
+            displayNotifications(buildNotifications(userID));
+        }
+
+        previousUserID = userID;
         NotificationServiceScheduler.scheduleNewBid(getApplicationContext()); // reschedule the job
         return true;
     }
@@ -85,7 +102,7 @@ public class NewBidNotificationService extends JobService{
             if (channel == null) {
                 channel = new NotificationChannel(newBidChannelID, name, importance);
                 channel.setDescription(description);
-                //channel.enableVibration(true); //TODO test
+                //channel.enableVibration(true);
                 //channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                 notificationManager.createNotificationChannel(channel);
             }
@@ -108,11 +125,17 @@ public class NewBidNotificationService extends JobService{
             bidsToGrab = task.getBidsPendingNotification();
             //TODO: Create mutual exclusion for read and write of elastic search data
             if (bidsToGrab > 0){
+                taskBids = bidService.getAllBidsByTaskIDDateSorted(task.getId(), 0);
+
+                numberOfBids = taskBids.size();
+
+                if (numberOfBids - bidsToGrab < 0){
+                    Log.e("Warning", "Index error avoided");
+                    continue;
+                }
+
                 task.setBidsPendingNotification(0);
                 taskService.update(task);
-
-                taskBids = bidService.getAllBidsByTaskID(task.getId(), 0);
-                numberOfBids = taskBids.size();
 
                 for (;bidsToGrab > 0; bidsToGrab--){
                     grabbedBid = taskBids.get(numberOfBids - bidsToGrab);
@@ -131,12 +154,9 @@ public class NewBidNotificationService extends JobService{
 
         builder = new NotificationCompat.Builder(this, newBidChannelID);
 
-        //intent = new Intent(this, MyTaskViewActivity.class);
-        //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        //pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        Intent resultIntent = new Intent(this, MyTaskViewActivity.class);
-        resultIntent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, task.getId());
+        //create stupid god damn activity stack
+        Intent resultIntent = new Intent(this, RequestedTasksViewActivity.class);
+        //resultIntent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, task.getId());
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntentWithParentStack(resultIntent);
         PendingIntent resultPendingIntent =
@@ -149,6 +169,7 @@ public class NewBidNotificationService extends JobService{
                 + task.getTitle() ;
 
         builder.setContentTitle(title)
+                .setContentIntent(resultPendingIntent)
                 .setSmallIcon(R.drawable.ic_lateral_notification)
                 .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                 .setContentText(details)
@@ -168,11 +189,6 @@ public class NewBidNotificationService extends JobService{
         }
     }
 
-    private void finish(){
-        notificationManager = null;
-        notifyID = 0;
-    }
-
     private void resetPendingBids(String userID){
         TaskService taskService = new DefaultTaskService();
         Log.i("Initialized", "NewBidNotificationService initialized");
@@ -182,5 +198,4 @@ public class NewBidNotificationService extends JobService{
             taskService.update(task);
         }
     }
-
 }

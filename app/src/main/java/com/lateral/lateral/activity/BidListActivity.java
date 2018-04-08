@@ -6,13 +6,10 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -20,7 +17,6 @@ import android.widget.ListView;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
@@ -29,10 +25,8 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
-// TODO: fix bid limit problem
-// TODO: BUG: When you decline all bids, need to set status back to Requested and update task in DB
-// TODO: BUG: Need to overwrite last bid (but somehow only if bid is lower?)
-// TODO: BUG: Currency format wrong everywhere in app. Ex: 235 -> $235.0
+
+//TODO: Only a maximum of 10 bids are displayed
 
 /**
  * Activity to display the list of bids
@@ -66,7 +60,7 @@ public class BidListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         taskID = intent.getStringExtra(TASK_ID);
         DefaultBidService bidService = new DefaultBidService();
-        ArrayList<Bid> bids = bidService.getAllBidsByTaskID(taskID, 0);
+        ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID, 0);
 
         UserService userService = new DefaultUserService();
         TaskService taskService = new DefaultTaskService();

@@ -6,23 +6,14 @@
 
 package com.lateral.lateral.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -40,21 +31,14 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
-import java.util.List;
 
-//import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
-import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
-import static com.lateral.lateral.model.TaskStatus.Done;
 
 
 /*
@@ -219,9 +203,6 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             }
         });
 
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -233,21 +214,10 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        if(user != null) {
-            usernameView.setText(getString(R.string.username_display, user.getUsername()));
-        } else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        if(user != null) {
-            emailView.setText(user.getEmailAddress());
-        }
-        else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        emailView.setText(LOGGED_IN_USER.getEmailAddress());
 
         navigationView.setNavigationItemSelectedListener(this);
     }

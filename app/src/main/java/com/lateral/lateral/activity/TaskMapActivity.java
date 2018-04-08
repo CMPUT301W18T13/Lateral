@@ -15,7 +15,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,14 +30,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.MenuItem;
 
 import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +39,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
@@ -96,9 +88,7 @@ public class TaskMapActivity extends AppCompatActivity implements NavigationView
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        DefaultUserService defaultUserService = new DefaultUserService();
         DefaultTaskService defaultTaskService = new DefaultTaskService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
         // Does this work?
         closeTasks = defaultTaskService.getAllTasksByDistance(userLocation.getLatitude(), userLocation.getLatitude(), 5.0);
 
@@ -113,21 +103,10 @@ public class TaskMapActivity extends AppCompatActivity implements NavigationView
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        if(user != null) {
-            usernameView.setText(getString(R.string.username_display, user.getUsername()));
-        } else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        if(user != null) {
-            emailView.setText(user.getEmailAddress());
-        }
-        else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        emailView.setText(LOGGED_IN_USER.getEmailAddress());
 
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -193,7 +172,7 @@ public class TaskMapActivity extends AppCompatActivity implements NavigationView
 
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
-                MainActivity.LOGGED_IN_USER = null;
+                LOGGED_IN_USER = null;
                 Log.i("RequestedTasksView", "File deleted");
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);

@@ -13,7 +13,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,13 +29,10 @@ import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
-//import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
@@ -51,7 +47,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
     private ArrayList<Task> matchingTasks;
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
 
-    private String thisUserID = LOGGED_IN_USER;
     private PullRefreshLayout layout;
     static final int ADD_EDIT_TASK_CODE = 2;
 
@@ -219,10 +214,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             }
         });
 
-
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -234,21 +225,10 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        if(user != null) {
-            usernameView.setText(getString(R.string.username_display, user.getUsername()));
-        } else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        if(user != null) {
-            emailView.setText(user.getEmailAddress());
-        }
-        else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        emailView.setText(LOGGED_IN_USER.getEmailAddress());
 
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -320,7 +300,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
      * --> Assumes globals are already correctly set
      */
     public int initializeLocalArrays() {
-        allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(thisUserID);
+        allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(LOGGED_IN_USER.getId());
 
         if (allLocallyStoredTasks.get(0) == null) {
             Log.d("Tag", "allLocalTasks == null");
@@ -429,7 +409,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             finish();
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
-                MainActivity.LOGGED_IN_USER = null;
+                LOGGED_IN_USER = null;
                 Log.i("RequestedTasksView", "File deleted");
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
