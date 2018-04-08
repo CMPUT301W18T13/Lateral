@@ -38,7 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
+        <com.lateral.lateral.widget.PhotoImageView
             android:id="@+id/qrcode_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/qrcode_user_view"
-            app:srcCompat="@drawable/ic_menu_gallery" />
+            android:onClick="onPhotoImageViewClick"/>
 
         <TextView
             android:id="@+id/qrcode_instruction_text"
