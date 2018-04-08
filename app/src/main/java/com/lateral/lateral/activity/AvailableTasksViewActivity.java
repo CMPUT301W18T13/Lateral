@@ -22,6 +22,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -126,6 +127,11 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     @Override
     protected int getProgressBarID() { return R.id.available_task_view_progress; }
 
+    @Override
+    protected int getErrorMessageID() {
+        return R.id.availableErrorWarning;
+    }
+
     /**
      * Gets the context of the current activity
      * @return The current activity's Context
@@ -165,6 +171,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

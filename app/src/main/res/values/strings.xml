@@ -107,6 +107,8 @@
     <string name="title_activity_map">Task Location</string>
 
     <string name="error_unknown_message">An error occurred</string>
+    <string name="generic_warning_title">Oops!</string>
+    <string name="generic_warning_message">Something went wrong, please try again later.</string>
 
 
 </resources>

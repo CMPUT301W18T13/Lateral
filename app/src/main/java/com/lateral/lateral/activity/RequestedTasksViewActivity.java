@@ -13,6 +13,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -87,6 +88,11 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
     @Override
     protected int getProgressBarID() { return R.id.req_task_view_progress;}
 
+    @Override
+    protected int getErrorMessageID() {
+        return R.id.requestedErrorWarning;
+    }
+
     /**
      * Gets the context of the current activity
      * @return The current activity's Context
@@ -112,10 +118,23 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        initializeLocalArrays();
+        //try {
+        if (initializeLocalArrays() == -1) {
+//            Toast errorToast = Toast.makeText(this, "Error loading tasks", Toast.LENGTH_SHORT);
+//            errorToast.show();
+            //requestedErrorWarning.setVisibility(View.VISIBLE);
+            setErrorMessageVisibility(true);
+            return;
+        }
+
+        //} catch (Exception e) {
+//            Toast errorToast = Toast.makeText(this, "Error loading tasks", Toast.LENGTH_SHORT);
+//            errorToast.show();
+        //}
         displayResultsFromFilter();
 
         // Move to 'create new task' activity when fab pressed
@@ -293,8 +312,17 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      * --> Assumes globals are already correctly set
      */
-    public void initializeLocalArrays() {
+    public int initializeLocalArrays() {
         allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(thisUserID);
+
+        if (allLocallyStoredTasks.get(0) == null) {
+            Log.d("Tag", "allLocalTasks == null");
+            return -1;
+        } else {
+            Log.d("alltasks", "all tasks is not null");
+        }
+
+        Log.d("SIZE", "size of array = " + allLocallyStoredTasks.size());
 
         // clear in case we are refreshing
         tasksWithBids.clear();
@@ -313,7 +341,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             }
         }
 
-
+        return 1;
     }
 
     /**
