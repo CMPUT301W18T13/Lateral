@@ -145,6 +145,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
             assignedToUsername.setText(R.string.task_view_not_assigned);
         }
 
+        TextView statusTextView = findViewById(R.id.my_task_view_status);
+        statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
         setImages();
         setButtonVisibility();
     }

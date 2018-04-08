@@ -76,6 +76,7 @@
     <!-- Strings for Task View -->
     <string name="task_view_no_bids">None</string>
     <string name="task_view_not_assigned">None</string>
+    <string name="task_view_temp_status">[requested]</string>
 
     <!-- Strings for Bid List activity -->
     <string name="bid_list_default_display_text">No Bids</string>

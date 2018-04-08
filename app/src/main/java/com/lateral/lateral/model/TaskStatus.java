@@ -7,5 +7,15 @@ public enum TaskStatus {
     Requested,
     Bidded,
     Assigned,
-    Done
+    Done;
+
+    public static String getFormattedEnum(TaskStatus value){
+        switch (value){
+            case Requested: return "[requested]";
+            case Bidded: return "[bidded]";
+            case Assigned: return "[assigned]";
+            case Done: return "[done]";
+            default: return null;
+        }
+    }
 }

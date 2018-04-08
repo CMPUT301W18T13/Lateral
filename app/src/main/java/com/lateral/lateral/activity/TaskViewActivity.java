@@ -125,6 +125,8 @@ public class TaskViewActivity extends AppCompatActivity {
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
+        TextView statusTextView = findViewById(R.id.task_view_status);
+        statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
         setImages();
     }
 
