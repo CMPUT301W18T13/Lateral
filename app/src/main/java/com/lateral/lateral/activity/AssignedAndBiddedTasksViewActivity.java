@@ -27,9 +27,11 @@ import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
+import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
@@ -52,16 +54,18 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
     private PullRefreshLayout layout;
 
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
+    private DefaultBidService defaultBidService = new DefaultBidService();
 
     /* Filter related variables */
     private Spinner filterSpinner;
     private int currentFilter = 0;
 
     /* local storage */
-    private ArrayList<Task> allLocallyStoredTasks;
+    private ArrayList<Task> allLocallyStoredTasks = new ArrayList<Task>();
     private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
     private ArrayList<Task> assignedTasks = new ArrayList<Task>();
     private ArrayList<Task> doneTasks = new ArrayList<Task>();
+    private ArrayList<Bid> myBids = new ArrayList<Bid>();
 
     /**
      * Gets the layout ID of the activity
@@ -244,7 +248,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      */
     private void returnMatchingTasks(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
-        addTasks(taskService.getBiddedTasks(query));
+        addTasks(taskService.getBiddedTasks(query), null);
     }
 
 
@@ -268,24 +272,54 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      */
     public void initializeLocalArrays() {
-        allLocallyStoredTasks = defaultTaskService.getBiddedTasks(LOGGED_IN_USER.getId());
+        //allLocallyStoredTasks = defaultTaskService.getBiddedTasks(LOGGED_IN_USER.getId());
+
+        Task curTask;
+        TaskStatus taskStatus;
 
         // clear in case we are refreshing
+        allLocallyStoredTasks.clear();
         tasksWithBids.clear();
         assignedTasks.clear();
         doneTasks.clear();
+        myBids.clear();
 
-        for (Task curTask : allLocallyStoredTasks) {
-            TaskStatus status = curTask.getStatus();
-            if (status == Bidded) {
+        myBids = defaultBidService.getAllBidsByUserID(LOGGED_IN_USER.getId());       // SearchQuery
+        //ArrayList<Task> biddedTasks = new ArrayList<Task>();
+
+
+        for (Bid bid : myBids) {
+            curTask = defaultTaskService.getTaskByTaskID(bid.getTaskId());           // Search query
+            allLocallyStoredTasks.add(curTask);
+            taskStatus = curTask.getStatus();
+
+            if (taskStatus == Bidded) {
                 // extract
                 tasksWithBids.add(curTask);
-            } else if (status == Assigned) {
+            } else if (taskStatus == Assigned) {
                 assignedTasks.add(curTask);
-            } else if (status == Done) {
+            } else if (taskStatus == Done) {
                 doneTasks.add(curTask);
             }
+
         }
+
+//        // clear in case we are refreshing
+//        tasksWithBids.clear();
+//        assignedTasks.clear();
+//        doneTasks.clear();
+
+//        for (Task curTask : allLocallyStoredTasks) {
+//            TaskStatus status = curTask.getStatus();
+//            if (status == Bidded) {
+//                // extract
+//                tasksWithBids.add(curTask);
+//            } else if (status == Assigned) {
+//                assignedTasks.add(curTask);
+//            } else if (status == Done) {
+//                doneTasks.add(curTask);
+//            }
+//        }
 
 
     }
@@ -299,19 +333,19 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
         if (currentFilter == 0) {
             // display refreshed all
-            addTasks(allLocallyStoredTasks);
+            addTasks(allLocallyStoredTasks, myBids);
 
         } else if (currentFilter == 1) {
             // display refreshed bidded
-            addTasks(tasksWithBids);
+            addTasks(tasksWithBids, myBids);
 
         } else if (currentFilter == 2) {
             // display refreshed assigned
-            addTasks(assignedTasks);
+            addTasks(assignedTasks, myBids);
 
         } else if (currentFilter == 3) {
             // display refreshed done
-            addTasks(doneTasks);
+            addTasks(doneTasks, myBids);
         }
     }
 

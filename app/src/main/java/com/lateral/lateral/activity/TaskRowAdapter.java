@@ -22,6 +22,7 @@ import android.widget.TextView;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
+import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
@@ -41,6 +42,7 @@ import java.util.Locale;
  */
 public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHolder> {
     private ArrayList<Task> mTasks;
+    private ArrayList<Bid> mBids;
     DefaultUserService defaultUserService = new DefaultUserService();
     DefaultBidService defaultBidService = new DefaultBidService();
     Context context;
@@ -59,6 +61,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         TextView tvDate;
         TextView tvCurBid;
         TextView tvNewBids;
+        TextView tvCurrentBidTitle;
         GridLayout tvTaskStatus;
 
         /**
@@ -76,6 +79,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             tvCurBid = itemView.findViewById(R.id.bidTextView);
             tvNewBids = itemView.findViewById(R.id.newBidTextView);
             tvTaskStatus = itemView.findViewById(R.id.bidStatusIndicator);
+            tvCurrentBidTitle = itemView.findViewById(R.id.currentBidTitleText);
         }
 
     }
@@ -85,10 +89,11 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
      *
      * @param mTasks List of tasks to set
      */
-    public TaskRowAdapter(ArrayList<Task> mTasks, Context context) {
+    public TaskRowAdapter(ArrayList<Task> mTasks, Context context, ArrayList<Bid> mBids) {
         //this.context = context;
         this.mTasks = mTasks;
         this.context = context;
+        this.mBids = mBids;
     }
 
 
@@ -164,9 +169,24 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             }
 
             if (displayBidsNotViewed) {
-                Log.d("BNVS", bidsNotViewedString);
+                //Log.d("BNVS", bidsNotViewedString);
                 holder.tvNewBids.setText(bidsNotViewedString);
             }
+        } else if (context instanceof AssignedAndBiddedTasksViewActivity) {
+            String leadingBidText;
+            String outBidString;
+            //Log.d("ADAPTER", "mybid = " + mBids.get(position).getAmount() + "leading = " + bid);
+            if ((mBids.get(position).getAmount()).equals(bid)) {
+                leadingBidText = "Your Leading Bid:";
+                outBidString = "";
+
+            } else {
+                leadingBidText = "Leading Bid:";
+                outBidString = "You've Been Outbid!";
+                //holder.tvNewBids.setText(outBidString);
+            }
+            holder.tvNewBids.setText(outBidString);
+            holder.tvCurrentBidTitle.setText(leadingBidText);
         }
 
 

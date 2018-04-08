@@ -356,7 +356,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
      */
     private void returnMatchingTask(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
-        addTasks(taskService.getAllTasks(query));
+        addTasks(taskService.getAllTasks(query), null);
     }
 
 
@@ -432,11 +432,11 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         if (currentFilter == 0) {
             // display refreshed all
-            addTasks(allLocallyStoredTasks);
+            addTasks(allLocallyStoredTasks, null);
 
         } else if (currentFilter == 1) {
             // display refreshed bidded
-            addTasks(tasksWithBids);
+            addTasks(tasksWithBids, null);
         }
     }
 

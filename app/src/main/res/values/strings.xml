@@ -46,7 +46,7 @@
         Suspendisse aliquet lectus sapien, eget dignissim sem semper ac. Mauris vehicula purus mi. Nulla ac pretium tortor, vitae mattis velit. Sed arcu erat, posuere eget ipsum id, condimentum bibendum dolor.\n\n
     </string>
     <string name="bid_button_label">Bid Now!</string>
-    <string name="current_bid_prompt">Current Bid:</string>
+    <string name="current_bid_prompt">Leading Bid:</string>
     <string name="temp_task_title">Lawnmowing</string>
     <string name="temp_username">\@cmerkosky</string>
     <string name="temp_date">Jun 24, 2018</string>
