@@ -98,9 +98,7 @@
                     android:text="@string/temp_task_title"
                     android:textAppearance="@android:style/TextAppearance.Material.Large.Inverse"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_conversion_absoluteHeight="30dp"
-                    tools:layout_conversion_absoluteWidth="215dp" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/my_task_assigned_to"
@@ -109,9 +107,17 @@
                     android:text="Assigned to: "
                     android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/my_task_view_title"
-                    tools:layout_conversion_absoluteHeight="19dp"
-                    tools:layout_conversion_absoluteWidth="80dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/my_task_view_title" />
+
+                <com.lateral.lateral.widget.UserLinkTextView
+                    android:id="@+id/my_text_view_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/temp_username"
+                    android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/my_task_assigned_to"
+                    app:layout_constraintTop_toBottomOf="@+id/my_task_view_title"/>
 
                 <TextView
                     android:id="@+id/my_task_view_date"
@@ -121,20 +127,7 @@
                     android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/my_task_assigned_to"
-                    tools:layout_conversion_absoluteHeight="16dp"
-                    tools:layout_conversion_absoluteWidth="215dp" />
-
-                <com.lateral.lateral.widget.UserLinkTextView
-                    android:id="@+id/my_text_view_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/temp_username"
-                    android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
-                    app:layout_constraintStart_toEndOf="@+id/my_task_assigned_to"
-                    app:layout_constraintTop_toBottomOf="@+id/my_task_view_title"
-                    tools:layout_conversion_absoluteHeight="19dp"
-                    tools:layout_conversion_absoluteWidth="135dp" />
+                    app:layout_constraintTop_toBottomOf="@+id/my_task_assigned_to" />
 
             </android.support.constraint.ConstraintLayout>
 

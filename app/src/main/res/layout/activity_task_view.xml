@@ -119,13 +119,23 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <TextView
+                    android:id="@+id/task_username_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Requester: "
+                    android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/task_view_title" />
+
                 <com.lateral.lateral.widget.UserLinkTextView
                     android:id="@+id/task_view_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/temp_username"
                     android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@+id/task_username_label"
                     app:layout_constraintTop_toBottomOf="@+id/task_view_title" />
 
                 <TextView
@@ -136,7 +146,7 @@
                     android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/task_view_username" />
+                    app:layout_constraintTop_toBottomOf="@+id/task_username_label" />
 
             </android.support.constraint.ConstraintLayout>
 
