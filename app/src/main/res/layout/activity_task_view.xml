@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-            <TextView
+            <com.lateral.lateral.widget.UserLinkTextView
                 android:id="@+id/task_view_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,7 +39,6 @@
                 android:layout_marginStart="0dp"
                 android:text="@string/large_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.316"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
         </ScrollView>

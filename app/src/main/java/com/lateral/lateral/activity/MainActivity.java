@@ -28,7 +28,7 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.lateral.lateral.service.notification.NotificationServiceScheduler;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
-// TODO: Remove or fix the highlight of currently selected item in menu
+
 /**
  * The main activity for the app
  */

@@ -48,6 +48,7 @@ import java.util.Locale;
 public class TaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    public static final int QR_ACTIVITY_CODE = 5;
 
     private String taskID;
 
@@ -174,7 +175,7 @@ public class TaskViewActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
-            startActivity(intent);
+            startActivityForResult(intent, QR_ACTIVITY_CODE);
         }
         else if (item.getItemId() == R.id.action_geo_location){
             Intent intent = new Intent(this, MapActivity.class);

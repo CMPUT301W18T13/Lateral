@@ -72,7 +72,6 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
  * Activity for viewing all available tasks
  */
 // TODO: Get the notification "x new bids!" working (or remove it)
-// TODO: Show some info stating what the status colors mean!
 // TODO: BUG: Filter isn't working anymore
 // TODO: No need to store extra lists for each filter, just filter the list (which is cheap) when changing the filter
 // TODO: Show some info in the filter stating what the status colors mean!

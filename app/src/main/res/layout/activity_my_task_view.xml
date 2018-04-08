@@ -233,7 +233,6 @@
                 android:layout_marginTop="0dp"
                 android:text="@string/large_text"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
         </ScrollView>

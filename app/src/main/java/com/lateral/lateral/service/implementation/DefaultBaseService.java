@@ -14,6 +14,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BaseService;
 import com.searchly.jestdroid.DroidClientConfig;
@@ -116,7 +117,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             data = getData.get();
         }catch(Exception e){
             Log.i("Error", "Failed to get task from async object");
-            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
         }
         return data;
     }
