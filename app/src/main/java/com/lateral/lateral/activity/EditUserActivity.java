@@ -59,26 +59,28 @@ public class EditUserActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_sign_up);
-        setTitle(R.string.edit_user_title);
 
         DefaultUserService defaultUserService = new DefaultUserService();
         mCurrentUser = defaultUserService.getById(LOGGED_IN_USER);
 
         // Set up form views
         mUsername = findViewById(R.id.usernameSignUpForm);
-        mUsername.setText(mCurrentUser.getUsername());
+        mUsername.setVisibility(View.INVISIBLE);
+
+        TextView usernameDisplay = findViewById(R.id.usernameDisplay);
+        usernameDisplay.setText(mCurrentUser.getUsername());
 
         mPhoneNumber = findViewById(R.id.phoneSignUpForm);
-        mPhoneNumber.setText(mCurrentUser.getPhoneNumber());
+        mPhoneNumber.setHint(R.string.prompt_change_phone);
 
         mEmail = findViewById(R.id.emailSignUpForm);
-        mEmail.setText(mCurrentUser.getEmailAddress());
+        mEmail.setHint(R.string.prompt_change_email);
 
         mConfirmEmail = findViewById(R.id.emailConfirmSignUpForm);
-        mConfirmEmail.setText(mCurrentUser.getEmailAddress());
 
         mPassword = findViewById(R.id.passwordSignUpForm);
         mConfirmPassword = findViewById(R.id.passwordConfirmSignUpForm);
+        mPassword.setHint(R.string.prompt_change_password);
 
         // Watch for "Enter" click on the keyboard
         mConfirmPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -124,7 +126,6 @@ public class EditUserActivity extends AppCompatActivity {
      * Validates the info entered, and creates and uploads the user if everything checks out
      */
     private void validateForm(){
-        String username = mUsername.getText().toString();
         String phoneNumber = mPhoneNumber.getText().toString();
         String email = mEmail.getText().toString();
         String confEmail = mConfirmEmail.getText().toString();
@@ -132,28 +133,14 @@ public class EditUserActivity extends AppCompatActivity {
         String confPassword = mConfirmPassword.getText().toString();
 
         boolean cancel = false;
+        boolean newPhoneNumber = true;
+        boolean newEmail = true;
+        boolean newPassword = true;
         View focusView = null;
-
-        // Check for a valid username
-        if (TextUtils.isEmpty(username)) {
-            mUsername.setError(getString(R.string.error_field_required));
-            focusView = mUsername;
-            cancel = true;
-        } else if (!isUsernameValid(username)) {
-            mUsername.setError(getString(R.string.error_invalid_username));
-            focusView = mUsername;
-            cancel = true;
-        } else if(!isUsernameTaken(username)){
-            mUsername.setError(getString(R.string.error_username_taken));
-            focusView = mUsername;
-            cancel = true;
-        }
 
         // Check for valid phone number
         if (TextUtils.isEmpty(phoneNumber)) {
-            mPhoneNumber.setError(getString(R.string.error_field_required));
-            focusView = mPhoneNumber;
-            cancel = true;
+            newPhoneNumber =false;
         } else if (!isPhoneNumberValid(phoneNumber)) {
             mPhoneNumber.setError(getString(R.string.error_invalid_phone_number));
             focusView = mPhoneNumber;
@@ -162,9 +149,7 @@ public class EditUserActivity extends AppCompatActivity {
 
         // Check for a valid email address.
         if (TextUtils.isEmpty(email)) {
-            mEmail.setError(getString(R.string.error_field_required));
-            focusView = mEmail;
-            cancel = true;
+            newEmail = false;
         } else if (!isEmailValid(email)) {
             mEmail.setError(getString(R.string.error_invalid_email));
             focusView = mEmail;
@@ -172,7 +157,7 @@ public class EditUserActivity extends AppCompatActivity {
         }
 
         // Check for a valid confirmation email address.
-        if (!confEmail.equals(email)) {
+        if (!confEmail.equals(email) && newEmail) {
             mConfirmEmail.setError(getString(R.string.error_no_match_email));
             focusView = mConfirmEmail;
             cancel = true;
@@ -180,9 +165,7 @@ public class EditUserActivity extends AppCompatActivity {
 
         // Check for a valid password.
         if (TextUtils.isEmpty(password)) {
-            mPassword.setError(getString(R.string.error_field_required));
-            focusView = mPassword;
-            cancel = true;
+            newPassword = false;
         }
         else if (!isPasswordValid(password)) {
             mPassword.setError(getString(R.string.error_invalid_password));
@@ -191,7 +174,7 @@ public class EditUserActivity extends AppCompatActivity {
         }
 
         // Check for a valid confirmation password.
-        if (!confPassword.equals(password)) {
+        if (!confPassword.equals(password) && newPassword) {
             mConfirmPassword.setError(getString(R.string.error_no_match_password));
             focusView = mConfirmPassword;
             cancel = true;
@@ -206,18 +189,25 @@ public class EditUserActivity extends AppCompatActivity {
             // perform the user login attempt.
             showProgress(true);
 
-            // Generate secure salt, and hash the password with it
-            String salt = randomBytes(64);
-            String saltAndHash = salt + ':' + hashPassword(password, salt);
+            // Update the user
+            if(newPhoneNumber) {
+                mCurrentUser.setPhoneNumber(phoneNumber);
+            }
+            if(newEmail) {
+                mCurrentUser.setEmailAddress(email);
+            }
+            if(newPassword) {
+                // Generate secure salt, and hash the password with it
+                String salt = randomBytes(64);
+                String saltAndHash = salt + ':' + hashPassword(password, salt);
+                mCurrentUser.setSaltAndHash(saltAndHash);
+            }
 
-            // Create and store the user
-            mCurrentUser.setUsername(username);
-            mCurrentUser.setPhoneNumber(phoneNumber);
-            mCurrentUser.setEmailAddress(email);
-            mCurrentUser.setSaltAndHash(saltAndHash);
-
-            DefaultUserService defaultUserService = new DefaultUserService();
-            defaultUserService.update(mCurrentUser);
+            // If there's anything new
+            if(newPassword || newEmail || newPhoneNumber) {
+                DefaultUserService defaultUserService = new DefaultUserService();
+                defaultUserService.update(mCurrentUser);
+            }
 
             // Start the next activity with the user logged in
             saveUserToken(mCurrentUser, getApplicationContext());

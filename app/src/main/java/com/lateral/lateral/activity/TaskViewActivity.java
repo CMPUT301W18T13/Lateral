@@ -48,6 +48,7 @@ import java.util.Locale;
 public class TaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    public static final int QR_ACTIVITY_CODE = 5;
 
     private String taskID;
 
@@ -125,6 +126,8 @@ public class TaskViewActivity extends AppCompatActivity {
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
+        TextView statusTextView = findViewById(R.id.task_view_status);
+        statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
         setImages();
     }
 
@@ -159,6 +162,10 @@ public class TaskViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_menu, menu);
+        if(!task.checkGeo()){
+            MenuItem item = menu.findItem(R.id.action_geo_location);
+            item.setVisible(false);
+        }
         return true;
     }
 
@@ -172,7 +179,9 @@ public class TaskViewActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
-            startActivity(intent);
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_TITLE, task.getTitle());
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_USER, task.getRequestingUserUsername());
+            startActivityForResult(intent, QR_ACTIVITY_CODE);
         }
         else if (item.getItemId() == R.id.action_geo_location){
             Intent intent = new Intent(this, MapActivity.class);

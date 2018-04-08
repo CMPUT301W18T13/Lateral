@@ -10,8 +10,7 @@
     <color name="soft_white">#FFECEFF1</color>
 
     <color name="dialog_photo_viewer_background">#000000</color>
-    <!--<color name="highlight">#00008b</color>-->
-    <color name="highlight">#000033</color>
+    <color name="highlight">#FF0000EE</color>
     <color name="statusRequested">#2196F3</color>
     <color name="statusBidded">#3F51B5</color>
     <color name="statusAssigned">#4CAF50</color>

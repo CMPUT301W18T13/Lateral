@@ -73,7 +73,6 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
  * Activity for viewing all available tasks
  */
 // TODO: Get the notification "x new bids!" working (or remove it)
-// TODO: Show some info stating what the status colors mean!
 // TODO: BUG: Filter isn't working anymore
 // TODO: No need to store extra lists for each filter, just filter the list (which is cheap) when changing the filter
 // TODO: Show some info in the filter stating what the status colors mean!
@@ -251,7 +250,13 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         }
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_available_tasks);
     }
 
     /**
@@ -283,17 +288,6 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.d("OnQueryListener", "TEXT CHANGED|" + newText + "|");
-//<<<<<<< HEAD:app/src/main/java/com/lateral/lateral/activity/AllTasksViewActivity.java
-//                if (newText.equals("")) {
-//                    Log.d("null text", "this is null text");
-//                    newText = null;
-//                }
-//                Log.d("onQueryTextChange", "refreshing arrays");
-//                refreshLocalArrays(newText);
-//                Log.d("onQueryTextChange", "display array from filter");
-//                displayResultsFromFilter();
-//                //searchNeeded(newText);
-//=======
                 searchNeeded(newText);
 
 
@@ -511,14 +505,16 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, RequestedTasksViewActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_available_tasks) {
-            Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
-            startActivity(intent);
+
+            // We are already here, do nothing
+
         } else if (id == R.id.nav_bidded_tasks) {
             Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_qrcode){
             Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, ScanQRCodeActivity.class);
@@ -527,9 +523,11 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             Intent intent = new Intent(this, AvailableTasksViewActivity.class);
             intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_task_map){
             Intent intent = new Intent(this, TaskMapActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_logout) {
             Log.i("AllTasksView", "Nav Item Selected!");
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){

@@ -253,6 +253,13 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_req_tasks);
+    }
+
     /**
      * Called when the options menu is created
      * @param menu The menu to be created
@@ -397,14 +404,17 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             Intent intent = new Intent(this, EditUserActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_req_tasks) {
-            Intent intent = new Intent(this, RequestedTasksViewActivity.class);
-            startActivity(intent);
+
+            // We are already here, do nothing
+
         } else if (id == R.id.nav_available_tasks) {
             Intent intent = new Intent(this, AvailableTasksViewActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_bidded_tasks) {
             Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_qrcode){
             Intent intent = new Intent(this, ScanQRCodeActivity.class);
             startActivity(intent);
@@ -412,9 +422,11 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             Intent intent = new Intent(this, AvailableTasksViewActivity.class);
             intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_task_map){
             Intent intent = new Intent(this, TaskMapActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
                 MainActivity.LOGGED_IN_USER = null;

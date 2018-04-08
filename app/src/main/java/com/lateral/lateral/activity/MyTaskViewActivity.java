@@ -39,11 +39,12 @@ import com.lateral.lateral.widget.PhotoImageView;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
-// TODO: Don't bother refreshing after displaying QR code (use startActivityForResult with code)
+
 // TODO: Need progress bar in here
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    public static final int QR_ACTIVITY_CODE = 5;
 
     private String taskID;
 
@@ -145,6 +146,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
             assignedToUsername.setText(R.string.task_view_not_assigned);
         }
 
+        TextView statusTextView = findViewById(R.id.my_task_view_status);
+        statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
         setImages();
         setButtonVisibility();
     }
@@ -227,7 +230,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
         taskService.update(task);
         refresh(task);
     }
-    // TODO: Need some way to clearly display the status within the view
 
     /**
      * Called when Set Requested (Cancel) button is clicked
@@ -254,6 +256,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.my_task_menu, menu);
+        if(!task.checkGeo()){
+            MenuItem item = menu.findItem(R.id.action_geo_location);
+            item.setVisible(false);
+        }
         return true;
     }
 
@@ -281,7 +287,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
         else if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
-            startActivity(intent);
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_TITLE, task.getTitle());
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_USER, task.getRequestingUserUsername());
+            startActivityForResult(intent, QR_ACTIVITY_CODE);
         }
         else if (item.getItemId() == android.R.id.home){
             setResult(RESULT_OK);
@@ -300,6 +308,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == QR_ACTIVITY_CODE){
+            // Don't need refresh
+            return;
+        }
+
         if (resultCode == RESULT_OK) {
             refresh();
         }
