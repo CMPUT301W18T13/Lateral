@@ -1,23 +1,14 @@
 package com.lateral.lateral;
 
-import android.support.test.espresso.base.Default;
 import android.support.test.runner.AndroidJUnit4;
-import android.util.Log;
 
-import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
-import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class PostingTest {
@@ -92,7 +83,7 @@ public class PostingTest {
     @Test
     public void testGetEveryTask() {
 //        DefaultTaskService defaultTaskService = new DefaultTaskService();
-//        ArrayList<Task> returned = defaultTaskService.getEveryTask();
+//        ArrayList<Task> returned = defaultTaskService.getEveryAvailableTask();
 //        Task task1 = returned.get(0);
 //        assertEquals(task1.getTitle(), "Test");
     }
@@ -108,7 +99,7 @@ public class PostingTest {
     public void testDeleteAllTasks() {
         DefaultTaskService defaultTaskService = new DefaultTaskService();
         //defaultTaskService.delete("AWJACBVhAJsZenWtuLON");
-        ArrayList<Task> allTasks = defaultTaskService.getEveryTask();
+        ArrayList<Task> allTasks = defaultTaskService.getEveryAvailableTask();
         String taskId;
         for (Task task : allTasks) {
             taskId = task.getId();

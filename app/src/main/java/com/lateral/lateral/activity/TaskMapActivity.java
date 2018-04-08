@@ -11,8 +11,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -47,47 +49,43 @@ import java.util.ArrayList;
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
-public class TaskMapActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,OnMapReadyCallback{
-    private FusedLocationProviderClient mFusedLocationClient;
-    private Location userLocation;
-    private ArrayList<Task> closeTasks = new ArrayList<Task>();
+public class TaskMapActivity extends AppCompatActivity
+        implements OnMapReadyCallback{
+
+    private DefaultTaskService defaultTaskService;
+    private ArrayList<Task> tasks;
+
+    private GoogleMap mMap;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+    private Location mLastKnownLocation;
+    private Boolean locationPermissionGranted;
+
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        setContentView(R.layout.activity_task_map);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        // Got last known location. In some rare situations this can be null.
-                        if (location != null) {
-                            userLocation = location;
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_map);
 
+        defaultTaskService = new DefaultTaskService();
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-                        }
-                    }
-                });
-        setContentView(R.layout.content_task_map_view);
-        // Get the SupportMapFragment and request notification
-        // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
+<<<<<<< HEAD
+    }
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        mMap = map;
+        checkAndGrantPermissions();
+        getDeviceLocation();
+    }
+=======
         DefaultTaskService defaultTaskService = new DefaultTaskService();
         // Does this work?
         closeTasks = defaultTaskService.getAllTasksByDistance(userLocation.getLatitude(), userLocation.getLatitude(), 5.0);
@@ -107,38 +105,70 @@ public class TaskMapActivity extends AppCompatActivity implements NavigationView
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
         emailView.setText(LOGGED_IN_USER.getEmailAddress());
+>>>>>>> 5152bb4d7750e96309421eedcc13613b3dc0f8af
 
-        navigationView.setNavigationItemSelectedListener(this);
+    private void getDeviceLocation() {
+        try {
+            mFusedLocationProviderClient.getLastLocation()
+                    .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                Log.i("Location", "location was succesful");
+                                mLastKnownLocation = location;
+                                drawMapMarkers();
+                            }
+                        }
+                    });
+        }catch(SecurityException e){
+            Log.i("Error","Permissions not set");
+        }
     }
-    @Override
-    public void onMapReady(GoogleMap googleMap){
-        for (int i = 0; i < closeTasks.size(); i++) {
-            Task task = closeTasks.get(i);
-            LatLng taskCoords = new LatLng(task.getLat(), task.getLon());
-            googleMap.addMarker(new MarkerOptions().position(taskCoords)
+
+    private void drawMapMarkers(){
+        LatLng curLoc = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
+        tasks = defaultTaskService.getAvailableTasksByDistance(mLastKnownLocation.getLatitude(),
+                mLastKnownLocation.getLongitude(),
+                5.0);
+
+        Log.i("Size", String.valueOf(tasks.size()));
+        for(Task task: tasks){
+            LatLng latLng = new LatLng(task.getLat(), task.getLon());
+            mMap.addMarker(new MarkerOptions().position(latLng)
                     .title(task.getTitle())
                     .snippet(task.getStatus().toString()));
+        }
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(curLoc, 12);
+        mMap.animateCamera(cameraUpdate);
+    }
+
+    public void checkAndGrantPermissions(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            locationPermissionGranted = true;
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
         }
-        LatLng userCoords = new LatLng(userLocation.getLatitude(), userLocation.getLongitude());
-
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(userCoords, 13);
-        googleMap.animateCamera(cameraUpdate);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setCheckedItem(R.id.nav_task_map);
-    }
-
-    /**
-     * Handles clicking of Navigation Drawer Items
-     * @param item Navigation Drawer Item
-     * @return True
-     */
-    @Override
+<<<<<<< HEAD
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        locationPermissionGranted = false;
+        switch (requestCode) {
+            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                    getDeviceLocation();
+                }
+=======
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -177,11 +207,23 @@ public class TaskMapActivity extends AppCompatActivity implements NavigationView
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
+>>>>>>> 5152bb4d7750e96309421eedcc13613b3dc0f8af
             }
         }
+    }
 
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            setResult(RESULT_OK);
+            finish();
+        } else return super.onOptionsItemSelected(item);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_OK);
+        super.onBackPressed();
     }
 }

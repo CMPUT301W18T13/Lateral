@@ -63,11 +63,11 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: BUG: Load all records, not just top 10
 // TODO: Probably remove incremental searching
 // TODO: BUG: Available Tasks still shows Assigned and Done tasks (they shouldn't be displayed here)
-// TODO: --> Change getEveryTask/getAllTask to getEveryAvailableTask/getAllAvailableTask and add "Requested or Bidded" to the query
-// TODO: --> Change getAllTasksByDistance to getAvailableTasksByDistance and add "Requested or Bidded" to the query
+// TODO: --> Change getEveryAvailableTask/getAllTask to getEveryAvailableTask/getAllAvailableTask and add "Requested or Bidded" to the query
+// TODO: --> Change getAvailableTasksByDistance to getAvailableTasksByDistance and add "Requested or Bidded" to the query
 // TODO: BUG: All filters are missing "Tasks without bids (only requested)" option
 // TODO: BUG: Still able to bid on assigned and done tasks
-// TODO: BUG: getAllTasks() uses different number than getEveryTask()
+// TODO: BUG: getAllTasks() uses different number than getEveryAvailableTask()
 public class AvailableTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static String INTENT_OPEN_SEARCH = "com.lateral.lateral.OPEN_SEARCH";
@@ -403,7 +403,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         if (query == null) {
             // did not get here via search, display all
-            allLocallyStoredTasks = defaultTaskService.getEveryTask();
+            allLocallyStoredTasks = defaultTaskService.getEveryAvailableTask();
         } else {
             // user gave search query
             allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
