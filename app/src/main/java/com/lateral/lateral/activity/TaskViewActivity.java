@@ -162,6 +162,10 @@ public class TaskViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_menu, menu);
+        if(!task.checkGeo()){
+            MenuItem item = menu.findItem(R.id.action_geo_location);
+            item.setVisible(false);
+        }
         return true;
     }
 
