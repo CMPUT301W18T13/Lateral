@@ -17,6 +17,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.lateral.lateral.R;
@@ -149,6 +150,7 @@ public class NewBidNotificationService extends JobService{
 
         builder.setContentTitle(title)
                 .setSmallIcon(R.drawable.ic_lateral_notification)
+                .setColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary))
                 .setContentText(details)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setAutoCancel(true)
