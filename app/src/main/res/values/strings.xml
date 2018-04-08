@@ -102,6 +102,7 @@
     <string name="qrcode_scan">Scan Task QR Code</string>
     <string name="qrcode_create">QR Code</string>
     <string name="qrcode_instructions">Screenshot this page to save this task\'s QR Code!</string>
+    <string name="qrcode_user">A task by @%1$s on Lateral!</string>
 
     <string name="permission_camera_rationale">Needed to access the camera to scan a QR code</string>
     <string name="no_camera_permission">Permission to open camera not granted!</string>

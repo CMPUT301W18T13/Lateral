@@ -44,6 +44,8 @@ import java.util.Locale;
 public class MyTaskViewActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    public static final String EXTRA_TASK_TITLE = "com.lateral.lateral.TASK_TITLE";
+    public static final String EXTRA_TASK_USER = "com.lateral.lateral.TASK_USER";
     public static final int QR_ACTIVITY_CODE = 5;
 
     private String taskID;
@@ -282,7 +284,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
         }
         else if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
-            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
+            intent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, taskID);
+            intent.putExtra(MyTaskViewActivity.EXTRA_TASK_TITLE, task.getTitle());
+            intent.putExtra(MyTaskViewActivity.EXTRA_TASK_USER, task.getRequestingUserUsername());
             startActivityForResult(intent, QR_ACTIVITY_CODE);
         }
         else if (item.getItemId() == android.R.id.home){
