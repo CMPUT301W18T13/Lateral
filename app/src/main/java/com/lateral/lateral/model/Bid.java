@@ -10,6 +10,7 @@ import com.lateral.lateral.Constants;
 import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 // TODO: Maybe store bidderUsername as well as bidderId for efficiency?
 /**
@@ -41,14 +42,14 @@ public class Bid extends BaseEntity {
             throw new IllegalArgumentException("Amount is below " + Constants.MIN_BID_AMOUNT);
         }
 
-        this.amount = amount;
+        this.amount = amount.setScale(2, RoundingMode.CEILING); // Needed to keep precision
         this.taskId = taskId;
         this.bidderId = bidderId;
     }
 
     /**
      * Constructor
-     * @param amount
+     * @param amount The dollar value of the new bid
      */
     public Bid(BigDecimal amount){
         if (amount.compareTo(new BigDecimal(Constants.MIN_BID_AMOUNT)) < 0){
@@ -62,7 +63,7 @@ public class Bid extends BaseEntity {
      * Gets the amount of this bid
      * @return The stored amount
      */
-    public BigDecimal getAmount(){ return this.amount; }
+    public BigDecimal getAmount(){ return this.amount.setScale(2, RoundingMode.CEILING); }
 
     /**
      * Gets the bidder on this object

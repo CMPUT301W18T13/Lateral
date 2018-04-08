@@ -221,12 +221,11 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
         try {
             Task newTask = new Task(title, desc);
-            newTask.setRequestingUserId(LOGGED_IN_USER);
+            newTask.setRequestingUserId(LOGGED_IN_USER.getId());
 
             // TODO vvvvvvvvvv create variable LOGGED_IN_USER_USERNAME which specifies the current users username
             // TODO: Actually, no, LOGGED_IN_USER should be a User object, not a String
-            DefaultUserService defaultUserService = new DefaultUserService();
-            String username = defaultUserService.getUserByID(LOGGED_IN_USER).getUsername();
+            String username = LOGGED_IN_USER.getUsername();
             newTask.setRequestingUserUsername(username);
 
             // TODO: Testing

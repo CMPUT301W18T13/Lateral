@@ -30,6 +30,10 @@ import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
 
+import static com.lateral.lateral.service.UserLoginService.isUsernameTaken;
+import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
+import static com.lateral.lateral.service.UserLoginService.usernameValidChars;
+
 // Source for idea: https://stackoverflow.com/questions/10696986
 
 /**
@@ -92,7 +96,7 @@ public class UserLinkTextView extends AppCompatTextView {
             if (link_start == -1){
                 // Match '@' at beginning of word or text
                 if (text.charAt(i) == '@' &&
-                    (i == 0 || Character.isWhitespace(text.charAt(i-1)))){
+                    (i == 0 || usernameValidChars.indexOf(text.charAt(i-1)) < 0)){
                     // Reset search
                     link_start = i;
                 }
@@ -108,7 +112,7 @@ public class UserLinkTextView extends AppCompatTextView {
                 int link_end = -1;
 
                 // Match end of word
-                if (Character.isWhitespace(text.charAt(i))){
+                if (usernameValidChars.indexOf(text.charAt(i)) < 0){
                     link_end = i;
                     link_found = true;
                 }
@@ -118,16 +122,21 @@ public class UserLinkTextView extends AppCompatTextView {
                     link_found = true;
                 }
 
-                if (link_found){
+                if (link_found) {
                     // Validate
-                    if (link_end - link_start >= Constants.USERNAME_CHAR_MINIMUM &&
-                            link_end - link_start <= Constants.USERNAME_CHAR_LIMIT) {
-
-                        // Create link
+//                    if (link_end - link_start >= Constants.USERNAME_CHAR_MINIMUM &&
+//                            link_end - link_start <= Constants.USERNAME_CHAR_LIMIT) {
+//
+//                        // Create link
+//                        text.setSpan(new UserLinkSpan(), link_start, link_end,
+//                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                    }
+                    String username = text.subSequence(link_start+1, link_end).toString();
+                    if (isUsernameValid(username)) {
                         text.setSpan(new UserLinkSpan(), link_start, link_end,
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
                     }
+
                     // Reset search
                     link_start = -1;
                 }

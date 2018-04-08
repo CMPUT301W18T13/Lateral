@@ -117,13 +117,21 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         Log.d("ADAPTER", Integer.toString(position));
         // need to fill more properly once big/user objects implemented on elastic search
         final Task task = mTasks.get(position);
+        BigDecimal bid;
+        String bidText;
+        DateFormat df;
+        PhotoGallery gallery;
+        int bidsNotViewed;
+        String bidsNotViewedString;
+        boolean displayBidsNotViewed = false;
+
         holder.tvTitle.setText(task.getTitle());
         //holder.tvUsername.setText(context.getString(R.string.username_display, (defaultUserService.getUserByID(task.getRequestingUserId())).getUsername()));
         holder.tvUsername.setText(context.getString(R.string.username_display, task.getRequestingUserUsername()));
         //TODO error handle
         //Bid bid = defaultBidService.getLowestBid(task.getId());
-        BigDecimal bid = task.getLowestBidValue();
-        String bidText = "No Bids";
+        bid = task.getLowestBidValue();
+        bidText = "No Bids";
         if (bid != null) {
             //bidText = String.valueOf(bid.getAmount());
             bidText = String.valueOf(bid);
@@ -137,16 +145,32 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // get task status -> get color from status -> set background color
         holder.tvTaskStatus.setBackgroundColor(getColorValueFromTaskStatus(task.getStatus()));
 
-        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
+        df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         holder.tvDate.setText(df.format(task.getDate()));
 
-        // display number of new bids
-       //
-        //holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
-        //
-        // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
+        /*
+        deals with displaying new bids indicator on task card
+         */
+        if (context instanceof RequestedTasksViewActivity) {
+            bidsNotViewed = task.getBidsNotViewed();
+            bidsNotViewedString = String.valueOf(bidsNotViewed);
 
-        PhotoGallery gallery = task.getPhotoGallery();
+            if (bidsNotViewed > 1) {
+                bidsNotViewedString += " new bids!";
+                displayBidsNotViewed = true;
+            } else if (bidsNotViewed == 1) {
+                bidsNotViewedString += " new bid!";
+                displayBidsNotViewed = true;
+            }
+
+            if (displayBidsNotViewed) {
+                Log.d("BNVS", bidsNotViewedString);
+                holder.tvNewBids.setText(bidsNotViewedString);
+            }
+        }
+
+
+        gallery = task.getPhotoGallery();
         holder.imageView.setImage(gallery.get(0));
     }
 

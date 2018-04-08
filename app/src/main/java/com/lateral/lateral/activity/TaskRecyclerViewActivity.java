@@ -10,8 +10,6 @@ package com.lateral.lateral.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,10 +17,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -61,7 +59,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     private static int firstVisibleInListview;
     private boolean userIsInteracting;
-
+    private CardView errorMessage;
     /*
     public RecyclerView.Adapter getmAdapter(){
         return this.mAdapter;
@@ -83,6 +81,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     protected abstract int getResourceLayoutID();
     protected abstract int getRecyclerListID();
     protected abstract int getProgressBarID();
+    protected abstract int getErrorMessageID();
     protected abstract Context currentActivityContext();
     protected abstract Class targetClass(Task clickedTask);
 
@@ -97,6 +96,10 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(getResourceLayoutID());
+
+        errorMessage = findViewById(getErrorMessageID());
+        setErrorMessageVisibility(false);
+        //errorMessage.setVisibility(View.INVISIBLE);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -278,6 +281,19 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
      */
     public boolean getUserIsInteracting() {
         return this.userIsInteracting;
+    }
+
+    /**
+     * call if you want to set a generic error message on one of the task recycler views
+     * @param visibility true is you want error message to be displayed, false if you
+     */
+    public void setErrorMessageVisibility(boolean visibility) {
+        if (visibility) {
+            // display error message
+            errorMessage.setVisibility(View.VISIBLE);
+        } else if (!visibility){
+            errorMessage.setVisibility(View.INVISIBLE);
+        }
     }
 
 

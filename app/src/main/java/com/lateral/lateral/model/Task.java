@@ -10,6 +10,7 @@ import com.lateral.lateral.Constants;
 import com.lateral.lateral.annotation.ElasticSearchType;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -200,7 +201,10 @@ public class Task extends BaseEntity {
     }
 
     public BigDecimal getLowestBidValue() {
-        return lowestBidValue;
+        if (lowestBidValue == null){
+            return null;
+        }
+        return lowestBidValue.setScale(2, RoundingMode.CEILING);
     }
 
 

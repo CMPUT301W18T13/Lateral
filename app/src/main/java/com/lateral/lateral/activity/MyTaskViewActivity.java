@@ -126,7 +126,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param task task
      */
     private void refresh(Task task) {
-
         if (task.getLowestBid() == null) {
             currentBid.setText(R.string.task_view_no_bids);
         } else {
@@ -150,8 +149,18 @@ public class MyTaskViewActivity extends AppCompatActivity {
         statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
         setImages();
         setButtonVisibility();
+
+        invalidateOptionsMenu();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_geo_location);
+        item.setVisible(task.checkGeo());
+        return true;
+
+    }
 
     private void setImages() {
         PhotoGallery gallery = task.getPhotoGallery();
@@ -236,13 +245,15 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param v current view
      */
     public void onSetRequestedButtonClick(View v){
+        Bid assignedBid = task.getAssignedBid();
+        bidService.delete(assignedBid.getId());
+
         task.setAssignedBid(null);
         task.setAssignedBidId(null);
         task.setBids(null);
         task.setLowestBid(null);
         task.setStatus(TaskStatus.Requested);
 
-        bidService.deleteBidsByTask(taskID);
         taskService.update(task);
         refresh(task);
     }
@@ -256,10 +267,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.my_task_menu, menu);
-        if(!task.checkGeo()){
-            MenuItem item = menu.findItem(R.id.action_geo_location);
-            item.setVisible(false);
-        }
         return true;
     }
 

@@ -28,7 +28,7 @@ import com.lateral.lateral.service.implementation.DefaultTaskService;
 import java.util.ArrayList;
 
 //TODO: use recycler view
-//TODO: make disgusting bid_card look nicer
+//TODO: set unaccepted bids to not accepted and don't delete them
 
 /**
  * Class to work the Bid List into the List/RecyclerView
@@ -121,17 +121,7 @@ public class BidRowAdapter extends BaseAdapter {
 
         acceptButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick(View v)
-            {
-                // TODO: Make more efficient? Maybe add service method to simplify this
-                //Delete all other bids which have not been accepted
-                for (Bid b : bids){
-                    if (!b.getId().equals(bid.getId())){
-                        BidService bidService = new DefaultBidService();
-                        bidService.delete(b.getId());
-                    }
-                }
-
+            public void onClick(View v) {
                 task.setAssignedBidId(bid.getId());
                 task.setStatus(TaskStatus.Assigned);
                 TaskService taskService = new DefaultTaskService();
@@ -142,7 +132,6 @@ public class BidRowAdapter extends BaseAdapter {
                             "Failed to update task", Toast.LENGTH_SHORT);
                     errorToast.show();
                 }
-
                 bidListActivity.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
             }
@@ -155,6 +144,12 @@ public class BidRowAdapter extends BaseAdapter {
                 bids.remove(bid);
                 BidService bidService = new DefaultBidService();
                 bidService.delete(bid.getId());
+
+                if (bids.size() == 0){
+                    task.setStatus(TaskStatus.Requested);
+                    TaskService taskService = new DefaultTaskService();
+                    taskService.update(task);
+                }
                 notifyDataSetChanged();
             }
         });

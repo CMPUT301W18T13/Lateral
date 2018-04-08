@@ -13,7 +13,6 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -50,7 +49,6 @@ import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
  */
 public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String thisUserID = LOGGED_IN_USER;
     private PullRefreshLayout layout;
 
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
@@ -87,6 +85,11 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
     protected int getProgressBarID() { return R.id.bidded_task_view_progress;}
     //bidded_task_view_progress
 
+    @Override
+    protected int getErrorMessageID() {
+        return R.id.assignedAndBiddedErrorWarning;
+    }
+
     /**
      * Gets the context of the current activity
      * @return The current activity's Context
@@ -117,7 +120,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Log.d("LOGGED IN USER", thisUserID);
+        Log.d("LOGGED IN USER", LOGGED_IN_USER.getId());
         //returnMatchingTasks(thisUserID);
 
         initializeLocalArrays();
@@ -166,9 +169,6 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
             }
         });
 
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -180,21 +180,10 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        if(user != null) {
-            usernameView.setText(getString(R.string.username_display, user.getUsername()));
-        } else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        if(user != null) {
-            emailView.setText(user.getEmailAddress());
-        }
-        else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        emailView.setText(LOGGED_IN_USER.getEmailAddress());
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -279,7 +268,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      */
     public void initializeLocalArrays() {
-        allLocallyStoredTasks = defaultTaskService.getBiddedTasks(thisUserID);
+        allLocallyStoredTasks = defaultTaskService.getBiddedTasks(LOGGED_IN_USER.getId());
 
         // clear in case we are refreshing
         tasksWithBids.clear();

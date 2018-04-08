@@ -8,14 +8,8 @@ package com.lateral.lateral.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -31,7 +25,6 @@ import com.lateral.lateral.model.Bid;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import static java.lang.Character.isDigit;
 
@@ -158,7 +151,6 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         }
 
         BigDecimal amount = new BigDecimal(amountPlainText.getText().toString());
-        amount = amount.setScale(2, RoundingMode.CEILING);  // Needed to keep precision
         newBid = new Bid(amount);
     }
 
