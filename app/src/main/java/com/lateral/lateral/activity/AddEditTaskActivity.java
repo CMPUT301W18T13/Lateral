@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -37,7 +36,6 @@ import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.PhotoGenerator;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.lateral.lateral.widget.PhotoImageView;
 
 import java.io.IOException;
@@ -122,7 +120,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
             title.setText(editTask.getTitle());
             description.setText(editTask.getDescription());
             gallery = editTask.getPhotoGallery();
-            if(editTask.checkGeo()){
+            if (editTask.checkGeo()) {
                 addGeoLocationButton.setText(editTask.getAddress());
             }
         }
@@ -249,7 +247,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
         try {
             editTask.setTitle(title);
             editTask.setDescription(desc);
-            if(latLng != null)
+            if (latLng != null)
                 editTask.setLocation(latLng.latitude, latLng.longitude, address);
             service.update(editTask);
             Toast postTask = Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT);
@@ -325,13 +323,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
         } else if (requestCode >= PHOTO_REQUEST && resultCode == RESULT_OK) {
             // Adding new image
 
-            // Source: https://stackoverflow.com/questions/38352148
-            Uri selectedImage = data.getData();
             try {
-                Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImage);
-                if (image == null) throw new IOException("Image failed to load");
-                // Shrink the bitmap so it fits in the database nicely
-                image = PhotoGallery.shrinkBitmap(image);
+                Uri imageData = data.getData();
+                Bitmap image = PhotoGallery.generateBitmap(getContentResolver(), imageData);
                 gallery.insert(image, requestCode - PHOTO_REQUEST);
                 refreshImages();
             } catch (IOException e) {
