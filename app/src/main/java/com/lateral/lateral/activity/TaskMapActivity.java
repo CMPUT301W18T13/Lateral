@@ -8,60 +8,34 @@ package com.lateral.lateral.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
-import com.lateral.lateral.service.notification.NotificationServiceScheduler;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
-// TODO: Make the homepage look nicer (make a cool background maybe)
-// TODO: Add hamburger menu on (almost) all pages
-// TODO: Remove or fix the highlight of currently selected item in menu
-/**
- * The main activity for the app
- */
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
-    // TODO: Don't store string, use User object instead so we can get username and other info too!
-    public static String LOGGED_IN_USER = null;
+public class TaskMapActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    /**
-     * Called when the activity is created
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_task_map);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Receive intent
-        Bundle extras = getIntent().getExtras();
-        if(extras != null){
-            String user = extras.getString("userId");
-            if (user != null) {
-                LOGGED_IN_USER = user;
-            }
-        }
-        Log.i("MainActivity", "AFT Logged in user's ID: " + LOGGED_IN_USER);
-
-        //Start sending notifications
-        NotificationServiceScheduler.scheduleNewBid(getApplicationContext());
 
         DefaultUserService defaultUserService = new DefaultUserService();
         User user = defaultUserService.getById(LOGGED_IN_USER);
@@ -73,6 +47,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.bringToFront();
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
@@ -95,61 +70,6 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
-    // handles onClick events
-
-    /**
-     * Handles button onClick events
-     * @param view The clicked view
-     */
-    public void onButtonClick(View view) {
-        Intent intent;
-        switch (view.getId()) {
-
-            case R.id.button_available:
-                intent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.button_requested:
-                intent = new Intent(MainActivity.this, RequestedTasksViewActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.button_search:
-                intent = new Intent(MainActivity.this, AvailableTasksViewActivity.class);
-                intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
-                startActivity(intent);
-                break;
-
-            case R.id.button_assigned:
-                intent = new Intent(MainActivity.this, AssignedAndBiddedTasksViewActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.button_map:
-                intent = new Intent(MainActivity.this, TaskMapActivity.class);
-                startActivity(intent);
-                break;
-
-            case R.id.button_QR:
-                intent = new Intent(MainActivity.this, ScanQRCodeActivity.class);
-                startActivity(intent);
-        }
-    }
-
-    /**
-     * Handles pressing of the back button
-     */
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     /**
      * Handles clicking of Navigation Drawer Items
      * @param item Navigation Drawer Item
@@ -159,6 +79,7 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
         if (id == R.id.nav_edit_user) {
             Intent intent = new Intent(this, EditUserActivity.class);
             startActivity(intent);
@@ -171,7 +92,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_bidded_tasks) {
             Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_qrcode) {
+        } else if (id == R.id.nav_qrcode){
             Intent intent = new Intent(this, ScanQRCodeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_search_tasks) {
@@ -183,15 +104,15 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         } else if (id == R.id.nav_logout) {
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
-                LOGGED_IN_USER = null;
-                Log.i("MainActivity", "File deleted");
+                MainActivity.LOGGED_IN_USER = null;
+                Log.i("RequestedTasksView", "File deleted");
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
-        } else return false;
+        }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

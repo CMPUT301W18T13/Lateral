@@ -26,12 +26,12 @@ public class Task extends BaseEntity {
     private String description;
     private String requestingUserId;
     private String assignedBidId;
-    private String geo_location; // TODO: string so that we can easily serialize a tasks latitude and longitude for geosearch
     private int bidsNotViewed;
     private int bidsPendingNotification;
     private String requestingUserUsername;
     private BigDecimal lowestBidValue;
     private PhotoGallery photoGallery;
+    private String address;
 
     private double latitude;
     private double longitude;
@@ -262,10 +262,10 @@ public class Task extends BaseEntity {
      * @param latitude Latitude to be set
      * @param longitude Longitude to be set
      */
-    public void setLocation(double latitude, double longitude){
+    public void setLocation(double latitude, double longitude,String address){
         this.latitude = latitude;
         this.longitude = longitude;
-        this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
+        this.address = address;
     }
 
     public double getLat(){
@@ -274,6 +274,14 @@ public class Task extends BaseEntity {
 
     public double getLon(){
         return longitude;
+    }
+
+    public boolean checkGeo(){
+        return address != null;
+    }
+
+    public String getAddress(){
+        return address;
     }
 
     /**

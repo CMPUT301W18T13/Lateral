@@ -29,9 +29,10 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
-//TODO: fix bid limit problem
+// TODO: fix bid limit problem
 // TODO: BUG: When you decline all bids, need to set status back to Requested and update task in DB
-// TODO: You are still able to bid twice on the same task?
+// TODO: BUG: Need to overwrite last bid (but somehow only if bid is lower?)
+// TODO: BUG: Currency format wrong everywhere in app. Ex: 235 -> $235.0
 
 /**
  * Activity to display the list of bids

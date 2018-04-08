@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/temp_date"
-                    android:textAppearance="@android:style/TextAppearance.Material.Caption"
+                    android:textAppearance="@android:style/TextAppearance.Material.Small.Inverse"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/task_view_username" />

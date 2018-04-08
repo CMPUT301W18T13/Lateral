@@ -55,10 +55,12 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
     /**
      * Constructor for the service
      */
+    @SuppressWarnings("unchecked")
     protected DefaultBaseService(){
         // Source: https://stackoverflow.com/questions/3403909/
         ParameterizedType type = (ParameterizedType)getClass().getGenericSuperclass();
-        this.typeArgument = (Class<T>)type.getActualTypeArguments()[0];
+        Type arg = type.getActualTypeArguments()[0];
+        this.typeArgument = (Class<T>)arg;
 
         gson = buildGson().create();
     }

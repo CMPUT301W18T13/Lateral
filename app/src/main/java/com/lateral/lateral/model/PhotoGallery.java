@@ -20,7 +20,6 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.lateral.lateral.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Type;
@@ -32,6 +31,27 @@ import java.lang.reflect.Type;
 public class PhotoGallery {
 
     public static int MAX_PHOTOS = 5;
+    public static int MAX_SIZE = 65000; // This number is smaller to account for meta-data
+
+    /**
+     * Shrink bitmap to match database constraints
+     * @param image image
+     * @return resized image
+     */
+    public static Bitmap shrinkBitmap(Bitmap image){
+        // TODO: BUG: This method isn't shrinking linearly!
+        final int serializedByteCount = new Serializer().serializeBitmap(image).length()*2;
+        // No need to shrink
+        if (serializedByteCount < MAX_SIZE) return image;
+
+        // How much to shrink each edge
+        double factor = Math.sqrt((double)MAX_SIZE/serializedByteCount);
+
+        return android.graphics.Bitmap.createScaledBitmap(image,
+                (int)(image.getWidth()*factor),
+                (int)(image.getHeight()*factor),
+                false);
+    }
 
     private Bitmap[] photoList = new Bitmap[MAX_PHOTOS];
 
@@ -80,22 +100,29 @@ public class PhotoGallery {
         @Override
         public JsonElement serialize(PhotoGallery gallery, Type type, JsonSerializationContext jsonSerializationContext) {
 
-            // TODO: Investigate why serialize appends a space to the end
             JsonArray photoArray = new JsonArray();
 
             for (Bitmap bitmap : gallery.photoList) {
                 if (bitmap == null) {
                     photoArray.add(JsonNull.INSTANCE);
                 } else {
-                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                    // TODO: Maybe use JPG if I can ensure quality isn't repeatedly lost
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                    byte[] byteArray = stream.toByteArray();
-                    photoArray.add(Base64.encodeToString(byteArray, Base64.URL_SAFE));
+                    photoArray.add(serializeBitmap(bitmap));
                 }
             }
 
             return photoArray;
+        }
+
+        /**
+         * Serialize bitmap as base 64 string
+         * @param image bitmap
+         * @return serialized string
+         */
+        public String serializeBitmap(Bitmap image){
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            image.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            return Base64.encodeToString(byteArray, Base64.URL_SAFE);
         }
 
         /**

@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_assigned_and_bidded_tasks_view">
 
     <Spinner
-        android:id="@+id/filterTasksSpinner"
+        android:id="@+id/assignedFilterTasksSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -25,7 +25,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterTasksSpinner">
+        app:layout_constraintTop_toBottomOf="@+id/assignedFilterTasksSpinner">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/assignedTaskViewList"

@@ -23,10 +23,10 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.lateral.lateral.activity.RequestedTasksViewActivity">
+        tools:context="com.lateral.lateral.activity.AvailableTasksViewActivity">
 
         <ProgressBar
-            android:id="@+id/req_task_view_progress"
+            android:id="@+id/available_task_view_progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -36,9 +36,7 @@
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fitsSystemWindows="true"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:expanded="false">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -49,29 +47,14 @@
 
                 <TextView
                     android:id="@+id/toolbar_title"
-                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="left"
-                    android:textColor="@android:color/white" />
-
+                    android:layout_height="wrap_content"/>
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 
+        <include layout="@layout/content_available_tasks_view" />
 
-
-        <include layout="@layout/content_requested_tasks_view" />
-
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/addNewTaskFab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:fabSize="normal"
-            app:srcCompat="@drawable/ic_add_button" />
 
     </android.support.design.widget.CoordinatorLayout>
 

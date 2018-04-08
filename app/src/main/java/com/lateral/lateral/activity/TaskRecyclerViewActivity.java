@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -109,6 +110,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         progressView = findViewById(getProgressBarID());
         mRecyclerView.setVisibility(View.GONE);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        mRecyclerView.addItemDecoration(dividerItemDecoration);
+
 
         /*
         Listens and handles clicks on the recycler view
@@ -154,14 +158,14 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
 //        /* uncomment to add search bar icon to every child recycler view */
 //
-//        getMenuInflater().inflate(R.menu.all_task_view_menu, menu);
+//        getMenuInflater().inflate(R.menu.available_task_view_menu, menu);
 //
 //        // Get the SearchView and set the searchable configuration
 //        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 //        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 //        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 //
-//        /* also remove the code from the onCreateOptionsMenu in AllTasksViewActivity */
+//        /* also remove the code from the onCreateOptionsMenu in AvailableTasksViewActivity */
 
 
 

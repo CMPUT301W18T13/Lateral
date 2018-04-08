@@ -7,17 +7,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.lateral.lateral.activity.AllTasksViewActivity"
-    tools:showIn="@layout/activity_all_tasks_view">
+    tools:context="com.lateral.lateral.activity.AvailableTasksViewActivity"
+    tools:showIn="@layout/activity_available_tasks_view">
 
+    <Spinner
+        android:id="@+id/availableFilterTasksSpinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.baoyz.widget.PullRefreshLayout
-        android:id="@+id/allTasksSwipeRefreshLayout"
+        android:id="@+id/availableTasksSwipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/allTasksSpinner">
+        app:layout_constraintTop_toBottomOf="@+id/availableFilterTasksSpinner">
 
 
         <android.support.v7.widget.RecyclerView

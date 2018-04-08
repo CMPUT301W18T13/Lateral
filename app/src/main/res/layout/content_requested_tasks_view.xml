@@ -9,7 +9,7 @@
     tools:showIn="@layout/activity_requested_tasks_view">
 
     <Spinner
-        android:id="@+id/filterTasksSpinner"
+        android:id="@+id/requestedFilterTasksSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -25,7 +25,7 @@
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/filterTasksSpinner">
+        app:layout_constraintTop_toBottomOf="@+id/requestedFilterTasksSpinner">
 
 
         <android.support.v7.widget.RecyclerView
@@ -41,7 +41,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/filterText"></android.support.v7.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@+id/filterText"/>
 
 
     </com.baoyz.widget.PullRefreshLayout>

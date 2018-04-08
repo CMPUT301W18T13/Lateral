@@ -7,9 +7,7 @@
 package com.lateral.lateral.activity;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
-import com.lateral.lateral.dialog.UserInfoDialog;
 import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.BidEvent;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
@@ -30,8 +26,6 @@ import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
 import java.util.ArrayList;
-
-import static com.lateral.lateral.model.BidEvent.*;
 
 //TODO: use recycler view
 //TODO: make disgusting bid_card look nicer
@@ -45,7 +39,7 @@ public class BidRowAdapter extends BaseAdapter {
     private ArrayList<Bid> bids;
     private Task task;
     private static LayoutInflater inflater = null;
-    private Activity BidListActivtyClass;
+    private Activity bidListActivity;
     private String usernameFormat;
     private String amountFormat;
 
@@ -54,14 +48,14 @@ public class BidRowAdapter extends BaseAdapter {
      * @param context The current context
      * @param bids The list of bids to add
      * @param task the task to watch
-     * @param BidListActivtyClass The activity to use this in
+     * @param bidListActivity The activity to use this in
      */
-    public BidRowAdapter(Context context, ArrayList<Bid> bids, Task task, Activity BidListActivtyClass) {
+    public BidRowAdapter(Context context, ArrayList<Bid> bids, Task task, Activity bidListActivity) {
 
         this.context = context;
         this.bids = bids;
         this.task = task;
-        this.BidListActivtyClass = BidListActivtyClass;
+        this.bidListActivity = bidListActivity;
         inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -149,7 +143,7 @@ public class BidRowAdapter extends BaseAdapter {
                     errorToast.show();
                 }
 
-                BidListActivtyClass.setResult(Activity.RESULT_OK);
+                bidListActivity.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
             }
         });
