@@ -59,7 +59,6 @@ public class EditUserActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_sign_up);
-        setTitle(R.string.edit_user_title);
 
         DefaultUserService defaultUserService = new DefaultUserService();
         mCurrentUser = defaultUserService.getById(LOGGED_IN_USER);

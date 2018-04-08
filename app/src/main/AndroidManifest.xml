@@ -94,7 +94,8 @@
             android:label="@string/title_activity_task_map"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".activity.BidListActivity"/>
-        <activity android:name=".activity.EditUserActivity" />
+        <activity android:name=".activity.EditUserActivity"
+            android:label="@string/edit_user_title"/>
         <activity android:name=".activity.ScanQRCodeActivity"
             android:label="@string/title_activity_scan_qrcode"/>
         <activity android:name=".barcodereader.BarcodeCaptureActivity"

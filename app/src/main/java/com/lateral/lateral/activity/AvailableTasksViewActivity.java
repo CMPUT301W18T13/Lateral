@@ -247,7 +247,13 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         }
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setCheckedItem(R.id.nav_available_tasks);
     }
 
     /**
@@ -494,14 +500,16 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, RequestedTasksViewActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_available_tasks) {
-            Log.i("AllTasksView", "Nav Item Selected!");
-            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
-            startActivity(intent);
+
+            // We are already here, do nothing
+
         } else if (id == R.id.nav_bidded_tasks) {
             Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_qrcode){
             Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, ScanQRCodeActivity.class);
@@ -510,9 +518,11 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             Intent intent = new Intent(this, AvailableTasksViewActivity.class);
             intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_task_map){
             Intent intent = new Intent(this, TaskMapActivity.class);
             startActivity(intent);
+            finish();
         } else if (id == R.id.nav_logout) {
             Log.i("AllTasksView", "Nav Item Selected!");
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){

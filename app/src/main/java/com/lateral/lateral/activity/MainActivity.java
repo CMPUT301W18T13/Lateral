@@ -9,6 +9,7 @@ package com.lateral.lateral.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -27,8 +28,6 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.lateral.lateral.service.notification.NotificationServiceScheduler;
 
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
-// TODO: Make the homepage look nicer (make a cool background maybe)
-// TODO: Add hamburger menu on (almost) all pages
 // TODO: Remove or fix the highlight of currently selected item in menu
 /**
  * The main activity for the app
@@ -93,6 +92,19 @@ public class MainActivity extends AppCompatActivity
         }
 
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // Uncheck all options
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu navMenu = navigationView.getMenu();
+        int size = navMenu.size();
+        for (int i = 0; i < size; i++) {
+            navMenu.getItem(i).setChecked(false);
+        }
     }
 
     // handles onClick events
@@ -189,7 +201,7 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
                 finish();
             }
-        } else return false;
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
