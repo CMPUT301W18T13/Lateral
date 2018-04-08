@@ -89,43 +89,42 @@ public class ScanQRCodeActivity extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
-        if (requestCode == RC_BARCODE_CAPTURE) {
-            if (resultCode == CommonStatusCodes.SUCCESS) {
-                if (data != null) {
-                    Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
-                    String url = barcode.displayValue;
-                    if(url.startsWith("http://lateral.lateral.com/")){
-                        String taskId = url.substring(27); // Length of URL string
+        if (requestCode == RC_BARCODE_CAPTURE && resultCode == CommonStatusCodes.SUCCESS) {
 
-                        DefaultTaskService defaultTaskService = new DefaultTaskService();
-                        Task task = defaultTaskService.getTaskByTaskID(taskId);
+            Barcode barcode = data.getParcelableExtra(BarcodeCaptureActivity.BarcodeObject);
+            String url = barcode.displayValue;
+            String domain = "http://lateral.lateral.com/";
+            if(url.startsWith(domain)){
+                String taskId = url.substring(domain.length());
 
-                        if(task != null){
-                            if(task.getRequestingUserId().equals(MainActivity.LOGGED_IN_USER)){
-                                Toast.makeText(this, "You own this task!", Toast.LENGTH_LONG).show();
-                            }
-                            else if (task.getStatus() == TaskStatus.Assigned || task.getStatus() == TaskStatus.Done){
-                                Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_LONG).show();
-                            }
-                            else{
-                                Intent intent = new Intent(ScanQRCodeActivity.this, TaskViewActivity.class);
-                                intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, taskId);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }
-                        else{
-                            Toast.makeText(this, "Could not load task!", Toast.LENGTH_LONG).show();
-                        }
+                DefaultTaskService defaultTaskService = new DefaultTaskService();
+                Task task = defaultTaskService.getTaskByTaskID(taskId);
+
+                if (task != null){
+                    if (task.getStatus() == TaskStatus.Done){
+                        Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_LONG).show();
+                    }
+                    else if (task.getStatus() == TaskStatus.Assigned){
+                        Toast.makeText(this, "This task is already assigned!", Toast.LENGTH_LONG).show();
+                    } else if(task.getRequestingUserId().equals(MainActivity.LOGGED_IN_USER)){
+                        Intent intent = new Intent(ScanQRCodeActivity.this, MyTaskViewActivity.class);
+                        intent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, taskId);
+                        startActivity(intent);
+                        finish();
                     }
                     else{
-                        Toast.makeText(this, "Couldn't get task data!", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(ScanQRCodeActivity.this, TaskViewActivity.class);
+                        intent.putExtra(TaskViewActivity.EXTRA_TASK_ID, taskId);
+                        startActivity(intent);
+                        finish();
                     }
-                } else {
-                    Log.d(TAG, "No barcode captured, intent data is null");
                 }
-            } else {
-                Log.d(TAG, "Unknown intent received!");
+                else{
+                    Toast.makeText(this, "Couldn't find task!", Toast.LENGTH_LONG).show();
+                }
+            }
+            else{
+                Toast.makeText(this, "Couldn't resolve Task from QR Code!", Toast.LENGTH_LONG).show();
             }
         }
         else {
