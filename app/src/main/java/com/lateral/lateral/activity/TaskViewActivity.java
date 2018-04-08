@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -140,8 +139,22 @@ public class TaskViewActivity extends AppCompatActivity {
 
         if (status == Assigned || status == Done){
             bidNowButton.setVisibility(View.GONE);
+        } else{
+            bidNowButton.setVisibility(View.VISIBLE);
         }
         setImages();
+
+        invalidateOptionsMenu();
+
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_geo_location);
+        item.setVisible(task.checkGeo());
+        return true;
+
     }
 
     private void setImages() {
@@ -175,10 +188,6 @@ public class TaskViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_menu, menu);
-        if(!task.checkGeo()){
-            MenuItem item = menu.findItem(R.id.action_geo_location);
-            item.setVisible(false);
-        }
         return true;
     }
 

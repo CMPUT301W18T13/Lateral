@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -84,7 +83,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         Intent taskIntent = getIntent();
         this.taskID = taskIntent.getStringExtra(MyTaskViewActivity.EXTRA_TASK_ID);
         if (this.taskID == null){
-            setResult(RESULT_OK);
+            setResult(RESULT_CANCELED);
             finish();
         }
 
@@ -150,8 +149,18 @@ public class MyTaskViewActivity extends AppCompatActivity {
         statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
         setImages();
         setButtonVisibility();
+
+        invalidateOptionsMenu();
     }
 
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item = menu.findItem(R.id.action_geo_location);
+        item.setVisible(task.checkGeo());
+        return true;
+
+    }
 
     private void setImages() {
         PhotoGallery gallery = task.getPhotoGallery();
@@ -245,7 +254,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
         task.setLowestBid(null);
         task.setStatus(TaskStatus.Requested);
 
-        //bidService.deleteBidsByTask(taskID);
         taskService.update(task);
         refresh(task);
     }
@@ -259,10 +267,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.my_task_menu, menu);
-        if(!task.checkGeo()){
-            MenuItem item = menu.findItem(R.id.action_geo_location);
-            item.setVisible(false);
-        }
         return true;
     }
 
