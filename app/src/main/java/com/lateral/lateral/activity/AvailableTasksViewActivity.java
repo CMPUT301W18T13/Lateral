@@ -71,10 +71,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 /**
  * Activity for viewing all available tasks
  */
-// TODO fix white bar at the top of this activity --> appeared on my original pull
-// TODO clicking seems to work but test more --> pass intents
 // TODO: Get the notification "x new bids!" working (or remove it)
-// TODO: Disable app rotation
 // TODO: Show some info stating what the status colors mean!
 // TODO: BUG: Filter isn't working anymore
 // TODO: No need to store extra lists for each filter, just filter the list (which is cheap) when changing the filter

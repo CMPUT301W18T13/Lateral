@@ -147,7 +147,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         // holder.tvNewBids.setText(Integer.valueOf(task.getBidsNotViewed()));
 
         PhotoGallery gallery = task.getPhotoGallery();
-        //holder.imageView.setImage(gallery.get(0));
+        holder.imageView.setImage(gallery.get(0));
     }
 
     /**
