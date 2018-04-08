@@ -43,7 +43,6 @@ import java.util.Locale;
 
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.model.TaskStatus.*;
-// TODO: MAJOR BUG: Sometimes get after update fails to retrieve new changes
 
 /**
  * Activity for viewing a certain task

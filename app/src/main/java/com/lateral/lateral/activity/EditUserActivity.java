@@ -26,13 +26,10 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.service.UserLoginService.hashPassword;
 import static com.lateral.lateral.service.UserLoginService.isEmailValid;
 import static com.lateral.lateral.service.UserLoginService.isPasswordValid;
 import static com.lateral.lateral.service.UserLoginService.isPhoneNumberValid;
-import static com.lateral.lateral.service.UserLoginService.isUsernameTaken;
-import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
 import static com.lateral.lateral.service.UserLoginService.login;
 import static com.lateral.lateral.service.UserLoginService.randomBytes;
 import static com.lateral.lateral.service.UserLoginService.saveUserToken;

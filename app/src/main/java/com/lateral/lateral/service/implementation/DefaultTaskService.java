@@ -89,6 +89,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     public ArrayList<Task> getAvailableTasksByDistance(Double latitude, Double longitude, Double distance){
         String json = "{" +
                 "\"query\" : { " +
+                // TODO: Why is this commented out? It should return only Requested OR Bidded, maybe syntax was incorrect?
                 //"\"match\" : {" +
                 //"\"taskStatus\" : {" +
                 //"\"query\" : \"Requested Bidded\"}}, " +

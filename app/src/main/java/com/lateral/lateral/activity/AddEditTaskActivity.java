@@ -223,12 +223,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
             Task newTask = new Task(title, desc);
             newTask.setRequestingUserId(LOGGED_IN_USER.getId());
 
-            // TODO vvvvvvvvvv create variable LOGGED_IN_USER_USERNAME which specifies the current users username
-            // TODO: Actually, no, LOGGED_IN_USER should be a User object, not a String
             String username = LOGGED_IN_USER.getUsername();
             newTask.setRequestingUserUsername(username);
 
-            // TODO: Testing
             if (latLng != null) {
                 newTask.setLocation(latLng.latitude, latLng.longitude, address);
             }

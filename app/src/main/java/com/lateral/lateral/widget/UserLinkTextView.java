@@ -11,7 +11,6 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -19,20 +18,15 @@ import android.support.v7.widget.AppCompatTextView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.UserInfoDialog;
-
-import static com.lateral.lateral.service.UserLoginService.isUsernameTaken;
-import static com.lateral.lateral.service.UserLoginService.isUsernameValid;
-import static com.lateral.lateral.service.UserLoginService.usernameValidChars;
+import com.lateral.lateral.service.UserLoginService;
 
 // Source for idea: https://stackoverflow.com/questions/10696986
 
@@ -96,7 +90,7 @@ public class UserLinkTextView extends AppCompatTextView {
             if (link_start == -1){
                 // Match '@' at beginning of word or text
                 if (text.charAt(i) == '@' &&
-                    (i == 0 || usernameValidChars.indexOf(text.charAt(i-1)) < 0)){
+                    (i == 0 || Character.isWhitespace(text.charAt(i-1)))){
                     // Reset search
                     link_start = i;
                 }
@@ -112,7 +106,7 @@ public class UserLinkTextView extends AppCompatTextView {
                 int link_end = -1;
 
                 // Match end of word
-                if (usernameValidChars.indexOf(text.charAt(i)) < 0){
+                if (UserLoginService.USERNAME_VALID_CHARS.indexOf(text.charAt(i)) < 0){
                     link_end = i;
                     link_found = true;
                 }
@@ -123,16 +117,9 @@ public class UserLinkTextView extends AppCompatTextView {
                 }
 
                 if (link_found) {
-                    // Validate
-//                    if (link_end - link_start >= Constants.USERNAME_CHAR_MINIMUM &&
-//                            link_end - link_start <= Constants.USERNAME_CHAR_LIMIT) {
-//
-//                        // Create link
-//                        text.setSpan(new UserLinkSpan(), link_start, link_end,
-//                                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                    }
-                    String username = text.subSequence(link_start+1, link_end).toString();
-                    if (isUsernameValid(username)) {
+                    String username = text.subSequence(link_start + 1, link_end).toString();
+                    if (UserLoginService.isUsernameValid(username)) {
+
                         text.setSpan(new UserLinkSpan(), link_start, link_end,
                                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     }
