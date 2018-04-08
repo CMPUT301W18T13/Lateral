@@ -122,16 +122,21 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         clickedItemPosition = position;
-                        Task clickedTask = matchingTasks.get(position);
-                        Log.d("ITEM CLICKED", "item " + (matchingTasks.get(position).getId()));
-                        //String RequestingUserId = clickedTask.getRequestingUserId();
+                        Log.d("CLICK", "Click position = " + position);
 
-                        // create intent to go to task view given by targetClass() --> defined in child activities
-                        Intent viewTaskIntent = new Intent(currentActivityContext(), targetClass(clickedTask));
-                        // pass task id into intent
-                        viewTaskIntent.putExtra(EXTRA_TASK_ID, (matchingTasks.get(position).getId()));
-                        //startActivity(viewTaskIntent);
-                        startActivityForResult(viewTaskIntent, VIEW_TASK_REQUEST);
+                        if ((clickedItemPosition >= 0) && (clickedItemPosition < matchingTasks.size())) {
+
+                            Task clickedTask = matchingTasks.get(position);
+                            Log.d("ITEM CLICKED", "item " + (matchingTasks.get(position).getId()));
+                            //String RequestingUserId = clickedTask.getRequestingUserId();
+
+                            // create intent to go to task view given by targetClass() --> defined in child activities
+                            Intent viewTaskIntent = new Intent(currentActivityContext(), targetClass(clickedTask));
+                            // pass task id into intent
+                            viewTaskIntent.putExtra(EXTRA_TASK_ID, (matchingTasks.get(position).getId()));
+                            //startActivity(viewTaskIntent);
+                            startActivityForResult(viewTaskIntent, VIEW_TASK_REQUEST);
+                        }
                     }
                 });
 

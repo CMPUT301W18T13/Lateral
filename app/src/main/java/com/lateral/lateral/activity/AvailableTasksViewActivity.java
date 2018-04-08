@@ -71,10 +71,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 /**
  * Activity for viewing all available tasks
  */
-// TODO fix white bar at the top of this activity --> appeared on my original pull
-// TODO clicking seems to work but test more --> pass intents
 // TODO: Get the notification "x new bids!" working (or remove it)
-// TODO: Disable app rotation
 // TODO: Show some info stating what the status colors mean!
 // TODO: BUG: Filter isn't working anymore
 // TODO: No need to store extra lists for each filter, just filter the list (which is cheap) when changing the filter
@@ -301,14 +298,14 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     }
 
 
-    // determins if a search should be executed given the previous query, and the new query
+    // determines if a search should be executed given the previous query, and the new query
     public void searchNeeded(String newQuery) {
         boolean search = false;
 
         // user pressed space, search
-        if (newQuery.length() > 0) {
+        if (newQuery.length() > 1) {
 
-            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!newQuery.substring(newQuery.length() - 2).equals(" "))) {
+            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!(newQuery.substring(newQuery.length() - 2).equals(" ")))) {
                 search = true;
         }
 
@@ -319,7 +316,9 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         // search needed
         if (search) {
+            Log.d("search needed", "refreshing arrays");
             refreshLocalArrays(newQuery);
+            Log.d("display array", "display array from filter");
             displayResultsFromFilter();
         }
 
