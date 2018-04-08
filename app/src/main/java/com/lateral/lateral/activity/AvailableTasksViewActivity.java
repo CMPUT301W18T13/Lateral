@@ -6,21 +6,13 @@
 
 package com.lateral.lateral.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -39,21 +31,15 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.model.User;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 
-import java.nio.charset.CharacterCodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 //import static com.lateral.lateral.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
-import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
-import static com.lateral.lateral.model.TaskStatus.Done;
 
 
 /*
@@ -78,11 +64,11 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 // TODO: BUG: Load all records, not just top 10
 // TODO: Probably remove incremental searching
 // TODO: BUG: Available Tasks still shows Assigned and Done tasks (they shouldn't be displayed here)
-// TODO: --> Change getEveryTask/getAllTask to getEveryAvailableTask/getAllAvailableTask and add "Requested or Bidded" to the query
-// TODO: --> Change getAllTasksByDistance to getAvailableTasksByDistance and add "Requested or Bidded" to the query
+// TODO: --> Change getEveryAvailableTask/getAllTask to getEveryAvailableTask/getAllAvailableTask and add "Requested or Bidded" to the query
+// TODO: --> Change getAvailableTasksByDistance to getAvailableTasksByDistance and add "Requested or Bidded" to the query
 // TODO: BUG: All filters are missing "Tasks without bids (only requested)" option
 // TODO: BUG: Still able to bid on assigned and done tasks
-// TODO: BUG: getAllTasks() uses different number than getEveryTask()
+// TODO: BUG: getAllTasks() uses different number than getEveryAvailableTask()
 public class AvailableTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static String INTENT_OPEN_SEARCH = "com.lateral.lateral.OPEN_SEARCH";
@@ -426,7 +412,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         if (query == null) {
             // did not get here via search, display all
-            allLocallyStoredTasks = defaultTaskService.getEveryTask();
+            allLocallyStoredTasks = defaultTaskService.getEveryAvailableTask();
         } else {
             // user gave search query
             allLocallyStoredTasks = defaultTaskService.getAllTasks(query);

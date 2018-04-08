@@ -86,9 +86,12 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @param distance Distance from specified location
      * @return The list of all Tasks within distance of location
      */
-    public ArrayList<Task> getAllTasksByDistance(Double latitude, Double longitude, Double distance){
+    public ArrayList<Task> getAvailableTasksByDistance(Double latitude, Double longitude, Double distance){
         String json = "{" +
                 "\"query\" : { " +
+                //"\"match\" : {" +
+                //"\"taskStatus\" : {" +
+                //"\"query\" : \"Requested Bidded\"}}, " +
                 "\"filtered\" : { " +
                 "\"filter\" : { " +
                 "\"geo_distance\" : { " +
@@ -101,9 +104,9 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
-    public ArrayList<Task> getEveryTask(){
+    public ArrayList<Task> getEveryAvailableTask(){
         //String json = "{ \"query\" : { \"match_all\" : {}}}";
-        String json = "{\"from\" : 0, \"size\" : 50,\"query\" : {\"match_all\" : {}}}";
+        String json = "{\"from\" : 0, \"size\" : 50,\"query\" : {\"match\" : {\"taskStatus\" : { \"query\" : \"Requested Bidded\"}}}}";
 
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);

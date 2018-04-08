@@ -35,6 +35,7 @@ public class Task extends BaseEntity {
 
     private double latitude;
     private double longitude;
+    private String geo_location;
 
     // Extra fields
     private transient User requestingUser;
@@ -266,6 +267,7 @@ public class Task extends BaseEntity {
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;
+        this.geo_location = Double.toString(latitude) + ", " +  Double.toString(longitude);
     }
 
     public double getLat(){
