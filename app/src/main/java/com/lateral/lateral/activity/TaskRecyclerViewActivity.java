@@ -29,6 +29,7 @@ import android.view.View;
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
+import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.ItemClickSupport;
 import com.lateral.lateral.widget.PhotoImageView;
@@ -49,6 +50,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
     private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
+    private ArrayList<Bid> matchingBids;
 
     // request code for starting 'view a task' activity
     static final int VIEW_TASK_REQUEST = 1;
@@ -105,6 +107,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         matchingTasks = new ArrayList<Task>();
+        matchingBids = new ArrayList<Bid>();
 
         // defining recycler view
         mRecyclerView = findViewById(getRecyclerListID());
@@ -145,7 +148,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new TaskRowAdapter(matchingTasks, this);
+        mAdapter = new TaskRowAdapter(matchingTasks, this, matchingBids);
         mRecyclerView.setAdapter(mAdapter);
 
 
@@ -187,8 +190,10 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     /**
      * Adds a list of Tasks to the displayed tasks
      * @param returnedTasks tasks to be added
+     * @param returnedBids null unless you are in Assigned and Bidded tasks view activity,
+     *                     pass an array of every bid that user has made
      */
-    public void addTasks(ArrayList<Task> returnedTasks) {
+    public void addTasks(ArrayList<Task> returnedTasks, ArrayList<Bid> returnedBids) {
         Log.i("addTasks", "Showing progress bar!");
         showProgress(true);
         Log.i("addTasks", "Progress bar shown!");
@@ -196,8 +201,12 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         // most likely need to clear screen of tasks first
         //clearList();
         matchingTasks.clear();
-
         matchingTasks.addAll(returnedTasks);
+
+        if (returnedBids != null) {
+            matchingBids.clear();
+            matchingBids.addAll(returnedBids);
+        }
 //        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
         mAdapter.notifyDataSetChanged();
 

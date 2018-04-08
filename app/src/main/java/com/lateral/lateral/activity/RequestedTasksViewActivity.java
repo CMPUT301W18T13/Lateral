@@ -250,13 +250,13 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         return true;
     }
 
-    /**
-     * Returns any tasks matching the given query
-     * @param query Query to check on
-     */
-    private void returnMatchingTasks(String query) {
-        addTasks(defaultTaskService.getAllTasksByRequesterID(query));
-    }
+//    /**
+//     * Returns any tasks matching the given query
+//     * @param query Query to check on
+//     */
+//    private void returnMatchingTasks(String query) {
+//        addTasks(defaultTaskService.getAllTasksByRequesterID(query), null);
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -301,12 +301,15 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
     public int initializeLocalArrays() {
         allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(LOGGED_IN_USER.getId());
 
-        if (allLocallyStoredTasks.get(0) == null) {
-            Log.d("Tag", "allLocalTasks == null");
-            return -1;
-        } else {
-            Log.d("alltasks", "all tasks is not null");
-        }
+
+        // caused out of bounds index
+        // can be fixed by just checking size first but this code will probably be replaces anyway
+//        if (allLocallyStoredTasks.get(0) == null) {
+//            Log.d("Tag", "allLocalTasks == null");
+//            return -1;
+//        } else {
+//            Log.d("alltasks", "all tasks is not null");
+//        }
 
         Log.d("SIZE", "size of array = " + allLocallyStoredTasks.size());
 
@@ -338,19 +341,19 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         if (currentFilter == 0) {
             // display refreshed all
-            addTasks(allLocallyStoredTasks);
+            addTasks(allLocallyStoredTasks, null);
 
         } else if (currentFilter == 1) {
             // display refreshed bidded
-            addTasks(tasksWithBids);
+            addTasks(tasksWithBids, null);
 
         } else if (currentFilter == 2) {
             // display refreshed assigned
-            addTasks(assignedTasks);
+            addTasks(assignedTasks, null);
 
         } else if (currentFilter == 3) {
             // display refreshed done
-            addTasks(doneTasks);
+            addTasks(doneTasks, null);
         }
     }
 
