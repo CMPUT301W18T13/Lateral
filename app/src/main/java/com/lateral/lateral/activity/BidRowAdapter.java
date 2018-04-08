@@ -8,7 +8,6 @@ package com.lateral.lateral.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 //TODO: use recycler view
@@ -134,18 +132,8 @@ public class BidRowAdapter extends BaseAdapter {
                             "Failed to update task", Toast.LENGTH_SHORT);
                     errorToast.show();
                 }
-
-                // wait for task service to update
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    /**
-                     * Run the remaining code after sleep
-                     */
-                    public void run() {
-                        bidListActivity.setResult(Activity.RESULT_OK);
-                        ((Activity)context).finish();
-                    }
-                }, 1000);
+                bidListActivity.setResult(Activity.RESULT_OK);
+                ((Activity)context).finish();
             }
         });
 

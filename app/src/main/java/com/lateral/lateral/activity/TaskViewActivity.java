@@ -9,7 +9,6 @@ package com.lateral.lateral.activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -263,28 +262,16 @@ public class TaskViewActivity extends AppCompatActivity {
                     task.setBidsNotViewed(bidsNotViewed + 1);
                     task.setStatus(TaskStatus.Bidded);
 
-                    //taskService.update(task); //Upate
                     bidService.post(newBid);// Make sure bid has task Id
                     taskService.update(task);
+                    final Bid lowestBid = bidService.getLowestBid(taskID);
 
+                    task.setLowestBid(lowestBid);
+                    task.setLowestBidValue(lowestBid.getAmount());
+                    currentBid.setText(getString(R.string.dollar_amount_display,
+                            String.valueOf(lowestBid.getAmount())));
 
-                    // wait one second after the bid post before grabbing the lowest bid
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        /**
-                         * Run the remaining code after sleep
-                         */
-                        public void run() {
-                            final Bid lowestBid = bidService.getLowestBid(taskID);
-
-                            task.setLowestBid(lowestBid);
-                            task.setLowestBidValue(lowestBid.getAmount());
-                            currentBid.setText(getString(R.string.dollar_amount_display,
-                                    String.valueOf(lowestBid.getAmount())));
-
-                            taskService.update(task);
-                        }
-                    },1000);
+                    taskService.update(task);
                 }
             }
         });

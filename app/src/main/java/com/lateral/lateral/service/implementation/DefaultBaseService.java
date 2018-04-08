@@ -257,7 +257,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             String id = null;
 
             for(String obj: objs) {
-                Index index = new Index.Builder(obj).index("cmput301w18t13").type(idx).build();
+                Index index = new Index.Builder(obj).index("cmput301w18t13").type(idx).refresh(true).build();
 
                 try {
                     DocumentResult result = jestClient.execute(index);
@@ -348,7 +348,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... updateJson) {
             verifySettings();
 
-            Update update = new Update.Builder(updateJson[0]).index("cmput301w18t13").type(idx).id(id).build();
+            Update update = new Update.Builder(updateJson[0]).index("cmput301w18t13").type(idx).id(id).refresh(true).build();
 
             try {
                 DocumentResult result = jestClient.execute(update);
@@ -390,7 +390,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... obj) {
             verifySettings();
 
-                Delete delete = new Delete.Builder(obj[0]).index("cmput301w18t13").type(idx).build();
+                Delete delete = new Delete.Builder(obj[0]).index("cmput301w18t13").type(idx).refresh(true).build();
 
                 try {
                     DocumentResult result = jestClient.execute(delete);
