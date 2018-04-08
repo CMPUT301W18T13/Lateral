@@ -35,8 +35,7 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    // TODO: Don't store string, use User object instead so we can get username and other info too!
-    public static String LOGGED_IN_USER = null;
+    public static User LOGGED_IN_USER = null;
 
     /**
      * Called when the activity is created
@@ -54,16 +53,14 @@ public class MainActivity extends AppCompatActivity
         if(extras != null){
             String user = extras.getString("userId");
             if (user != null) {
-                LOGGED_IN_USER = user;
+                DefaultUserService defaultUserService = new DefaultUserService();
+                LOGGED_IN_USER = defaultUserService.getById(user);
             }
         }
-        Log.i("MainActivity", "AFT Logged in user's ID: " + LOGGED_IN_USER);
+        Log.i("MainActivity", "AFT Logged in user's ID: " + LOGGED_IN_USER.getId());
 
         //Start sending notifications
         NotificationServiceScheduler.scheduleNewBid(getApplicationContext());
-
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,21 +72,10 @@ public class MainActivity extends AppCompatActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        if(user != null) {
-            usernameView.setText(getString(R.string.username_display, user.getUsername()));
-        } else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        if(user != null) {
-            emailView.setText(user.getEmailAddress());
-        }
-        else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        emailView.setText(LOGGED_IN_USER.getEmailAddress());
 
         navigationView.setNavigationItemSelectedListener(this);
     }

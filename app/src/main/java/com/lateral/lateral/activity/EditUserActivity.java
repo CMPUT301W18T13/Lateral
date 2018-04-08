@@ -60,9 +60,6 @@ public class EditUserActivity extends AppCompatActivity {
         if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_sign_up);
 
-        DefaultUserService defaultUserService = new DefaultUserService();
-        mCurrentUser = defaultUserService.getById(LOGGED_IN_USER);
-
         // Set up form views
         mUsername = findViewById(R.id.usernameSignUpForm);
         mUsername.setVisibility(View.INVISIBLE);

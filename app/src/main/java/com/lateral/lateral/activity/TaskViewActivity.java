@@ -42,6 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.model.TaskStatus.*;
 // TODO: MAJOR BUG: Sometimes get after update fails to retrieve new changes
 
@@ -239,13 +240,13 @@ public class TaskViewActivity extends AppCompatActivity {
                 Bid newBid = bidCreationDialog.getNewBid();
                 if (newBid != null){
                     newBid.setTaskId(taskID);
-                    newBid.setBidderId(MainActivity.LOGGED_IN_USER);
+                    newBid.setBidderId(LOGGED_IN_USER.getId());
 
                     int bidsPendingNotification = task.getBidsPendingNotification();
                     int bidsNotViewed = task.getBidsNotViewed();
 
                     // Delete old bids associated with user
-                    ArrayList<Bid> oldUserBids = bidService.getAllBidsByUserID(MainActivity.LOGGED_IN_USER);
+                    ArrayList<Bid> oldUserBids = bidService.getAllBidsByUserID(LOGGED_IN_USER.getId());
                     ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
                     for (Bid oldUserBid : oldUserBids){
                         bidService.delete(oldUserBid.getId());

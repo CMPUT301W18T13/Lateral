@@ -42,6 +42,8 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
  */
 public class UserLoginService {
 
+    public static String usernameValidChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890._";
+
     /**
      * Hashes a password using the PBKDF2 Standard on SHA-512
      * Warning - changing this could make any stored passwords invalid!!
@@ -181,10 +183,13 @@ public class UserLoginService {
      * @return True if requirements met; false otherwise
      */
     public static boolean isUsernameValid(String username){
+        for(int i = 0; i < username.length(); i++){
+            if(usernameValidChars.indexOf(username.charAt(i)) < 0) {
+                return false;
+            }
+        }
         return username.length() >= USERNAME_CHAR_MINIMUM
-                && username.length() <= USERNAME_CHAR_LIMIT
-                && !username.contains("@")
-                && !username.contains(" ");
+                && username.length() <= USERNAME_CHAR_LIMIT;
     }
 
     /**

@@ -49,7 +49,6 @@ import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
  */
 public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private String thisUserID = LOGGED_IN_USER;
     private PullRefreshLayout layout;
 
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
@@ -121,7 +120,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Log.d("LOGGED IN USER", thisUserID);
+        Log.d("LOGGED IN USER", LOGGED_IN_USER.getId());
         //returnMatchingTasks(thisUserID);
 
         initializeLocalArrays();
@@ -170,9 +169,6 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
             }
         });
 
-        DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getById(LOGGED_IN_USER);
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -184,21 +180,10 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
         View hView = navigationView.getHeaderView(0);
         TextView usernameView = hView.findViewById(R.id.nav_header_username);
-        if(user != null) {
-            usernameView.setText(getString(R.string.username_display, user.getUsername()));
-        } else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
 
         TextView emailView = hView.findViewById(R.id.nav_header_email);
-        if(user != null) {
-            emailView.setText(user.getEmailAddress());
-        }
-        else{
-            usernameView.setText("ERROR!");
-            Toast.makeText(this, "Couldn't load user!", Toast.LENGTH_LONG).show();
-        }
+        emailView.setText(LOGGED_IN_USER.getEmailAddress());
 
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -283,7 +268,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      */
     public void initializeLocalArrays() {
-        allLocallyStoredTasks = defaultTaskService.getBiddedTasks(thisUserID);
+        allLocallyStoredTasks = defaultTaskService.getBiddedTasks(LOGGED_IN_USER.getId());
 
         // clear in case we are refreshing
         tasksWithBids.clear();
