@@ -66,6 +66,9 @@ public class SignUpActivity extends AppCompatActivity {
         mPassword = findViewById(R.id.passwordSignUpForm);
         mConfirmPassword = findViewById(R.id.passwordConfirmSignUpForm);
 
+        TextView usernameDisplay = findViewById(R.id.usernameDisplay);
+        usernameDisplay.setVisibility(View.INVISIBLE);
+
         // Watch for "Enter" click on the keyboard
         mConfirmPassword.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
