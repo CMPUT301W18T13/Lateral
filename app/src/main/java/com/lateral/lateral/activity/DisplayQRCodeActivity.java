@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +22,10 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.lateral.lateral.R;
+import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
+import com.lateral.lateral.widget.PhotoImageView;
 import com.lateral.lateral.widget.UserLinkTextView;
 
 import static android.graphics.Color.BLACK;
@@ -31,6 +34,8 @@ import static android.graphics.Color.WHITE;
 public class DisplayQRCodeActivity extends AppCompatActivity {
 
     public static final String EXTRA_TASK_ID = "com.lateral.lateral.TASK_ID";
+    public static final String EXTRA_TASK_TITLE = "com.lateral.lateral.TASK_TITLE";
+    public static final String EXTRA_TASK_USER = "com.lateral.lateral.TASK_USER";
 
     ImageView qrCode;
     TextView taskTitleView;
@@ -51,9 +56,9 @@ public class DisplayQRCodeActivity extends AppCompatActivity {
         userStringView = findViewById(R.id.qrcode_user_view);
 
         Intent taskIntent = getIntent();
-        this.taskId = taskIntent.getStringExtra(MyTaskViewActivity.EXTRA_TASK_ID);
-        this.taskTitle = taskIntent.getStringExtra(MyTaskViewActivity.EXTRA_TASK_TITLE);
-        this.taskUsername = taskIntent.getStringExtra(MyTaskViewActivity.EXTRA_TASK_USER);
+        this.taskId = taskIntent.getStringExtra(EXTRA_TASK_ID);
+        this.taskTitle = taskIntent.getStringExtra(EXTRA_TASK_TITLE);
+        this.taskUsername = taskIntent.getStringExtra(EXTRA_TASK_USER);
         if (this.taskId == null || this.taskUsername == null || this.taskTitle == null){
             setResult(RESULT_CANCELED);
             finish();
@@ -118,5 +123,19 @@ public class DisplayQRCodeActivity extends AppCompatActivity {
         Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
         bitmap.setPixels(pixels, 0, 200, 0, 0, w, h);
         return bitmap;
+    }
+
+    /**
+     * Called when photo is clicked
+     * @param v view
+     */
+    public void onPhotoImageViewClick(View v){
+
+        Bitmap image = ((PhotoImageView)v).getImage();
+
+        if (image != null){
+            PhotoViewerDialog dialog = PhotoViewerDialog.newInstance(image);
+            dialog.show(getFragmentManager(), "photo_dialog");
+        }
     }
 }

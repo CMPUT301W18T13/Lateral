@@ -178,9 +178,9 @@ public class TaskViewActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         if (item.getItemId() == R.id.action_qrcode){
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
-            intent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, taskID);
-            intent.putExtra(MyTaskViewActivity.EXTRA_TASK_TITLE, task.getTitle());
-            intent.putExtra(MyTaskViewActivity.EXTRA_TASK_USER, task.getRequestingUserUsername());
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_TITLE, task.getTitle());
+            intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_USER, task.getRequestingUserUsername());
             startActivityForResult(intent, QR_ACTIVITY_CODE);
         }
         else if (item.getItemId() == R.id.action_geo_location){
