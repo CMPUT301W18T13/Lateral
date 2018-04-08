@@ -25,7 +25,6 @@ import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 //TODO: use recycler view
