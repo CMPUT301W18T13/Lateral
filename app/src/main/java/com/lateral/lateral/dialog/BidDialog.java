@@ -158,7 +158,6 @@ public class BidDialog extends Dialog implements android.view.View.OnClickListen
         }
 
         BigDecimal amount = new BigDecimal(amountPlainText.getText().toString());
-        amount = amount.setScale(2, RoundingMode.CEILING);  // Needed to keep precision
         newBid = new Bid(amount);
     }
 

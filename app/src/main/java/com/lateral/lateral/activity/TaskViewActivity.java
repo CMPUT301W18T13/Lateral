@@ -6,17 +6,19 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,10 +40,12 @@ import com.lateral.lateral.widget.PhotoImageView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
+
+import static com.lateral.lateral.model.TaskStatus.*;
 // TODO: MAJOR BUG: Sometimes get after update fails to retrieve new changes
 
-// TODO: Need to overwrite your own bid
 /**
  * Activity for viewing a certain task
  */
@@ -62,6 +66,8 @@ public class TaskViewActivity extends AppCompatActivity {
     private TextView username;
     private TextView date;
     private TextView description;
+
+    private Button bidNowButton;
 
     private PhotoImageView imageMain;
     private LinearLayout imageLayout;
@@ -90,6 +96,8 @@ public class TaskViewActivity extends AppCompatActivity {
         username = findViewById(R.id.task_view_username);
         date = findViewById(R.id.task_view_date);
         description = findViewById(R.id.task_view_description);
+
+        bidNowButton = findViewById(R.id.bid_now_btn);
 
         imageMain = findViewById(R.id.task_view_image_main);
         imageLayout = findViewById(R.id.task_view_imageLayout);
@@ -126,8 +134,13 @@ public class TaskViewActivity extends AppCompatActivity {
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
+        TaskStatus status = task.getStatus();
         TextView statusTextView = findViewById(R.id.task_view_status);
-        statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
+        statusTextView.setText(TaskStatus.getFormattedEnum(status));
+
+        if (status == Assigned || status == Done){
+            bidNowButton.setVisibility(View.GONE);
+        }
         setImages();
     }
 
@@ -214,30 +227,55 @@ public class TaskViewActivity extends AppCompatActivity {
         bidCreationDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-            Bid newBid = bidCreationDialog.getNewBid();
-            if (newBid != null){
-                newBid.setTaskId(taskID);
-                newBid.setBidderId(MainActivity.LOGGED_IN_USER);
+                Bid newBid = bidCreationDialog.getNewBid();
+                if (newBid != null){
+                    newBid.setTaskId(taskID);
+                    newBid.setBidderId(MainActivity.LOGGED_IN_USER);
 
-                task.setBidsPendingNotification(task.getBidsPendingNotification() + 1);
-                task.setBidsNotViewed(task.getBidsNotViewed() + 1);
+                    int bidsPendingNotification = task.getBidsPendingNotification();
+                    int bidsNotViewed = task.getBidsNotViewed();
 
-                if (task.getLowestBid() == null){
-                    currentBid.setText(getString(R.string.dollar_amount_display,
-                            String.valueOf(newBid.getAmount())));
-                    task.setLowestBidValue(newBid.getAmount());     // nick
-                } else if (newBid.getAmount().compareTo(task.getLowestBid().getAmount()) < 0){
-                    task.setLowestBid(newBid);
-                    currentBid.setText(getString(R.string.dollar_amount_display,
-                            String.valueOf(newBid.getAmount())));
-                    task.setLowestBidValue(newBid.getAmount());     // nick
+                    // Delete old bids associated with user
+                    ArrayList<Bid> oldUserBids = bidService.getAllBidsByUserID(MainActivity.LOGGED_IN_USER);
+                    ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
+                    for (Bid oldUserBid : oldUserBids){
+                        bidService.delete(oldUserBid.getId());
+                        for (Bid taskBid: taskBids) {
+                            if (taskBid.getId().equals(oldUserBid.getId())) {
+                                if (taskBids.indexOf(taskBid) >= (taskBids.size() - bidsNotViewed)) {
+                                    bidsNotViewed -= 1;
+                                }
+                            }
+                        }
+                    }
+
+                    task.setBidsPendingNotification(bidsPendingNotification + 1);
+                    task.setBidsNotViewed(bidsNotViewed + 1);
+                    task.setStatus(TaskStatus.Bidded);
+
+                    //taskService.update(task); //Upate
+                    bidService.post(newBid);// Make sure bid has task Id
+                    taskService.update(task);
+
+
+                    // wait one second after the bid post before grabbing the lowest bid
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        /**
+                         * Run the remaining code after sleep
+                         */
+                        public void run() {
+                            final Bid lowestBid = bidService.getLowestBid(taskID);
+
+                            task.setLowestBid(lowestBid);
+                            task.setLowestBidValue(lowestBid.getAmount());
+                            currentBid.setText(getString(R.string.dollar_amount_display,
+                                    String.valueOf(lowestBid.getAmount())));
+
+                            taskService.update(task);
+                        }
+                    },1000);
                 }
-
-                // TODO: Error handling required
-                bidService.post(newBid);// Make sure bid has task Id
-                task.setStatus(TaskStatus.Bidded);
-                taskService.update(task);
-            }
             }
         });
         bidCreationDialog.show();

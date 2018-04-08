@@ -27,5 +27,10 @@ public interface BidService extends BaseService<Bid> {
      */
     void deleteBidsByTask(String taskID);
 
-    ArrayList<Bid> getAllBidsByTaskID(String taskID, int offset);
+    ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID, int offset);
+
+    ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID, int offset);
+
+    ArrayList<Bid> getAllBidsByUserID(String userId); //TODO look at
+
 }
