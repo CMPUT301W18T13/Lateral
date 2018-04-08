@@ -252,8 +252,8 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
         try {
             editTask.setTitle(title);
-            editTask.setDescription(desc);{
-                // TODO: BUG: Can't update, it just crashes on this line
+            editTask.setDescription(desc);
+            // TODO: BUG: Can't update, it just crashes on this line
             editTask.setLocation(latLng.latitude, latLng.longitude, address);
             service.update(editTask);
             Toast postTask = Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT);
@@ -261,6 +261,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
 
             setResult(RESULT_OK);
             finish();
+
         } catch (Exception e) {
             Log.e("Update task", e.toString());
             Toast errorToast = Toast.makeText(this, "Task failed to update", Toast.LENGTH_SHORT);
