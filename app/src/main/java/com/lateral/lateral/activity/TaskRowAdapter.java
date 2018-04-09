@@ -158,6 +158,9 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
             } else if (bidsNotViewed == 1) {
                 bidsNotViewedString += " new bid!";
                 displayBidsNotViewed = true;
+            } else if (bidsNotViewed == 0) {
+                bidsNotViewedString = "";
+                displayBidsNotViewed = true;
             }
 
             if (displayBidsNotViewed) {
