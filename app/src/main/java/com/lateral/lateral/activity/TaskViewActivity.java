@@ -240,10 +240,22 @@ public class TaskViewActivity extends AppCompatActivity {
      */
     public void onBidButtonClick(View v) {
         final BidDialog bidCreationDialog = new BidDialog(TaskViewActivity.this);
+        try {
+            task = loadTask();
+        } catch (Exception e){
+            Toast errorToast = Toast.makeText(getApplicationContext(),
+                    "Error, the task may have been deleted", Toast.LENGTH_SHORT);
+            errorToast.show();
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
+        }
         if ((task = loadTask()) == null) {
             Toast errorToast = Toast.makeText(getApplicationContext(),
                     "Error, the task may have been deleted", Toast.LENGTH_SHORT);
             errorToast.show();
+            setResult(RESULT_CANCELED);
+            finish();
             return;
         } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
             refresh(task);
@@ -258,7 +270,22 @@ public class TaskViewActivity extends AppCompatActivity {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
             Bid newBid = bidCreationDialog.getNewBid();
+            try {
+                task = loadTask();
+            } catch (Exception e){
+                Toast errorToast = Toast.makeText(getApplicationContext(),
+                        "Error, the task may have been deleted", Toast.LENGTH_SHORT);
+                errorToast.show();
+                setResult(RESULT_CANCELED);
+                finish();
+                return;
+            }
             if (newBid == null) {
+                Toast errorToast = Toast.makeText(getApplicationContext(),
+                        "Error, the task may have been deleted", Toast.LENGTH_SHORT);
+                errorToast.show();
+                setResult(RESULT_CANCELED);
+                finish();
                 return;
             } else if ((task = loadTask()) == null) {
                 return;

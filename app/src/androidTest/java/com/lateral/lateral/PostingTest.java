@@ -80,6 +80,7 @@ public class PostingTest {
 //        String result = defaultUserService.getSaltAndHash(mUsername);
 //        assertEquals("idkl", result);
     }
+
     @Test
     public void testGetEveryTask() {
 //        DefaultTaskService defaultTaskService = new DefaultTaskService();
@@ -95,7 +96,7 @@ public class PostingTest {
     }
 
     // currently only deletes 50
-    @Test
+    /*@Test
     public void testDeleteAllTasks() {
         DefaultTaskService defaultTaskService = new DefaultTaskService();
         //defaultTaskService.delete("AWJACBVhAJsZenWtuLON");
@@ -105,12 +106,7 @@ public class PostingTest {
             taskId = task.getId();
             defaultTaskService.delete(taskId);
         }
-    }
-
-
-
-
-
+    }*/
 
 
 }

@@ -1,21 +1,27 @@
+/*
+ * Copyright (c) 2018 Team 13. CMPUT301. University of Alberta - All Rights Reserved.
+ * You may use, distribute, or modify this code under terms and conditions of the Code of Student Behaviour at University of Alberta.
+ * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
+ */
+
 package com.lateral.lateral;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.ActivityInstrumentationTestCase2;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 
-import com.lateral.lateral.activity.AvailableTasksViewActivity;
 import com.lateral.lateral.activity.LoginActivity;
 import com.lateral.lateral.activity.MainActivity;
+import com.lateral.lateral.activity.TaskViewActivity;
 import com.lateral.lateral.model.Bid;
-//                         import com.lateral.lateral.model.BidStatus;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
+import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
+import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.robotium.solo.Solo;
@@ -38,9 +44,11 @@ import static com.lateral.lateral.service.UserLoginService.randomBytes;
 public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private static User testUser = null;
     private static Task testTask = null;
+    private static Bid testBid = null;
     private static BigDecimal testAmount;
     private static UserService userService = new DefaultUserService();
     private static TaskService taskService = new DefaultTaskService();
+    private static BidService bidService = new DefaultBidService();
     private static Solo solo;
 
     @Rule
@@ -49,16 +57,26 @@ public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     private class SimpleOnFailed extends TestWatcher {
         @Override
         protected void failed(Throwable e, Description description) {
-            if (testUser != null) {
-                if (testUser.getId() != null) {
-                    userService.delete(testUser.getId());
+            try {
+                if (testUser != null) {
+                    if (testUser.getId() != null) {
+                        userService.delete(testUser.getId());
+                    }
                 }
-            }
 
-            if (testTask != null) {
-                if (testTask.getId() != null) {
-                    taskService.delete(testTask.getId());
+                if (testTask != null) {
+                    if (testTask.getId() != null) {
+                        taskService.delete(testTask.getId());
+                    }
                 }
+
+                if (testBid != null) {
+                    if (testBid.getId() != null) {
+                        bidService.delete(testTask.getId());
+                    }
+                }
+            } catch (Exception er){
+                Log.e("Error", "Failed to delete an object");
             }
         }
     }
@@ -72,8 +90,8 @@ public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         String saltAndHash = salt + ':' + hashPassword("malcolmT", salt);
         testUser = new User("malcolmT", "7803851748",
                 "mimacart@ualberta.ca", saltAndHash);
-        testTask = new Task("Smuggle some drugs", "Cross the the border into " +
-                "america, and drop them off at a place I will tell you about");
+        //testUser = userService.getUserByUsername("malcolm2");
+        testTask = new Task("Test Title", "this is a test description");
         testAmount = new BigDecimal(8.2).setScale(2, RoundingMode.CEILING);
     }
 
@@ -142,8 +160,12 @@ public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
     public void testGetters(){
         create_test_information();
 
-        userService.post(testUser);
-        taskService.post(testTask);
+        try {
+            userService.post(testUser);
+            taskService.post(testTask);
+        } catch (Exception e){
+            assertTrue(false);
+        }
         Bid bid = new Bid(testAmount, testTask.getId(),testUser.getId());
 
         if (testAmount.compareTo(bid.getAmount()) == 0){
@@ -154,14 +176,22 @@ public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
 
         int test = testUser.getId().compareTo(bid.getBidderId());
         if (testUser.getId().compareTo(bid.getBidderId()) == 0){
-            userService.delete(testUser.getId());
+            try {
+                userService.delete(testUser.getId());
+            } catch (Exception e){
+                assertTrue(false);
+            }
             assertTrue(true);
         } else {
             assertTrue(false);
         }
 
         if (testTask.getId().compareTo(bid.getTaskId()) == 0) {
+            try {
             taskService.delete(testTask.getId());
+            } catch (Exception e){
+                assertTrue(false);
+            }
             assertTrue(true);
         } else {
             assertTrue(false);
@@ -207,14 +237,77 @@ public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
             assertTrue(false);
         }
 
-        userService.post(testUser);
-        taskService.post(testTask);
+        try {
+            userService.post(testUser);
+            testTask.setRequestingUserId(testUser.getId());
+            testTask.setRequestingUser(testUser);
+            taskService.post(testTask);
+        } catch (Exception e){
+            assertTrue(false);
+        }
 
         login(); //Fails on connection error
-        solo.clickOnText("Search Available Tasks");
-        solo.assertCurrentActivity("Available Tasks View Activity",
-                AvailableTasksViewActivity.class);
-        assertTrue(true);
+        //TODO change vvv
+        //solo.clickOnText("Search Available Tasks");
+        //solo.assertCurrentActivity("Available Tasks View Activity",
+        //        AvailableTasksViewActivity.class);
+
+        //solo.enterText(0, "Smuggle");
+        //wait(10);
+
+        solo.clickOnText("Available Tasks");
+        wait(1);
+
+        solo.clickOnText("Test Title");
+
+        //TODO change ^^^
+
+        //Test bidding for first time
+        solo.assertCurrentActivity("My Task View Activity", TaskViewActivity.class);
+        solo.clickOnText("Bid Now!");
+        solo.clickOnText("00");
+        solo.enterText(0 ,"23.55" );
+        solo.clickOnText("BID");
+        wait(1);
+        try {
+            testBid = bidService.getLowestBid(testTask.getId());
+            testTask = taskService.getById(testTask.getId());
+        } catch (Exception e){
+            assertTrue(false);
+        }
+        if (testBid.getAmount().compareTo(
+                new BigDecimal("23.55").setScale(2, RoundingMode.CEILING)) == 0){
+            assertTrue(true);
+        } else {
+            assertTrue(false);
+        }
+
+        //Test overwriting
+        solo.assertCurrentActivity("My Task View Activity", TaskViewActivity.class);
+        solo.clickOnText("Bid Now!");
+        solo.clickOnText("00");
+        solo.enterText(0 ,"00.00" );
+        solo.clickOnText("BID");
+        wait(1);
+        try {
+            testBid = bidService.getLowestBid(testTask.getId());
+            testTask = taskService.getById(testTask.getId());
+        } catch (Exception e){
+            assertTrue(false);
+        }
+        if (testBid.getAmount().compareTo(new BigDecimal("00.00")
+                .setScale(2, RoundingMode.CEILING)) == 0){
+            assertTrue(true);
+        } else {
+            assertTrue(false);
+        }
+
+        try {
+            userService.delete(testUser.getId());
+            taskService.delete(testTask.getId());
+        } catch (Exception e){
+            assertTrue(false);
+        }
     }
 }
 
