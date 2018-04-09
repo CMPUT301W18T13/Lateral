@@ -186,6 +186,10 @@ public class LoginActivity extends AppCompatActivity{
             // TODO: Need error handling here
             mAuthTask = new UserLoginTask(password, saltAndHash, user.getId());
             mAuthTask.execute((Void) null);
+            if (mAuthTask.serviceException != null) {
+                ErrorDialog.show(this, "Failed to login");
+                return;
+            }
             showProgress(true);
         }
     }
@@ -233,6 +237,7 @@ public class LoginActivity extends AppCompatActivity{
         private final String mPassword;
         private final String mSaltAndHash;
         private final String mId;
+        private ServiceException serviceException = null;
 
         /**
          * Constructor for the UserLoginTask
@@ -282,18 +287,20 @@ public class LoginActivity extends AppCompatActivity{
                 try {
                     // TODO: Need proper error handling
                     user = defaultUserService.getById(mId);
+                    if(user != null) {
+                        saveUserToken(user, getApplicationContext());
+                        login(mId, getApplicationContext());
+                        finish();
+                    }
+                    else{
+                        mUsernameView.setError(getString(R.string.error_unknown_message));
+                        mUsernameView.requestFocus();
+                    }
                 }catch(ServiceException e){
-                    return;
+                    e.printStackTrace();
+                    this.serviceException = e;
                 }
-                if(user != null) {
-                    saveUserToken(user, getApplicationContext());
-                    login(mId, getApplicationContext());
-                    finish();
-                }
-                else{
-                    mUsernameView.setError(getString(R.string.error_unknown_message));
-                    mUsernameView.requestFocus();
-                }
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

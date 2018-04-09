@@ -202,19 +202,16 @@ public class EditUserActivity extends AppCompatActivity {
                 DefaultUserService defaultUserService = new DefaultUserService();
                 try {
                     defaultUserService.update(mCurrentUser);
+                    saveUserToken(mCurrentUser, getApplicationContext());
+
+                    // Start the next activity with the user logged in
+                    login(mCurrentUser.getId(), getApplicationContext());
+                    finish();
                 } catch (ServiceException e){
                     ErrorDialog.show(this, "Failed to update user");
                     showProgress(false);
-                    // TODO: Test this
-                    focusView.requestFocus();
-                    return;
                 }
             }
-
-            // Start the next activity with the user logged in
-            saveUserToken(mCurrentUser, getApplicationContext());
-            login(mCurrentUser.getId(), getApplicationContext());
-            finish();
         }
     }
 

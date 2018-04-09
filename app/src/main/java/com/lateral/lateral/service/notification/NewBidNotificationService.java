@@ -51,7 +51,9 @@ public class NewBidNotificationService extends JobService{
 
     @Override
     public boolean onStartJob(JobParameters params) {
+
         String userID = loadUserFromToken(getApplicationContext());
+
 
         /*ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);

@@ -135,20 +135,18 @@ public class UserLoginService {
             }
             return null;
 
-        } catch (FileNotFoundException e) {
+        } catch (FileNotFoundException | ServiceException e) {
             return null;
         } catch (IOException e) {
             Log.e("loadUserFromFile", "Error when trying to load file: " + e.getMessage());
             throw new RuntimeException();
-        } catch (ServiceException e){
-            throw new RuntimeException(e);
         }
     }
 
     /**
      * Saves a user's ID and token to a file.
      */
-    public static void saveUserToken(User user, Context context){
+    public static void saveUserToken(User user, Context context) throws ServiceException {
         try {
             FileOutputStream fos = context.openFileOutput(USER_FILE_NAME,
                     Context.MODE_PRIVATE);
@@ -168,10 +166,6 @@ public class UserLoginService {
         } catch (IOException e) {
             Log.e("UserLoginService", "Failed to save user token");
             throw new RuntimeException();
-        }
-        catch (ServiceException e){
-
-            throw new RuntimeException(e);
         }
     }
 
@@ -206,14 +200,14 @@ public class UserLoginService {
      * @param username Username to verify
      * @return True if requirement met; false otherwise
      */
-    public static boolean isUsernameTaken(String username){
+    public static boolean isUsernameTaken(String username) {
         DefaultUserService defaultUserService = new DefaultUserService();
+
         try {
             User user = defaultUserService.getUserByUsername(username);
             return user == null;
         } catch (ServiceException e){
-
-            throw new RuntimeException(e);
+            return true;
         }
     }
 

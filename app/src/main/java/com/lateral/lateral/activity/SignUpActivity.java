@@ -199,9 +199,14 @@ public class SignUpActivity extends AppCompatActivity {
             String id = user.getId();
 
             // Start the next activity with the user logged in
-            saveUserToken(user, getApplicationContext());
-            login(user.getId(), getApplicationContext());
-            finish();
+            try {
+                saveUserToken(user, getApplicationContext());
+                login(user.getId(), getApplicationContext());
+                finish();
+            } catch (ServiceException e){
+                ErrorDialog.show(this, "Failed to save user");
+                return;
+            }
         }
     }
 
