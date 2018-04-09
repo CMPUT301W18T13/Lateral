@@ -36,7 +36,8 @@ public class PhotoGallery {
     public static final int MAX_PHOTOS = 5;
 
     private static final int MAX_SERIALIZED_BYTE_SIZE = 65536;
-    private static final int MAX_SERIALIZED_CHAR_SIZE = MAX_SERIALIZED_BYTE_SIZE/2;
+    private static final int BYTE_PER_UTF8CHAR = 2;
+    private static final int MAX_SERIALIZED_CHAR_SIZE = MAX_SERIALIZED_BYTE_SIZE/BYTE_PER_UTF8CHAR;
     // Calculation source: https://stackoverflow.com/questions/471541
     private static final int MAX_BYTE_ARRAY_SIZE = 3*(MAX_SERIALIZED_CHAR_SIZE/4 - 1);
     private static final int BYTES_PER_PIXEL = 4; // Assuming ARGB_8888 Config is used in Bitmap
