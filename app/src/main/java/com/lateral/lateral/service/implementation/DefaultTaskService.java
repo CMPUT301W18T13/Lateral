@@ -46,7 +46,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @return List of tasks matching query
      */
     public ArrayList<Task> getAllTasks(String query){
-        String json = "{\"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
+        String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
         return gson.fromJson("[" + get(json) + "]", listType);
@@ -58,7 +58,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @return The list associated tasks
      */
     public ArrayList<Task> getAllTasksByRequesterID(String requesterID){
-        String json = "{\"query\":{\"match\":{\"requestingUserId\":{\"query\":\"" + requesterID + "\"}}}}";
+        String json = "{\"size\" : " + RECORD_COUNT + ", \"query\":{\"match\":{\"requestingUserId\":{\"query\":\"" + requesterID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
         return gson.fromJson("[" + get(json) + "]", listType);
@@ -87,7 +87,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @return The list of all Tasks within distance of location
      */
     public ArrayList<Task> getAvailableTasksByDistance(Double latitude, Double longitude, Double distance){
-        String json = "{" +
+        String json = "{\"size\" : " + RECORD_COUNT + ", " +
                 "\"query\" : { " +
                 "\"filtered\" : { " +
                 "\"query\" : {" +
@@ -104,8 +104,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     }
 
     public ArrayList<Task> getEveryAvailableTask(){
-        //String json = "{ \"query\" : { \"match_all\" : {}}}";
-        String json = "{\"from\" : 0, \"size\" : 50,\"query\" : {\"match\" : {\"taskStatus\" : { \"query\" : \"Requested Bidded\"}}}}";
+        String json = "{\"size\" : " + RECORD_COUNT + ", \"query\" : {\"match\" : {\"taskStatus\" : { \"query\" : \"Requested Bidded\"}}}}";
 
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
@@ -119,7 +118,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     }
 
     // nick
-    public ArrayList<Task> getBiddedTasks(String bidderID) {
+    public ArrayList<Task> getTasksByBidder(String bidderID) {
         DefaultBidService defaultBidService = new DefaultBidService();
         ArrayList<Bid> userBids = defaultBidService.getAllBidsByUserID(bidderID);       // SearchQuery
         ArrayList<Task> biddedTasks = new ArrayList<Task>();

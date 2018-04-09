@@ -6,21 +6,12 @@
 
 package com.lateral.lateral.service.implementation;
 
-import android.util.Log;
-
 import com.google.common.reflect.TypeToken;
-import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.BidService;
-
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-
-import io.searchbox.client.JestResult;
-import io.searchbox.core.DeleteByQuery;
 
 /**
  * Service class to interface with Bids on the ElasticSearch server
@@ -80,7 +71,6 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Jest ID of the task
      */
     public void deleteBidsByTask(String taskID){
-        // TODO: Not actually getting all!!!!! need to remove offset
         ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID);
 
         for (Bid bid : taskBids) {
@@ -94,7 +84,6 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param keepBidId the bid to keep
      */
     public void deleteOtherBidsByTask(String taskID, String keepBidId){
-        // TODO: Not actually getting all!!!!! need to remove offset
         ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID);
 
         if(taskBids != null) {

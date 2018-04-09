@@ -68,6 +68,7 @@
             android:name=".activity.AvailableTasksViewActivity"
             android:screenOrientation="portrait"
             android:exported="true"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_available_tasks_view"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

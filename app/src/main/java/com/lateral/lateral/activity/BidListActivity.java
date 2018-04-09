@@ -6,7 +6,6 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,12 +13,10 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
