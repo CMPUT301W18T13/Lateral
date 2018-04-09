@@ -15,12 +15,10 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,10 +27,10 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.lateral.lateral.R;
-import com.lateral.lateral.model.User;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import com.google.android.gms.maps.CameraUpdate;
 
@@ -51,7 +49,8 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 public class TaskMapActivity extends AppCompatActivity
-        implements OnMapReadyCallback{
+        implements GoogleMap.OnInfoWindowClickListener,
+        OnMapReadyCallback{
 
     private DefaultTaskService defaultTaskService;
     private ArrayList<Task> tasks;
@@ -76,37 +75,15 @@ public class TaskMapActivity extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-//<<<<<<< HEAD
     }
 
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        mMap.setOnInfoWindowClickListener(this);
         checkAndGrantPermissions();
         getDeviceLocation();
     }
-//=======
-//        DefaultTaskService defaultTaskService = new DefaultTaskService();
-//        // Does this work?
-//        closeTasks = defaultTaskService.getAllTasksByDistance(userLocation.getLatitude(), userLocation.getLatitude(), 5.0);
-//
-//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-//        drawer.addDrawerListener(toggle);
-//        toggle.syncState();
-//
-//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-//        navigationView.bringToFront();
-//
-//        View hView = navigationView.getHeaderView(0);
-//        TextView usernameView = hView.findViewById(R.id.nav_header_username);
-//        usernameView.setText(getString(R.string.username_display, LOGGED_IN_USER.getUsername()));
-//
-//        TextView emailView = hView.findViewById(R.id.nav_header_email);
-//        emailView.setText(LOGGED_IN_USER.getEmailAddress());
-//>>>>>>> 5152bb4d7750e96309421eedcc13613b3dc0f8af
 
     private void getDeviceLocation() {
         try {
@@ -135,11 +112,13 @@ public class TaskMapActivity extends AppCompatActivity
         Log.i("Size", String.valueOf(tasks.size()));
         for(Task task: tasks){
             LatLng latLng = new LatLng(task.getLat(), task.getLon());
-            mMap.addMarker(new MarkerOptions().position(latLng)
+            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng)
                     .title(task.getTitle())
-                    .snippet(task.getStatus().toString()));
+                    .snippet(task.getStatus().toString())
+                    .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))));
+            marker.setTag(task);
         }
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(curLoc, 12);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(curLoc, 13);
         mMap.animateCamera(cameraUpdate);
     }
 
@@ -156,7 +135,6 @@ public class TaskMapActivity extends AppCompatActivity
     }
 
     @Override
-//<<<<<<< HEAD
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -169,46 +147,6 @@ public class TaskMapActivity extends AppCompatActivity
                     locationPermissionGranted = true;
                     getDeviceLocation();
                 }
-//=======
-//    public boolean onNavigationItemSelected(MenuItem item) {
-//        // Handle navigation view item clicks here.
-//        int id = item.getItemId();
-//
-//        if (id == R.id.nav_edit_user) {
-//            Intent intent = new Intent(this, EditUserActivity.class);
-//            startActivity(intent);
-//        } else if (id == R.id.nav_req_tasks) {
-//            Intent intent = new Intent(this, RequestedTasksViewActivity.class);
-//            startActivity(intent);
-//            finish();
-//        } else if (id == R.id.nav_available_tasks) {
-//            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
-//            startActivity(intent);
-//            finish();
-//        } else if (id == R.id.nav_bidded_tasks) {
-//            Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
-//            startActivity(intent);
-//            finish();
-//        } else if (id == R.id.nav_qrcode){
-//            Intent intent = new Intent(this, ScanQRCodeActivity.class);
-//            startActivity(intent);
-//        } else if (id == R.id.nav_search_tasks) {
-//            Intent intent = new Intent(this, AvailableTasksViewActivity.class);
-//            intent.setAction(AvailableTasksViewActivity.INTENT_OPEN_SEARCH);
-//            startActivity(intent);
-//            finish();
-//        } else if (id == R.id.nav_task_map){
-//
-//            // We are already here, do nothing
-//
-//        } else if (id == R.id.nav_logout) {
-//            if(getApplicationContext().deleteFile(USER_FILE_NAME)){
-//                LOGGED_IN_USER = null;
-//                Log.i("RequestedTasksView", "File deleted");
-//                Intent intent = new Intent(this, LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//>>>>>>> 5152bb4d7750e96309421eedcc13613b3dc0f8af
             }
         }
     }
@@ -226,5 +164,13 @@ public class TaskMapActivity extends AppCompatActivity
     public void onBackPressed() {
         setResult(RESULT_OK);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Task markerTask = (Task)marker.getTag();
+        Intent taskIntent = new Intent(this, TaskViewActivity.class);
+        taskIntent.putExtra(TaskViewActivity.EXTRA_TASK_ID, markerTask.getId());
+        startActivity(taskIntent);
     }
 }

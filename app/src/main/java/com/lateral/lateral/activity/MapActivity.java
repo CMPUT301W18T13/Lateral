@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lateral.lateral.R;
@@ -55,7 +56,8 @@ public class MapActivity extends AppCompatActivity
         LatLng taskCoords = new LatLng(task.getLat(), task.getLon());
         googleMap.addMarker(new MarkerOptions().position(taskCoords)
                 .title(task.getTitle())
-                .snippet(task.getStatus().toString()));
+                .snippet(task.getStatus().toString())
+                .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))));
         //googleMap.moveCamera(CameraUpdateFactory.newLatLng(taskCoords));
 
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(taskCoords, 13);

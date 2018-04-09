@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -39,6 +38,7 @@ import com.lateral.lateral.widget.PhotoImageView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 // TODO: Need progress bar in here
@@ -113,7 +113,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private void refresh(){
 
         try {
-            task = loadTask(taskID);
+            task = loadTask();
             refresh(task);
         } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
@@ -128,24 +128,26 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param task task
      */
     private void refresh(Task task) {
-        if (task.getLowestBid() == null) {
-            currentBid.setText(R.string.task_view_no_bids);
-        } else {
+        final Bid assignedBid = task.getAssignedBid();
+        final Bid lowestBid = task.getLowestBid();
+        if (assignedBid != null) {
+            String assignedUsername = assignedBid.getBidder().getUsername();
+            assignedToUsername.setText(getString(R.string.username_display, assignedUsername));
             currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(task.getLowestBid().getAmount())));
+                    String.valueOf(assignedBid.getAmount())));
+        } else if (lowestBid != null) {
+            assignedToUsername.setText(R.string.task_view_not_assigned);
+            currentBid.setText(getString(R.string.dollar_amount_display,
+                    String.valueOf(lowestBid.getAmount())));
+        } else {
+            assignedToUsername.setText(R.string.task_view_not_assigned);
+            currentBid.setText(R.string.task_view_no_bids);
         }
         title.setText(task.getTitle());
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
 
-        final Bid assignedBid = task.getAssignedBid();
-        if (assignedBid != null) {
-            String assignedUsername = assignedBid.getBidder().getUsername();
-            assignedToUsername.setText(getString(R.string.username_display, assignedUsername));
-        } else {
-            assignedToUsername.setText(R.string.task_view_not_assigned);
-        }
 
         TextView statusTextView = findViewById(R.id.my_task_view_status);
         statusTextView.setText(TaskStatus.getFormattedEnum(task.getStatus()));
@@ -206,12 +208,19 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
     /**
      * Loads a task based on its taskID
-     * @param taskID Task ID of the task
      * @return The loaded task
      */
-    private Task loadTask(String taskID){
+    private Task loadTask(){
 
         Task task = taskService.getById(taskID);
+        if (task == null) {
+            Toast errorToast = Toast.makeText(getApplicationContext(),
+                    "Error, cannot get task information", Toast.LENGTH_SHORT);
+            errorToast.show();
+            setResult(RESULT_CANCELED);
+            finish();
+            return null;
+        }
 
         task.setLowestBid(bidService.getLowestBid(task.getId()));
         if (task.getAssignedBidId() != null) {
@@ -238,6 +247,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
      */
     public void onSetDoneButtonClick(View v){
         task.setStatus(TaskStatus.Done);
+        task.setBidsPendingNotification(0);
+        task.setBidsNotViewed(0);
         taskService.update(task);
         refresh(task);
     }
@@ -247,14 +258,17 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param v current view
      */
     public void onSetRequestedButtonClick(View v){
-        Bid assignedBid = task.getAssignedBid();
-        bidService.delete(assignedBid.getId());
+        bidService.delete(task.getAssignedBidId());
+        ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID, 0);
 
         task.setAssignedBid(null);
         task.setAssignedBidId(null);
-        task.setBids(null);
-        task.setLowestBid(null);
-        task.setStatus(TaskStatus.Requested);
+        task.setLowestBid(bidService.getLowestBid(task.getId()));
+        if (bids.size() > 0){
+            task.setStatus(TaskStatus.Bidded);
+        } else {
+            task.setStatus(TaskStatus.Requested);
+        }
 
         taskService.update(task);
         refresh(task);

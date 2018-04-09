@@ -24,12 +24,6 @@ public class User extends BaseEntity {
     private String saltAndHash;
     private String token;
 
-    // Extra fields
-    // transient to mark as non-serializable
-    private transient ArrayList<Task> requestedTasks;
-    private transient ArrayList<Bid> bids;
-    private transient ArrayList<Task> assignedTasks;
-
     // Private constructor for Jest to use
     private User(){}
 
@@ -122,53 +116,5 @@ public class User extends BaseEntity {
      * @param token The logon token to be set
      */
     public void setToken(String token) { this.token = token; }
-
-    /**
-     * Gets the list of tasks requested by the user
-     * @return The list of tasks requested by the user
-     */
-    public ArrayList<Task> getRequestedTasks() {
-        return requestedTasks;
-    }
-
-    /**
-     * Sets the list of tasks requested by the user
-     * @param requestedTasks The list of tasks to be set
-     */
-    public void setRequestedTasks(ArrayList<Task> requestedTasks) {
-        this.requestedTasks = requestedTasks;
-    }
-
-    /**
-     * Gets the list of bids made by the user
-     * @return The list of bids made by the user
-     */
-    public ArrayList<Bid> getBids() {
-        return bids;
-    }
-
-    /**
-     * Sets the list of bids made by the user
-     * @param bids The list of bids to be set
-     */
-    public void setBids(ArrayList<Bid> bids) {
-        this.bids = bids;
-    }
-
-    /**
-     * Gets the list of tasks assigned to the user
-     * @return The list of tasks assigned to the user
-     */
-    public ArrayList<Task> getAssignedTasks() {
-        return assignedTasks;
-    }
-
-    /**
-     * Sets the list of tasks assigned to the user
-     * @param assignedTasks The list of tasks to be set
-     */
-    public void setAssignedTasks(ArrayList<Task> assignedTasks) {
-        this.assignedTasks = assignedTasks;
-    }
 }
 

@@ -6,9 +6,7 @@
 
 package com.lateral.lateral.activity;
 
-import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -17,11 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
-import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
@@ -43,9 +39,7 @@ import java.util.Locale;
 public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHolder> {
     private ArrayList<Task> mTasks;
     private ArrayList<Bid> mBids;
-    DefaultUserService defaultUserService = new DefaultUserService();
-    DefaultBidService defaultBidService = new DefaultBidService();
-    Context context;
+    private Context context;
 
 
     /**

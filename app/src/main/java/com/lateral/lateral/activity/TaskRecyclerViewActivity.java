@@ -194,9 +194,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
      *                     pass an array of every bid that user has made
      */
     public void addTasks(ArrayList<Task> returnedTasks, ArrayList<Bid> returnedBids) {
-        Log.i("addTasks", "Showing progress bar!");
+        Log.i("addTasks", "Showing progress bar");
         showProgress(true);
-        Log.i("addTasks", "Progress bar shown!");
+        Log.i("addTasks", "Progress bar shown");
 
         // most likely need to clear screen of tasks first
         //clearList();
@@ -211,9 +211,9 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
 
 
-        Log.i("addTasks", "Hiding progress bar!");
+        Log.i("addTasks", "Hiding progress bar");
         showProgress(false);
-        Log.i("addTasks", "Progress bar hidden!");
+        Log.i("addTasks", "Progress bar hidden");
 
     }
 

@@ -6,11 +6,13 @@
 
 package com.lateral.lateral.model;
 
+import android.content.ContentResolver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -22,6 +24,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Type;
 
 
@@ -30,27 +33,46 @@ import java.lang.reflect.Type;
  */
 public class PhotoGallery {
 
-    public static int MAX_PHOTOS = 5;
-    public static int MAX_SIZE = 65000; // This number is smaller to account for meta-data
+    public static final int MAX_PHOTOS = 5;
 
+    private static final int MAX_SERIALIZED_BYTE_SIZE = 65536;
+    private static final int BYTE_PER_UTF8CHAR = 2;
+    private static final int MAX_SERIALIZED_CHAR_SIZE = MAX_SERIALIZED_BYTE_SIZE/BYTE_PER_UTF8CHAR;
+    // Calculation source: https://stackoverflow.com/questions/471541
+    private static final int MAX_BYTE_ARRAY_SIZE = 3*(MAX_SERIALIZED_CHAR_SIZE/4 - 1);
     /**
-     * Shrink bitmap to match database constraints
-     * @param image image
+     * Generate bitmap from Uri to match DB constraints
+     * @param imageData Uri of image data
      * @return resized image
      */
-    public static Bitmap shrinkBitmap(Bitmap image){
-        // TODO: BUG: This method isn't shrinking linearly!
-        final int serializedByteCount = new Serializer().serializeBitmap(image).length()*2;
-        // No need to shrink
-        if (serializedByteCount < MAX_SIZE) return image;
+    public static Bitmap generateBitmap(ContentResolver contentResolver, Uri imageData) throws IOException{
 
-        // How much to shrink each edge
-        double factor = Math.sqrt((double)MAX_SIZE/serializedByteCount);
+        Bitmap original = MediaStore.Images.Media.getBitmap(contentResolver, imageData);
 
-        return android.graphics.Bitmap.createScaledBitmap(image,
-                (int)(image.getWidth()*factor),
-                (int)(image.getHeight()*factor),
-                false);
+        Bitmap copy = original;
+        byte[] byteArray;
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        copy.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byteArray = stream.toByteArray();
+        stream.close();
+
+        int areaScale = 1;
+        while (byteArray.length > MAX_BYTE_ARRAY_SIZE){
+
+            areaScale *= 2;
+            double lengthScale = Math.sqrt(areaScale);
+            copy = Bitmap.createScaledBitmap(original,
+                    (int)(original.getWidth()/lengthScale),
+                    (int)(original.getHeight()/lengthScale),
+                    false);
+
+            stream = new ByteArrayOutputStream();
+            copy.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byteArray = stream.toByteArray();
+            stream.close();
+        }
+        return copy;
     }
 
     private Bitmap[] photoList = new Bitmap[MAX_PHOTOS];

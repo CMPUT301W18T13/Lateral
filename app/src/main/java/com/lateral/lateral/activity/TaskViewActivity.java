@@ -43,7 +43,6 @@ import java.util.Locale;
 
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 import static com.lateral.lateral.model.TaskStatus.*;
-// TODO: MAJOR BUG: Sometimes get after update fails to retrieve new changes
 
 /**
  * Activity for viewing a certain task
@@ -113,18 +112,37 @@ public class TaskViewActivity extends AppCompatActivity {
     }
 
     private void refresh(){
-        try{
-            task = loadTask();
-        } catch(Exception e){
+
+        try {
+            if ((task = loadTask()) == null){
+                Toast errorToast = Toast.makeText(getApplicationContext(),
+                        "Failed to load task", Toast.LENGTH_SHORT);
+                errorToast.show();
+                setResult(RESULT_CANCELED);
+                finish();
+                return;
+            }
+            refresh(task);
+        } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
             errorToast.show();
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
         }
+    }
 
-        if (task.getLowestBid() == null){
-            currentBid.setText(R.string.task_view_no_bids);
-        } else {
+    private void refresh(Task task){
+        final Bid assignedBid = task.getAssignedBid();
+        final Bid lowestBid = task.getLowestBid();
+        if (assignedBid != null) {
             currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(task.getLowestBid().getAmount())));
+                    String.valueOf(assignedBid.getAmount())));
+        } else if (lowestBid != null) {
+            currentBid.setText(getString(R.string.dollar_amount_display,
+                    String.valueOf(lowestBid.getAmount())));
+        } else {
+            currentBid.setText(R.string.task_view_no_bids);
         }
 
         title.setText(task.getTitle());
@@ -174,11 +192,23 @@ public class TaskViewActivity extends AppCompatActivity {
     private Task loadTask(){
         UserService userService = new DefaultUserService();
         Task task = taskService.getById(taskID);
-        task.setRequestingUser(userService.getById(task.getRequestingUserId()));
-        task.setLowestBid(bidService.getLowestBid(task.getId()));
-        return task;
+        if (task == null){
+            setResult(RESULT_CANCELED);
+            finish();
+            return null;
+        } else {
+            task.setRequestingUser(userService.getById(task.getRequestingUserId()));
+            task.setLowestBid(bidService.getLowestBid(task.getId()));
 
+            if (task.getAssignedBidId() != null) {
+                Bid bid = bidService.getById(task.getAssignedBidId());
+                task.setAssignedBid(bid);
+                bid.setBidder(userService.getById(bid.getBidderId()));
+            }
+            return task;
+        }
     }
+
     /**
      * Called when the options menu is created
      * @param menu The menu created
@@ -231,48 +261,65 @@ public class TaskViewActivity extends AppCompatActivity {
      * @param v The current view
      */
     public void onBidButtonClick(View v){
-        final BidDialog bidCreationDialog=new BidDialog(TaskViewActivity.this);
+        final BidDialog bidCreationDialog = new BidDialog(TaskViewActivity.this);
+        if ((task = loadTask()) == null){
+            Toast errorToast = Toast.makeText(getApplicationContext(),
+                    "Error, the task may have been deleted", Toast.LENGTH_SHORT);
+            errorToast.show();
+            return;
+        } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
+            refresh(task);
+            Toast errorToast = Toast.makeText(getApplicationContext(),
+                    "The task status changed", Toast.LENGTH_SHORT);
+            errorToast.show();
+            return;
+        }
+
         bidCreationDialog.setCanceledOnTouchOutside(false);
         bidCreationDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                Bid newBid = bidCreationDialog.getNewBid();
-                if (newBid != null){
-                    newBid.setTaskId(taskID);
-                    newBid.setBidderId(LOGGED_IN_USER.getId());
+            Bid newBid = bidCreationDialog.getNewBid();
+            if ((task = loadTask()) == null) {
+                return;
+            } else if(newBid == null){
+                return;
+            } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
+                Toast errorToast = Toast.makeText(getApplicationContext(),
+                        "Bid not posted. The task status changed", Toast.LENGTH_SHORT);
+                errorToast.show();
+            } else {
+                newBid.setTaskId(taskID);
+                newBid.setBidderId(LOGGED_IN_USER.getId());
 
-                    int bidsPendingNotification = task.getBidsPendingNotification();
-                    int bidsNotViewed = task.getBidsNotViewed();
+                int bidsPendingNotification = task.getBidsPendingNotification();
+                int bidsNotViewed = task.getBidsNotViewed();
 
-                    // Delete old bids associated with user
-                    ArrayList<Bid> oldUserBids = bidService.getAllBidsByUserID(LOGGED_IN_USER.getId());
-                    ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
-                    for (Bid oldUserBid : oldUserBids){
-                        bidService.delete(oldUserBid.getId());
-                        for (Bid taskBid: taskBids) {
-                            if (taskBid.getId().equals(oldUserBid.getId())) {
-                                if (taskBids.indexOf(taskBid) >= (taskBids.size() - bidsNotViewed)) {
-                                    bidsNotViewed -= 1;
-                                }
-                            }
+                // Delete old bids associated with user
+                ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
+                for (Bid bid : taskBids){
+                    if (bid.getBidderId().equals(LOGGED_IN_USER.getId())){
+                        bidService.delete(bid.getId());
+                        if (taskBids.indexOf(bid) >= (taskBids.size() - bidsNotViewed)) {
+                            bidsNotViewed -= 1;
                         }
                     }
-
-                    task.setBidsPendingNotification(bidsPendingNotification + 1);
-                    task.setBidsNotViewed(bidsNotViewed + 1);
-                    task.setStatus(TaskStatus.Bidded);
-
-                    bidService.post(newBid);// Make sure bid has task Id
-                    taskService.update(task);
-                    final Bid lowestBid = bidService.getLowestBid(taskID);
-
-                    task.setLowestBid(lowestBid);
-                    task.setLowestBidValue(lowestBid.getAmount());
-                    currentBid.setText(getString(R.string.dollar_amount_display,
-                            String.valueOf(lowestBid.getAmount())));
-
-                    taskService.update(task);
                 }
+
+                task.setBidsPendingNotification(bidsPendingNotification + 1);
+                task.setBidsNotViewed(bidsNotViewed + 1);
+                task.setStatus(TaskStatus.Bidded);
+
+                bidService.post(newBid);// Make sure bid has task Id
+                final Bid lowestBid = bidService.getLowestBid(taskID);
+
+                task.setLowestBid(lowestBid);
+                task.setLowestBidValue(lowestBid.getAmount());
+                currentBid.setText(getString(R.string.dollar_amount_display,
+                        String.valueOf(lowestBid.getAmount())));
+
+                taskService.update(task);
+            }
             }
         });
         bidCreationDialog.show();

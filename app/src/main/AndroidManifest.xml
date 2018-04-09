@@ -95,8 +95,7 @@
         <activity
             android:name=".activity.TaskMapActivity"
             android:screenOrientation="portrait"
-            android:label="@string/title_activity_task_map"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:label="@string/title_activity_task_map" />
         <activity
             android:name=".activity.BidListActivity"
             android:screenOrientation="portrait"/>

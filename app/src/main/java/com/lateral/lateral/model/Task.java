@@ -267,7 +267,7 @@ public class Task extends BaseEntity {
      * @param latitude Latitude to be set
      * @param longitude Longitude to be set
      */
-    public void setLocation(double latitude, double longitude,String address){
+    public void setLocation(double latitude, double longitude, String address){
         this.latitude = latitude;
         this.longitude = longitude;
         this.address = address;

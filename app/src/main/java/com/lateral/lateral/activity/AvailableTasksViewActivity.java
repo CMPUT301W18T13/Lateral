@@ -501,14 +501,10 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        Log.i("AllTasksView", "Nav Item Selected 1!");
-
         if (id == R.id.nav_edit_user) {
-            Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, EditUserActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_req_tasks) {
-            Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, RequestedTasksViewActivity.class);
             startActivity(intent);
             finish();
@@ -517,12 +513,10 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             // We are already here, do nothing
 
         } else if (id == R.id.nav_bidded_tasks) {
-            Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, AssignedAndBiddedTasksViewActivity.class);
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_qrcode){
-            Log.i("AllTasksView", "Nav Item Selected!");
             Intent intent = new Intent(this, ScanQRCodeActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_search_tasks) {
@@ -535,10 +529,8 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             startActivity(intent);
             finish();
         } else if (id == R.id.nav_logout) {
-            Log.i("AllTasksView", "Nav Item Selected!");
             if(getApplicationContext().deleteFile(USER_FILE_NAME)){
                 LOGGED_IN_USER = null;
-                Log.i("AllTasksViewActivity", "File deleted");
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();

@@ -43,6 +43,26 @@ public class PhotoGenerator {
         add(0xFFA1887F);
         add(0xFFE0E0E0);
         add(0xFF90A4AE);
+        // From Material Design level 700 colors
+        add(0xFFD32F2F);
+        add(0xFFC2185B);
+        add(0xFF7B1FA2);
+        add(0xFF512DA8);
+        add(0xFF303F9F);
+        add(0xFF1976D2);
+        add(0xFF0288D1);
+        add(0xFF0097A7);
+        add(0xFF00796B);
+        add(0xFF388E3C);
+        add(0xFF689F38);
+        add(0xFFAFB42B);
+        add(0xFFFBC02D);
+        add(0xFFFFA000);
+        add(0xFFF57C00);
+        add(0xFFE64A19);
+        add(0xFF5D4037);
+        add(0xFF616161);
+        add(0xFF455A64);
     }};
 
     /**
