@@ -132,6 +132,7 @@ public class BidRowAdapter extends BaseAdapter {
                             "Failed to update task", Toast.LENGTH_SHORT);
                     errorToast.show();
                 }
+
                 bidListActivity.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
             }

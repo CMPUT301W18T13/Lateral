@@ -48,7 +48,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     public RecyclerView mRecyclerView;
     private View progressView;
 
-    private RecyclerView.Adapter mAdapter;
+    protected RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
     private ArrayList<Bid> matchingBids;
 
@@ -304,8 +304,4 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
             errorMessage.setVisibility(View.INVISIBLE);
         }
     }
-
-
-
-
 }

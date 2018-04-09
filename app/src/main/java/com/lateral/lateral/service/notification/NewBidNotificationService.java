@@ -41,9 +41,11 @@ public class NewBidNotificationService extends JobService{
     private static final String groupID = "new_bid_group";
     private static NotificationManager notificationManager;
     private static int notifyID = 0;
+    private static final int summaryNotifyID = 1111;
     private static boolean initialized = false;
     private static long time_initialized;
     private static String previousUserID = null;
+    private static Notification summaryNotification = null;
 
     @Override
     public boolean onStartJob(JobParameters params) {
@@ -69,6 +71,7 @@ public class NewBidNotificationService extends JobService{
         // Initialize if onStartJob called for the first time after login
         if (!initialized || previousUserID.compareTo(userID) != 0){
             createNewBidChannel();
+            buildSummaryNotification();
             resetPendingBids(userID);
             time_initialized = System.currentTimeMillis();
             initialized = true;
@@ -123,9 +126,13 @@ public class NewBidNotificationService extends JobService{
             }
 
             bidsToGrab = task.getBidsPendingNotification();
-            //TODO: Create mutual exclusion for read and write of elastic search data
             if (bidsToGrab > 0){
-                taskBids = bidService.getAllBidsByTaskIDDateSorted(task.getId(), 0);
+                int offset = 0;
+                taskBids = bidService.getAllBidsByTaskIDAmountSorted(task.getId(), offset);
+                while (taskBids.size() == 10 * (offset + 1)){
+                    offset++;
+                    taskBids.addAll(bidService.getAllBidsByTaskIDDateSorted(task.getId(), offset));
+                }
 
                 numberOfBids = taskBids.size();
 
@@ -186,9 +193,29 @@ public class NewBidNotificationService extends JobService{
         return  builder.build();
     }
 
+    private void buildSummaryNotification(){
+        //create stupid god damn activity stack
+        Intent resultIntent = new Intent(this, RequestedTasksViewActivity.class);
+        //resultIntent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, task.getId());
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+        stackBuilder.addNextIntentWithParentStack(resultIntent);
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        summaryNotification = new NotificationCompat.Builder(this, newBidChannelID)
+                        .setSmallIcon(R.drawable.ic_lateral_notification)
+                        .setAutoCancel(true)
+                        .setContentIntent(resultPendingIntent)
+                        .setStyle(new NotificationCompat.InboxStyle()
+                                .setSummaryText("new bids!"))
+                        .setGroup(groupID)
+                        .setGroupSummary(true)
+                        .build();
+    }
+
     private void displayNotifications(ArrayList<Notification> notifications){
         for (Notification notification : notifications){
             notificationManager.notify(notifyID, notification);
+            notificationManager.notify(summaryNotifyID, summaryNotification);
             notifyID = (notifyID + 1) % 100; //send a maximum of 100 notifications
         }
     }

@@ -42,7 +42,7 @@ import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
  * Activity to view all requested tasks
  */
 public class RequestedTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private RecyclerView.Adapter mAdapter;
+    //private RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
     private DefaultTaskService defaultTaskService = new DefaultTaskService();
 
@@ -260,6 +260,8 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //mAdapter.notifyDataSetChanged();
+        mRecyclerView.invalidate();
         Log.d("activity result invoked", "OnActivityResult");
         if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             //mAdapter.notifyItemChanged(clickedItemPosition);

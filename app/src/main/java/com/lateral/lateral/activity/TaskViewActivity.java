@@ -296,7 +296,7 @@ public class TaskViewActivity extends AppCompatActivity {
                 int bidsNotViewed = task.getBidsNotViewed();
 
                 // Delete old bids associated with user
-                ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
+                /*ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
                 for (Bid bid : taskBids){
                     if (bid.getBidderId().equals(LOGGED_IN_USER.getId())){
                         bidService.delete(bid.getId());
@@ -304,7 +304,7 @@ public class TaskViewActivity extends AppCompatActivity {
                             bidsNotViewed -= 1;
                         }
                     }
-                }
+                }*/ //todo: uncomment
 
                 task.setBidsPendingNotification(bidsPendingNotification + 1);
                 task.setBidsNotViewed(bidsNotViewed + 1);
@@ -319,11 +319,12 @@ public class TaskViewActivity extends AppCompatActivity {
                         String.valueOf(lowestBid.getAmount())));
 
                 taskService.update(task);
+                refresh(task);
             }
             }
         });
         bidCreationDialog.show();
-        refresh();
+        refresh(task);
     }
 
     /**
