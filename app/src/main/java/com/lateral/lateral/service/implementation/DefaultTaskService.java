@@ -110,7 +110,6 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
     }
 
-    // TODO: VITAL ask Tyler to implement this
     /*
     should behave similiar to getEveryAvailableTasks (only display with status' Requested and Bidded) but add query searching
      */
