@@ -72,6 +72,9 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Jest ID of the task
      */
     public void deleteBidsByTask(String taskID){
+        if (taskID == null){
+            throw new IllegalArgumentException("Null passed");
+        }
         ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID);
 
         for (Bid bid : taskBids) {
@@ -85,6 +88,9 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param keepBidId the bid to keep
      */
     public void deleteOtherBidsByTask(String taskID, String keepBidId){
+        if (taskID == null){
+            throw new IllegalArgumentException("Null passed");
+        }
         ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID);
 
         if(taskBids != null) {

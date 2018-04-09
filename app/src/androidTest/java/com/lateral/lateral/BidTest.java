@@ -50,11 +50,15 @@ public class BidTest extends ActivityInstrumentationTestCase2<LoginActivity> {
         @Override
         protected void failed(Throwable e, Description description) {
             if (testUser != null) {
-                userService.delete(testUser.getId());
+                if (testUser.getId() != null) {
+                    userService.delete(testUser.getId());
+                }
             }
 
             if (testTask != null) {
-                taskService.delete(testTask.getId());
+                if (testTask.getId() != null) {
+                    taskService.delete(testTask.getId());
+                }
             }
         }
     }

@@ -69,6 +69,9 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      */
     @Override
     public void delete(String taskID){
+        if (taskID == null){
+            throw new IllegalArgumentException("Null passed");
+        }
         BidService bidService = new DefaultBidService();
         bidService.deleteBidsByTask(taskID);
         super.delete(taskID);

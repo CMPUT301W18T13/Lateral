@@ -237,6 +237,9 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void delete(String id){
+        if (id == null){
+            throw new IllegalArgumentException("Null passed");
+        }
 
         DeleteData deleteData = new DeleteData(getElasticSearchType());
         deleteData.execute(id);
@@ -251,22 +254,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
             throw new RuntimeException(e);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
