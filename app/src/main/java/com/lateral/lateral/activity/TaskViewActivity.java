@@ -115,6 +115,7 @@ public class TaskViewActivity extends AppCompatActivity {
     private void refresh() {
         try {
             task = loadTask();
+            if (task == null) return;
             refresh(task);
         } catch (Exception e) {
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
@@ -182,6 +183,7 @@ public class TaskViewActivity extends AppCompatActivity {
             return taskService.getById(taskID);
         }catch (ServiceException e){
             ErrorDialog.show(this, "Task failed to load");
+            return null;
         }
     }
 

@@ -6,12 +6,15 @@
 
 package com.lateral.lateral.service;
 
+import android.app.Service;
 import android.content.Intent;
 import android.util.Log;
 import android.content.Context;
 
 import com.lateral.lateral.Constants;
 import com.lateral.lateral.activity.MainActivity;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
@@ -137,6 +140,8 @@ public class UserLoginService {
         } catch (IOException e) {
             Log.e("loadUserFromFile", "Error when trying to load file: " + e.getMessage());
             throw new RuntimeException();
+        } catch (ServiceException e){
+            throw new RuntimeException(e);
         }
     }
 
@@ -163,6 +168,10 @@ public class UserLoginService {
         } catch (IOException e) {
             Log.e("UserLoginService", "Failed to save user token");
             throw new RuntimeException();
+        }
+        catch (ServiceException e){
+
+            throw new RuntimeException(e);
         }
     }
 
@@ -199,8 +208,13 @@ public class UserLoginService {
      */
     public static boolean isUsernameTaken(String username){
         DefaultUserService defaultUserService = new DefaultUserService();
-        User user = defaultUserService.getUserByUsername(username);
-        return user == null;
+        try {
+            User user = defaultUserService.getUserByUsername(username);
+            return user == null;
+        } catch (ServiceException e){
+
+            throw new RuntimeException(e);
+        }
     }
 
     /**

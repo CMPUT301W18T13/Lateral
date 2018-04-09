@@ -22,7 +22,9 @@ import android.util.Log;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.activity.RequestedTasksViewActivity;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
@@ -112,45 +114,54 @@ public class NewBidNotificationService extends JobService{
         }
     }
 
-    private ArrayList<Notification> buildNotifications(String userID){
+    private ArrayList<Notification> buildNotifications(String userID) {
         TaskService taskService = new DefaultTaskService();
         BidService bidService = new DefaultBidService();
-        ArrayList<Task> tasks = taskService.getAllTasksByRequesterID(userID);
-        ArrayList<Bid> taskBids;
-        ArrayList<Notification> notifications = new ArrayList<>();
-        Bid grabbedBid;
-        int numberOfBids, bidsToGrab;
-        for (Task task : tasks){
-            if (task == null){
-                continue;
-            }
-
-            bidsToGrab = task.getBidsPendingNotification();
-            if (bidsToGrab > 0){
-                taskBids = bidService.getAllBidsByTaskIDAmountSorted(task.getId());
-
-
-                numberOfBids = taskBids.size();
-
-                if (numberOfBids - bidsToGrab < 0){
-                    Log.e("Warning", "Index error avoided in NewBidNotificationService" +
-                            "with numberOfBids="+String.valueOf(numberOfBids)+
-                            " and bidsToGrab="+String.valueOf(bidsToGrab));
-                    task.setBidsPendingNotification(0);
-                    taskService.update(task);
+        ArrayList<Task> tasks;
+        try {
+            tasks = taskService.getAllTasksByRequesterID(userID);
+            ArrayList<Bid> taskBids;
+            ArrayList<Notification> notifications = new ArrayList<>();
+            Bid grabbedBid;
+            int numberOfBids, bidsToGrab;
+            for (Task task : tasks) {
+                if (task == null) {
                     continue;
                 }
 
-                task.setBidsPendingNotification(0);
-                taskService.update(task);
+                bidsToGrab = task.getBidsPendingNotification();
+                if (bidsToGrab > 0) {
+                    taskBids = bidService.getAllBidsByTaskIDAmountSorted(task.getId());
 
-                for (;bidsToGrab > 0; bidsToGrab--){
-                    grabbedBid = taskBids.get(numberOfBids - bidsToGrab);
-                    notifications.add(buildNotification(grabbedBid, task));
+
+                    numberOfBids = taskBids.size();
+
+                    if (numberOfBids - bidsToGrab < 0) {
+                        Log.e("Warning", "Index error avoided in NewBidNotificationService" +
+                                "with numberOfBids=" + String.valueOf(numberOfBids) +
+                                " and bidsToGrab=" + String.valueOf(bidsToGrab));
+                        task.setBidsPendingNotification(0);
+                        taskService.update(task);
+                        continue;
+                    }
+
+                    task.setBidsPendingNotification(0);
+                    taskService.update(task);
+
+                    for (; bidsToGrab > 0; bidsToGrab--) {
+                        grabbedBid = taskBids.get(numberOfBids - bidsToGrab);
+                        notifications.add(buildNotification(grabbedBid, task));
+                    }
+
                 }
             }
+            return notifications;
+        } catch (ServiceException e) {
+            ErrorDialog.show(this, "Failed to get notifications");
+            return null;
+
         }
-        return  notifications;
+
     }
 
     private Notification buildNotification(Bid bid, Task task){
@@ -170,7 +181,13 @@ public class NewBidNotificationService extends JobService{
                 stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
         String bidderID = bid.getBidderId();
-        User bidder = userService.getById(bidderID);
+        User bidder;
+        try {
+            bidder = userService.getById(bidderID);
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to build notification");
+            return null;
+        }
         String title = "New Bid!";
         String details = bidder.getUsername() + " has bid $" + bid.getAmount() + " on your task, "
                 + task.getTitle() ;
@@ -209,6 +226,7 @@ public class NewBidNotificationService extends JobService{
     }
 
     private void displayNotifications(ArrayList<Notification> notifications){
+        if (notifications == null) return;
         for (Notification notification : notifications){
             notificationManager.notify(notifyID, notification);
             notificationManager.notify(summaryNotifyID, summaryNotification);
@@ -217,12 +235,16 @@ public class NewBidNotificationService extends JobService{
     }
 
     private void resetPendingBids(String userID){
-        TaskService taskService = new DefaultTaskService();
-        Log.i("Initialized", "NewBidNotificationService initialized");
-        ArrayList<Task> tasks = taskService.getAllTasksByRequesterID(userID);
-        for (Task task : tasks) {
-            task.setBidsPendingNotification(0);
-            taskService.update(task);
+        try {
+            TaskService taskService = new DefaultTaskService();
+            Log.i("Initialized", "NewBidNotificationService initialized");
+            ArrayList<Task> tasks = taskService.getAllTasksByRequesterID(userID);
+            for (Task task : tasks) {
+                task.setBidsPendingNotification(0);
+                taskService.update(task);
+            }
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to reset bids");
         }
     }
 }

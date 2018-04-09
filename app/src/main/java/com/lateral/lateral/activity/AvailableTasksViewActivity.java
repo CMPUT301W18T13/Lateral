@@ -287,9 +287,6 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     }
 
 
-
-=======
->>>>>>> 0b3ec2a055605a171bba39135ffaf4c2c811e0a8
     /**
      * When an intent is received, handle it
      * @param intent Intent to Handle
@@ -360,7 +357,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
      * @param query if null, indicates user got to AvailableTasksViewActivity from button, therefore load all tasks,
      *              if not null, indicates user got to activity from a searchbar, therefore load tasks from query
      */
-<<<<<<< HEAD
+
     public boolean refreshLocalArrays(String query) {
 
         try{
@@ -370,24 +367,12 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             } else {
                 // user gave search query
                 // TODO: Wrong, need to getAvailableTasks
-                allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
+                allLocallyStoredTasks = defaultTaskService.getEveryAvailableTaskViaQuery(query);
             }
             return true;
         } catch (ServiceException e){
             ErrorDialog.show(this, "Failed to load tasks");
             return false;
-=======
-    public void refreshLocalArrays(String query) {
-
-
-        if (query == null) {
-            // did not search here via search, display all
-            allLocallyStoredTasks = defaultTaskService.getEveryAvailableTask();
-        } else {
-            // user gave search query
-            // TODO: Wrong, need to getAvailableTasks
-            allLocallyStoredTasks = defaultTaskService.getEveryAvailableTaskViaQuery(query);
->>>>>>> 0b3ec2a055605a171bba39135ffaf4c2c811e0a8
         }
     }
 
