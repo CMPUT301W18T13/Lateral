@@ -259,6 +259,8 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
 
         ArrayList<Task> filteredTasks = new ArrayList<Task>();
+        ArrayList<Bid> filteredBids = new ArrayList<Bid>();
+        int index = 0;
 
         if (currentFilter == 0) {
             // display refreshed all
@@ -274,21 +276,26 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
             if (currentFilter == 1) {
                 if (status == Bidded) {
                     filteredTasks.add(localTask);
+                    filteredBids.add(myBids.get(index));
                 }
             } else if (currentFilter == 2) {
                 if (status == Assigned) {
                     filteredTasks.add(localTask);
+                    filteredBids.add(myBids.get(index));
                 }
 
             } else if (currentFilter == 3) {
                 if (status == Done) {
                     filteredTasks.add(localTask);
+                    filteredBids.add(myBids.get(index));
                 }
 
             }
+
+            index += 1;
         }
 
-        addTasks(filteredTasks, myBids);
+        addTasks(filteredTasks, filteredBids);
 
     }
 

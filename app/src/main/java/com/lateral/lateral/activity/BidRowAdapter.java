@@ -133,9 +133,9 @@ public class BidRowAdapter extends BaseAdapter {
                 TaskService taskService = new DefaultTaskService();
 
                 taskService.update(task);
-                Toast errorToast = Toast.makeText(context,
-                        "Failed to update task", Toast.LENGTH_SHORT);
-                errorToast.show();
+//                Toast errorToast = Toast.makeText(context,
+//                        "Failed to update task", Toast.LENGTH_SHORT);
+//                errorToast.show();
 
 
                 bidListActivity.setResult(Activity.RESULT_OK);
