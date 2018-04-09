@@ -195,7 +195,6 @@ public class Task extends BaseEntity {
         this.requestingUserUsername = requestingUserUsername;
     }
 
-
     public void setLowestBidValue(BigDecimal newLowestBidValue) {
         this.lowestBidValue = newLowestBidValue;
     }

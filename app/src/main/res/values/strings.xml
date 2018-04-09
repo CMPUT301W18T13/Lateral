@@ -32,6 +32,7 @@
     <string name="title_activity_requested_tasks_view">My Requested Tasks</string>
     <string name="title_activity_assigned_and_bidded_tasks_view">Bids and Assigned Tasks</string>
     <string name="title_activity_task_map">Task Map</string>
+    <string name="title_activity_bid_list">Current Bids</string>
     <string name="filter_text">Filter</string>
     <string name="edit_user">Edit User</string>
     <string name="logout">Logout</string>

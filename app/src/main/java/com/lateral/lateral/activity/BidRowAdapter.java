@@ -153,19 +153,18 @@ public class BidRowAdapter extends BaseAdapter {
                 BidService bidService = new DefaultBidService();
                 bidService.delete(bid.getId());
 
-                // If this bid is NOT greater than lowest bid
-                // if bid <= lowest
-                if (!(bid.getAmount().compareTo(task.getLowestBidValue()) > 0)){
-                    // Get new lowest bid
-                    Bid lowest = bidService.getLowestBid(task.getId());
-                    task.setLowestBidValue(lowest.getAmount());
-                }
+                // Get new lowest bid
+                Bid lowest = bidService.getLowestBid(task.getId());
+                if (lowest == null) task.setLowestBidValue(null);
+                else task.setLowestBidValue(lowest.getAmount());
 
                 if (bids.size() == 0){
                     task.setStatus(TaskStatus.Requested);
-                    TaskService taskService = new DefaultTaskService();
-                    taskService.update(task);
                 }
+
+                TaskService taskService = new DefaultTaskService();
+                taskService.update(task);
+
                 notifyDataSetChanged();
             }
         });

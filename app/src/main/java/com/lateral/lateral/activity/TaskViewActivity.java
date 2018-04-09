@@ -285,7 +285,8 @@ public class TaskViewActivity extends AppCompatActivity {
                     task.setBidsPendingNotification(bidsPendingNotification + 1);
                     task.setBidsNotViewed(bidsNotViewed + 1);
                     task.setStatus(TaskStatus.Bidded);
-                    task.setLowestBidValue(lowestBid.getAmount());
+                    if (lowestBid == null) task.setLowestBidValue(null);
+                    else task.setLowestBidValue(lowestBid.getAmount());
 
                     taskService.update(task);
 
