@@ -72,6 +72,7 @@ public class TaskViewActivity extends AppCompatActivity {
 
     /**
      * Called when activity is created
+     *
      * @param savedInstanceState saved instance
      */
     @Override
@@ -84,7 +85,7 @@ public class TaskViewActivity extends AppCompatActivity {
         // Get the task id
         Intent taskIntent = getIntent();
         this.taskID = taskIntent.getStringExtra(EXTRA_TASK_ID);
-        if (this.taskID == null){
+        if (this.taskID == null) {
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -111,42 +112,29 @@ public class TaskViewActivity extends AppCompatActivity {
         refresh();
     }
 
-    private void refresh(){
-
+    private void refresh() {
         try {
-            if ((task = loadTask()) == null){
-                Toast errorToast = Toast.makeText(getApplicationContext(),
-                        "Failed to load task", Toast.LENGTH_SHORT);
-                errorToast.show();
-                setResult(RESULT_CANCELED);
-                finish();
-                return;
-            }
+            task = loadTask();
             refresh(task);
-        } catch (Exception e){
+        } catch (Exception e) {
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
             errorToast.show();
             setResult(RESULT_CANCELED);
             finish();
-            return;
         }
     }
 
-    private void refresh(Task task){
-        final Bid assignedBid = task.getAssignedBid();
-        final Bid lowestBid = task.getLowestBid();
-        if (assignedBid != null) {
-            currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(assignedBid.getAmount())));
-        } else if (lowestBid != null) {
-            currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(lowestBid.getAmount())));
-        } else {
+    private void refresh(Task task) {
+
+        if (task.getLowestBidValue() == null) {
             currentBid.setText(R.string.task_view_no_bids);
+        } else {
+            currentBid.setText(getString(R.string.dollar_amount_display,
+                    String.valueOf(task.getLowestBidValue())));
         }
 
         title.setText(task.getTitle());
-        username.setText(getString(R.string.username_display, task.getRequestingUser().getUsername()));
+        username.setText(getString(R.string.username_display, task.getRequestingUserUsername()));
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
@@ -155,15 +143,14 @@ public class TaskViewActivity extends AppCompatActivity {
         TextView statusTextView = findViewById(R.id.task_view_status);
         statusTextView.setText(TaskStatus.getFormattedEnum(status));
 
-        if (status == Assigned || status == Done){
+        if (status == Assigned || status == Done) {
             bidNowButton.setVisibility(View.GONE);
-        } else{
+        } else {
             bidNowButton.setVisibility(View.VISIBLE);
         }
         setImages();
 
         invalidateOptionsMenu();
-
     }
 
     @Override
@@ -179,7 +166,7 @@ public class TaskViewActivity extends AppCompatActivity {
         PhotoGallery gallery = task.getPhotoGallery();
 
         imageMain.setImage(gallery.get(0));
-        for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++){
+        for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++) {
             PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
             view.setImage(gallery.get(i));
         }
@@ -187,35 +174,21 @@ public class TaskViewActivity extends AppCompatActivity {
 
     /**
      * Loads the task from the database
+     *
      * @return The loaded task
      */
-    private Task loadTask(){
-        UserService userService = new DefaultUserService();
-        Task task = taskService.getById(taskID);
-        if (task == null){
-            setResult(RESULT_CANCELED);
-            finish();
-            return null;
-        } else {
-            task.setRequestingUser(userService.getById(task.getRequestingUserId()));
-            task.setLowestBid(bidService.getLowestBid(task.getId()));
-
-            if (task.getAssignedBidId() != null) {
-                Bid bid = bidService.getById(task.getAssignedBidId());
-                task.setAssignedBid(bid);
-                bid.setBidder(userService.getById(bid.getBidderId()));
-            }
-            return task;
-        }
+    private Task loadTask() {
+        return taskService.getById(taskID);
     }
 
     /**
      * Called when the options menu is created
+     *
      * @param menu The menu created
      * @return True
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.task_menu, menu);
         return true;
@@ -223,28 +196,26 @@ public class TaskViewActivity extends AppCompatActivity {
 
     /**
      * Called when an options menu item is selected
+     *
      * @param item The menu item selected
      * @return The built in result of calling onOptionsItemSelected
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        if (item.getItemId() == R.id.action_qrcode){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_qrcode) {
             Intent intent = new Intent(this, DisplayQRCodeActivity.class);
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_ID, taskID);
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_TITLE, task.getTitle());
             intent.putExtra(DisplayQRCodeActivity.EXTRA_TASK_USER, task.getRequestingUserUsername());
             startActivityForResult(intent, QR_ACTIVITY_CODE);
-        }
-        else if (item.getItemId() == R.id.action_geo_location){
+        } else if (item.getItemId() == R.id.action_geo_location) {
             Intent intent = new Intent(this, MapActivity.class);
             intent.putExtra(MapActivity.EXTRA_TASK_ID, taskID);
             startActivity(intent);
-        }
-        else if (item.getItemId() == android.R.id.home){
+        } else if (item.getItemId() == android.R.id.home) {
             setResult(RESULT_OK);
             finish();
-        }
-        else{
+        } else {
             return super.onOptionsItemSelected(item);
         }
         return true;
@@ -258,11 +229,12 @@ public class TaskViewActivity extends AppCompatActivity {
 
     /**
      * Called when the bid button is clicked
+     *
      * @param v The current view
      */
-    public void onBidButtonClick(View v){
+    public void onBidButtonClick(View v) {
         final BidDialog bidCreationDialog = new BidDialog(TaskViewActivity.this);
-        if ((task = loadTask()) == null){
+        if ((task = loadTask()) == null) {
             Toast errorToast = Toast.makeText(getApplicationContext(),
                     "Error, the task may have been deleted", Toast.LENGTH_SHORT);
             errorToast.show();
@@ -279,48 +251,47 @@ public class TaskViewActivity extends AppCompatActivity {
         bidCreationDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-            Bid newBid = bidCreationDialog.getNewBid();
-            if ((task = loadTask()) == null) {
-                return;
-            } else if(newBid == null){
-                return;
-            } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
-                Toast errorToast = Toast.makeText(getApplicationContext(),
-                        "Bid not posted. The task status changed", Toast.LENGTH_SHORT);
-                errorToast.show();
-            } else {
-                newBid.setTaskId(taskID);
-                newBid.setBidderId(LOGGED_IN_USER.getId());
+                Bid newBid = bidCreationDialog.getNewBid();
+                if (newBid == null) {
+                    return;
+                } else if ((task = loadTask()) == null) {
+                    return;
+                } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
+                    Toast errorToast = Toast.makeText(getApplicationContext(),
+                            "Bid not posted. The task status changed", Toast.LENGTH_SHORT);
+                    errorToast.show();
+                } else {
+                    newBid.setTaskId(taskID);
+                    newBid.setBidderId(LOGGED_IN_USER.getId());
 
-                int bidsPendingNotification = task.getBidsPendingNotification();
-                int bidsNotViewed = task.getBidsNotViewed();
+                    int bidsPendingNotification = task.getBidsPendingNotification();
+                    int bidsNotViewed = task.getBidsNotViewed();
 
-                // Delete old bids associated with user
-                /*ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
-                for (Bid bid : taskBids){
-                    if (bid.getBidderId().equals(LOGGED_IN_USER.getId())){
-                        bidService.delete(bid.getId());
-                        if (taskBids.indexOf(bid) >= (taskBids.size() - bidsNotViewed)) {
-                            bidsNotViewed -= 1;
+                    // Delete old bids associated with user
+                    ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID);
+                    for (Bid bid : taskBids) {
+                        if (bid.getBidderId().equals(LOGGED_IN_USER.getId())) {
+                            bidService.delete(bid.getId());
+                            if (taskBids.indexOf(bid) >= (taskBids.size() - bidsNotViewed)) {
+                                bidsNotViewed -= 1;
+                            }
                         }
                     }
-                }*/ //todo: uncomment
 
-                task.setBidsPendingNotification(bidsPendingNotification + 1);
-                task.setBidsNotViewed(bidsNotViewed + 1);
-                task.setStatus(TaskStatus.Bidded);
+                    bidService.post(newBid);
+                    final Bid lowestBid = bidService.getLowestBid(taskID);
 
-                bidService.post(newBid);// Make sure bid has task Id
-                final Bid lowestBid = bidService.getLowestBid(taskID);
+                    task.setBidsPendingNotification(bidsPendingNotification + 1);
+                    task.setBidsNotViewed(bidsNotViewed + 1);
+                    task.setStatus(TaskStatus.Bidded);
+                    if (lowestBid == null) task.setLowestBidValue(null);
+                    else task.setLowestBidValue(lowestBid.getAmount());
 
-                task.setLowestBid(lowestBid);
-                task.setLowestBidValue(lowestBid.getAmount());
-                currentBid.setText(getString(R.string.dollar_amount_display,
-                        String.valueOf(lowestBid.getAmount())));
+                    taskService.update(task);
+                    refresh(task);
 
-                taskService.update(task);
-                refresh(task);
-            }
+                }
+
             }
         });
         bidCreationDialog.show();
@@ -329,6 +300,7 @@ public class TaskViewActivity extends AppCompatActivity {
 
     /**
      * Called when photo is clicked
+     *
      * @param v view
      */
     public void onPhotoImageViewClick(View v) {

@@ -37,6 +37,7 @@ import static com.lateral.lateral.model.TaskStatus.Assigned;
 import static com.lateral.lateral.model.TaskStatus.Bidded;
 import static com.lateral.lateral.model.TaskStatus.Done;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
+import static com.lateral.lateral.model.TaskStatus.Requested;
 
 /**
  * Activity to view all requested tasks
@@ -55,7 +56,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
     //private boolean userIsInteracting;
 
     /* local storage */
-    private ArrayList<Task> allLocallyStoredTasks;
+    private ArrayList<Task> allLocallyStoredTasks = new ArrayList<Task>();
     private ArrayList<Task> tasksWithBids = new ArrayList<Task>();
     private ArrayList<Task> assignedTasks = new ArrayList<Task>();
     private ArrayList<Task> doneTasks = new ArrayList<Task>();
@@ -192,6 +193,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         filters.add("Tasks with Bids");
         filters.add("Assigned Tasks");
         filters.add("Completed Tasks");
+        filters.add("Requested Tasks");
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filters);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         filterSpinner.setAdapter(spinnerAdapter);
@@ -316,21 +318,21 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         Log.d("SIZE", "size of array = " + allLocallyStoredTasks.size());
 
         // clear in case we are refreshing
-        tasksWithBids.clear();
-        assignedTasks.clear();
-        doneTasks.clear();
-
-        for (Task curTask : allLocallyStoredTasks) {
-            TaskStatus status = curTask.getStatus();
-            if (status == Bidded) {
-                // extract
-                tasksWithBids.add(curTask);
-            } else if (status == Assigned) {
-                assignedTasks.add(curTask);
-            } else if (status == Done) {
-                doneTasks.add(curTask);
-            }
-        }
+//        tasksWithBids.clear();
+//        assignedTasks.clear();
+//        doneTasks.clear();
+//
+//        for (Task curTask : allLocallyStoredTasks) {
+//            TaskStatus status = curTask.getStatus();
+//            if (status == Bidded) {
+//                // extract
+//                tasksWithBids.add(curTask);
+//            } else if (status == Assigned) {
+//                assignedTasks.add(curTask);
+//            } else if (status == Done) {
+//                doneTasks.add(curTask);
+//            }
+//        }
 
         return 1;
     }
@@ -341,22 +343,61 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
      */
     public void displayResultsFromFilter() {
 
+//        if (currentFilter == 0) {
+//            // display refreshed all
+//            addTasks(allLocallyStoredTasks, null);
+//
+//        } else if (currentFilter == 1) {
+//            // display refreshed bidded
+//            addTasks(tasksWithBids, null);
+//
+//        } else if (currentFilter == 2) {
+//            // display refreshed assigned
+//            addTasks(assignedTasks, null);
+//
+//        } else if (currentFilter == 3) {
+//            // display refreshed done
+//            addTasks(doneTasks, null);
+//        }
+
+
+
+        ArrayList<Task> filteredTasks = new ArrayList<Task>();
+
         if (currentFilter == 0) {
             // display refreshed all
             addTasks(allLocallyStoredTasks, null);
-
-        } else if (currentFilter == 1) {
-            // display refreshed bidded
-            addTasks(tasksWithBids, null);
-
-        } else if (currentFilter == 2) {
-            // display refreshed assigned
-            addTasks(assignedTasks, null);
-
-        } else if (currentFilter == 3) {
-            // display refreshed done
-            addTasks(doneTasks, null);
+            return;
         }
+
+
+        for (Task localTask : allLocallyStoredTasks) {
+            TaskStatus status = localTask.getStatus();
+
+            // extract Bidded tasks
+            if (currentFilter == 1) {
+                if (status == Bidded) {
+                    filteredTasks.add(localTask);
+                }
+            } else if (currentFilter == 2) {
+                if (status == Assigned) {
+                    filteredTasks.add(localTask);
+                }
+
+            } else if (currentFilter == 3) {
+                if (status == Done) {
+                    filteredTasks.add(localTask);
+                }
+
+            } else if (currentFilter == 4) {
+                if (status == Requested) {
+                    filteredTasks.add(localTask);
+                }
+            }
+        }
+
+        addTasks(filteredTasks, null);
+
     }
 
 

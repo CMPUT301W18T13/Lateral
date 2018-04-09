@@ -14,22 +14,14 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
-import com.lateral.lateral.model.ServiceException;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BaseService;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
 import com.searchly.jestdroid.JestDroidClient;
 
-import org.apache.commons.lang3.NotImplementedException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Delete;
@@ -47,11 +39,14 @@ import io.searchbox.core.Update;
  */
 public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> {
 
+    static protected final int RECORD_COUNT = 10000;
+
     private static JestClient jestClient;
     // Stores T.class since java doesn't let you call T.class
     private final Class<T> typeArgument;
 
     protected final Gson gson;
+
 
     /**
      * Constructor for the service
@@ -109,8 +104,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
     @Override
     public String get(String query){
         String data = null;
-        String ElasticSearchType = getElasticSearchType();
-        GetData getData = new GetData(ElasticSearchType);
+        String elasticSearchType = getElasticSearchType();
+        GetData getData = new GetData(elasticSearchType);
 
         getData.execute(query);
         try{
@@ -127,8 +122,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void post(T obj){
-        String ElasticSearchType = getElasticSearchType();
-        PostData postData = new PostData(ElasticSearchType);
+        String elasticSearchType = getElasticSearchType();
+        PostData postData = new PostData(elasticSearchType);
         String id = null;
 
         String json = gson.toJson(obj);
@@ -153,8 +148,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void update(T obj) {
-        String ElasticSearchType = getElasticSearchType();
-        UpdateData updateData = new UpdateData(ElasticSearchType, obj.getId());
+        String elasticSearchType = getElasticSearchType();
+        UpdateData updateData = new UpdateData(elasticSearchType, obj.getId());
         String id = null;
 
         String json = gson.toJson(obj);
@@ -175,8 +170,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @param id The ID to set
      */
     public void setDocId(String id){
-        String ElasticSearchType = getElasticSearchType();
-        UpdateData updateData = new UpdateData(ElasticSearchType, id);
+        String elasticSearchType = getElasticSearchType();
+        UpdateData updateData = new UpdateData(elasticSearchType, id);
         String testId = null;
         String getIdJson = "{\"doc\": {\"id\": \"" + id + "\"}}";
 
@@ -196,8 +191,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void delete(String id){
-        String ElasticSearchType = getElasticSearchType();
-        DeleteData deleteData = new DeleteData(ElasticSearchType);
+        String elasticSearchType = getElasticSearchType();
+        DeleteData deleteData = new DeleteData(elasticSearchType);
 
         deleteData.execute(id);
         try{

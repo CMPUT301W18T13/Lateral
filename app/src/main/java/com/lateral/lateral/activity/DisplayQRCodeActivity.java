@@ -15,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -23,8 +22,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
-import com.lateral.lateral.model.Task;
-import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.widget.PhotoImageView;
 import com.lateral.lateral.widget.UserLinkTextView;
 

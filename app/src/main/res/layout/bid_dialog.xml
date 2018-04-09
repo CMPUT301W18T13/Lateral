@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:gravity="center"
-        android:inputType="phone"
+        android:inputType="numberDecimal"
         android:text="@string/bid_dialog_amount_filler"
         android:textColor="@android:color/darker_gray"
         android:maxLength="10" />
@@ -41,6 +41,7 @@
             android:layout_height="30dp"
             android:background="@android:color/holo_green_dark"
             android:clickable="true"
+            android:focusable="true"
             android:text="@string/bid_dialog_bid_button_text"
             android:textColor="@android:color/black" />
 
@@ -52,6 +53,7 @@
             android:layout_marginLeft="5dp"
             android:background="@android:color/holo_red_light"
             android:clickable="true"
+            android:focusable="true"
             android:text="@string/bid_dialog_cancel_button_text"
             android:textColor="@android:color/black" />
     </LinearLayout>

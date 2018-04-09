@@ -34,8 +34,6 @@ import java.util.ArrayList;
 public class BidListActivity extends AppCompatActivity {
     public static final String TASK_ID = "com.lateral.lateral.TASK_ID_INTERESTED_IN";
     private ListView bidListView;
-    private BidRowAdapter adapter;
-    private String taskID;
 
     /**
      * Called when activity created
@@ -58,26 +56,22 @@ public class BidListActivity extends AppCompatActivity {
         super.onStart();
 
         Intent intent = getIntent();
-        taskID = intent.getStringExtra(TASK_ID);
+        String taskID = intent.getStringExtra(TASK_ID);
         DefaultBidService bidService = new DefaultBidService();
-        int offset = 0;
-        ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID, offset);
-        while (bids.size() == 10 * (offset + 1)){
-            offset++;
-            bids.addAll(bidService.getAllBidsByTaskIDAmountSorted(taskID, offset));
-        }
+        ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID);
 
 
         UserService userService = new DefaultUserService();
         TaskService taskService = new DefaultTaskService();
         Task task = taskService.getById(taskID);
         task.setBidsNotViewed(0);
+        task.setBidsPendingNotification(0);
         taskService.update(task);
         for (Bid bid: bids){
             bid.setBidder(userService.getById(bid.getBidderId()));
         }
 
-        adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
+        BidRowAdapter adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
         adapter.setUsernameFormat(getString(R.string.bid_card_username_text_field));
         adapter.setAmountFormat(getString(R.string.bid_card_amount_text_field));
         bidListView.setAdapter(adapter);

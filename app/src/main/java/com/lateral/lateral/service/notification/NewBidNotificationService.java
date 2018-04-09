@@ -127,12 +127,8 @@ public class NewBidNotificationService extends JobService{
 
             bidsToGrab = task.getBidsPendingNotification();
             if (bidsToGrab > 0){
-                int offset = 0;
-                taskBids = bidService.getAllBidsByTaskIDAmountSorted(task.getId(), offset);
-                while (taskBids.size() == 10 * (offset + 1)){
-                    offset++;
-                    taskBids.addAll(bidService.getAllBidsByTaskIDDateSorted(task.getId(), offset));
-                }
+                taskBids = bidService.getAllBidsByTaskIDAmountSorted(task.getId());
+
 
                 numberOfBids = taskBids.size();
 

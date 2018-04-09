@@ -36,13 +36,13 @@ public class Task extends BaseEntity {
 
     private double latitude;
     private double longitude;
-    private String geo_location;
+    @SuppressWarnings({"UnusedDeclaration","FieldCanBeLocal"})
+    private String geo_location; // Needed for ElasticSearch query
 
     // Extra fields
     private transient User requestingUser;
     private transient Bid assignedBid;
     private transient ArrayList<Bid> bids;
-    private transient Bid lowestBid;
 
     // Private constructor for Jest to use
     private Task(){}
@@ -195,7 +195,6 @@ public class Task extends BaseEntity {
         this.requestingUserUsername = requestingUserUsername;
     }
 
-
     public void setLowestBidValue(BigDecimal newLowestBidValue) {
         this.lowestBidValue = newLowestBidValue;
     }
@@ -214,22 +213,6 @@ public class Task extends BaseEntity {
      */
     public void setRequestingUserId(String requestingUserId) {
         this.requestingUserId = requestingUserId;
-    }
-
-    /**
-     * Gets the lowest bid
-     * @return The lowest bid
-     */
-    public Bid getLowestBid() {
-        return lowestBid;
-    }
-
-    /**
-     * Sets the lowest bid
-     * @param lowestBid The bid to be set
-     */
-    public void setLowestBid(Bid lowestBid) {
-        this.lowestBid = lowestBid;
     }
 
     /**

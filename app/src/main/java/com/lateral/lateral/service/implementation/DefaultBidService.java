@@ -8,10 +8,7 @@ package com.lateral.lateral.service.implementation;
 
 import com.google.common.reflect.TypeToken;
 import com.lateral.lateral.model.Bid;
-import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.BidService;
-
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,13 +38,12 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
     /**
      * Gets all the bids with the specified taskID
      * @param taskID Task ID to get Bids from
-     * @param offset the offest
      * @return The list of Bids
      */
-    public ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID, int offset) {
-        Integer next = offset * 10;
-        String json = "{\"from\" : " + next.toString() + ", \"size\" : 10, \"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}, " +
+    public ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID) {
+        String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}, " +
                 "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}]}" ;
+
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
     }
@@ -57,15 +53,14 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Task ID to get Bids from
      * @return The list of Bids
      */
-    public ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID, int offset) {
-        Integer next = offset * 10;
-        String json = "{\"from\" : " + next.toString() + ", \"size\" : 10,\"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}}";
+    public ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID) {
+        String json = "{\"size\" : " + RECORD_COUNT + ",\"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
     }
 
     public ArrayList<Bid> getAllBidsByUserID(String userId) {
-        String json = "{\"query\":{\"match\":{\"bidderId\":{\"query\":\"" + userId + "\"}}}}";
+        String json = "{\"size\" : " + RECORD_COUNT + ", \"query\":{\"match\":{\"bidderId\":{\"query\":\"" + userId + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>() {
         }.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
@@ -77,13 +72,25 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Jest ID of the task
      */
     public void deleteBidsByTask(String taskID){
-        // TODO: Implement more efficiently! This could be done with one DB call
+        ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID);
 
-        ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID, 0);//TODO delete all bids
+        for (Bid bid : taskBids) {
+            delete(bid.getId());
+        }
+    }
+
+    /**
+     * Delete all bids for the given task
+     * @param taskID Jest ID of the task
+     * @param keepBidId the bid to keep
+     */
+    public void deleteOtherBidsByTask(String taskID, String keepBidId){
+        ArrayList<Bid> taskBids = getAllBidsByTaskIDAmountSorted(taskID);
 
         if(taskBids != null) {
             for (Bid bid : taskBids) {
-                delete(bid.getId());
+                if (!(bid.getId().equals(keepBidId)))
+                    delete(bid.getId());
             }
         }
     }

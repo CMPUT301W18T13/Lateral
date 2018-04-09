@@ -33,7 +33,7 @@ import com.lateral.lateral.dialog.ImageSelectionDialog;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.service.PhotoGenerator;
+import com.lateral.lateral.helper.PhotoGenerator;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 import com.lateral.lateral.widget.PhotoImageView;
