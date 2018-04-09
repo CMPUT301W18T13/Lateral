@@ -109,8 +109,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
     @Override
     public String get(String query){
         String data = null;
-        String ElasticSearchType = getElasticSearchType();
-        GetData getData = new GetData(ElasticSearchType);
+        String elasticSearchType = getElasticSearchType();
+        GetData getData = new GetData(elasticSearchType);
 
         getData.execute(query);
         try{
@@ -127,8 +127,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void post(T obj){
-        String ElasticSearchType = getElasticSearchType();
-        PostData postData = new PostData(ElasticSearchType);
+        String elasticSearchType = getElasticSearchType();
+        PostData postData = new PostData(elasticSearchType);
         String id = null;
 
         String json = gson.toJson(obj);
@@ -153,8 +153,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void update(T obj) {
-        String ElasticSearchType = getElasticSearchType();
-        UpdateData updateData = new UpdateData(ElasticSearchType, obj.getId());
+        String elasticSearchType = getElasticSearchType();
+        UpdateData updateData = new UpdateData(elasticSearchType, obj.getId());
         String id = null;
 
         String json = gson.toJson(obj);
@@ -175,8 +175,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @param id The ID to set
      */
     public void setDocId(String id){
-        String ElasticSearchType = getElasticSearchType();
-        UpdateData updateData = new UpdateData(ElasticSearchType, id);
+        String elasticSearchType = getElasticSearchType();
+        UpdateData updateData = new UpdateData(elasticSearchType, id);
         String testId = null;
         String getIdJson = "{\"doc\": {\"id\": \"" + id + "\"}}";
 
@@ -196,8 +196,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     @Override
     public void delete(String id){
-        String ElasticSearchType = getElasticSearchType();
-        DeleteData deleteData = new DeleteData(ElasticSearchType);
+        String elasticSearchType = getElasticSearchType();
+        DeleteData deleteData = new DeleteData(elasticSearchType);
 
         deleteData.execute(id);
         try{

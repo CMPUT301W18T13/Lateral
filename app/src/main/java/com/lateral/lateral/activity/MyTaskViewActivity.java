@@ -28,6 +28,7 @@ import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
+import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -116,7 +117,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
             refresh(task);
         } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
-            //Log.d("MYTASK", "task id = " + taskID);
             errorToast.show();
             setResult(RESULT_CANCELED);
             finish();
@@ -127,11 +127,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param task task
      */
     private void refresh(Task task) {
-        if (task.getLowestBid() == null) {
+        if (task.getLowestBidValue() == null) {
             currentBid.setText(R.string.task_view_no_bids);
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(task.getLowestBid().getAmount())));
+                    String.valueOf(task.getLowestBidValue())));
         }
         title.setText(task.getTitle());
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
@@ -212,11 +212,11 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
         Task task = taskService.getById(taskID);
 
-        task.setLowestBid(bidService.getLowestBid(task.getId()));
         if (task.getAssignedBidId() != null) {
             Bid bid = bidService.getById(task.getAssignedBidId());
             task.setAssignedBid(bid);
-            bid.setBidder(userService.getById(bid.getBidderId()));
+            User user = userService.getById(bid.getBidderId());
+            bid.setBidder(user);
         }
         return task;
     }
@@ -252,7 +252,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
         task.setAssignedBid(null);
         task.setAssignedBidId(null);
         task.setBids(null);
-        task.setLowestBid(null);
+        task.setLowestBidValue(null);
         task.setStatus(TaskStatus.Requested);
 
         taskService.update(task);

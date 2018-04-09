@@ -113,21 +113,21 @@ public class TaskViewActivity extends AppCompatActivity {
 
     private void refresh(){
         try{
-            task = loadTask();
+            task = taskService.getById(taskID);
         } catch(Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
             errorToast.show();
         }
 
-        if (task.getLowestBid() == null){
+        if (task.getLowestBidValue() == null){
             currentBid.setText(R.string.task_view_no_bids);
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(task.getLowestBid().getAmount())));
+                    String.valueOf(task.getLowestBidValue())));
         }
 
         title.setText(task.getTitle());
-        username.setText(getString(R.string.username_display, task.getRequestingUser().getUsername()));
+        username.setText(getString(R.string.username_display, task.getRequestingUserUsername()));
         DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
         date.setText(df.format(task.getDate()));
         description.setText(task.getDescription());
@@ -164,19 +164,6 @@ public class TaskViewActivity extends AppCompatActivity {
             PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
             view.setImage(gallery.get(i));
         }
-    }
-
-    /**
-     * Loads the task from the database
-     * @return The loaded task
-     */
-    private Task loadTask(){
-        UserService userService = new DefaultUserService();
-        Task task = taskService.getById(taskID);
-        task.setRequestingUser(userService.getById(task.getRequestingUserId()));
-        task.setLowestBid(bidService.getLowestBid(task.getId()));
-        return task;
-
     }
     /**
      * Called when the options menu is created
@@ -254,14 +241,12 @@ public class TaskViewActivity extends AppCompatActivity {
                     }
                 }
 
+                bidService.post(newBid);
+                final Bid lowestBid = bidService.getLowestBid(taskID);
+
                 task.setBidsPendingNotification(bidsPendingNotification + 1);
                 task.setBidsNotViewed(bidsNotViewed + 1);
                 task.setStatus(TaskStatus.Bidded);
-
-                bidService.post(newBid);// Make sure bid has task Id
-                final Bid lowestBid = bidService.getLowestBid(taskID);
-
-                task.setLowestBid(lowestBid);
                 task.setLowestBidValue(lowestBid.getAmount());
                 currentBid.setText(getString(R.string.dollar_amount_display,
                         String.valueOf(lowestBid.getAmount())));

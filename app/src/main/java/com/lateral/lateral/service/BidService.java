@@ -33,4 +33,6 @@ public interface BidService extends BaseService<Bid> {
 
     ArrayList<Bid> getAllBidsByUserID(String userId); //TODO look at
 
+    void deleteOtherBidsByTask(String taskID, String keepBidId);
+
 }

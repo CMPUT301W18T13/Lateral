@@ -6,6 +6,7 @@
 
 package com.lateral.lateral.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +14,12 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
+import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
@@ -34,8 +37,6 @@ import java.util.ArrayList;
 public class BidListActivity extends AppCompatActivity {
     public static final String TASK_ID = "com.lateral.lateral.TASK_ID_INTERESTED_IN";
     private ListView bidListView;
-    private BidRowAdapter adapter;
-    private String taskID;
 
     /**
      * Called when activity created
@@ -58,7 +59,7 @@ public class BidListActivity extends AppCompatActivity {
         super.onStart();
 
         Intent intent = getIntent();
-        taskID = intent.getStringExtra(TASK_ID);
+        String taskID = intent.getStringExtra(TASK_ID);
         DefaultBidService bidService = new DefaultBidService();
         ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID, 0);
 
@@ -66,12 +67,13 @@ public class BidListActivity extends AppCompatActivity {
         TaskService taskService = new DefaultTaskService();
         Task task = taskService.getById(taskID);
         task.setBidsNotViewed(0);
+        task.setBidsPendingNotification(0);
         taskService.update(task);
         for (Bid bid: bids){
             bid.setBidder(userService.getById(bid.getBidderId()));
         }
 
-        adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
+        BidRowAdapter adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
         adapter.setUsernameFormat(getString(R.string.bid_card_username_text_field));
         adapter.setAmountFormat(getString(R.string.bid_card_amount_text_field));
         bidListView.setAdapter(adapter);
