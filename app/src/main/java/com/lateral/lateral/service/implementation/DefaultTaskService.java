@@ -6,26 +6,17 @@
 
 package com.lateral.lateral.service.implementation;
 
-import android.provider.ContactsContract;
-import android.util.Log;
-
 import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
 import com.lateral.lateral.helper.StringHelper;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -43,7 +34,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
     /**
      * Returns the list of tasks matching the supplied query keywords
-     * @param query The keywords to get tasks from
+     * @param query The keywords to search tasks from
      * @return List of tasks matching query
      */
     public ArrayList<Task> getAllTasks(String query){
@@ -51,7 +42,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
     }
 
     /**
@@ -63,7 +54,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\":{\"match\":{\"requestingUserId\":{\"query\":\"" + requesterID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
     }
 
     /*
@@ -102,21 +93,21 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
                 "\"lon\": " + Double.toString(longitude) + "}}}}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
     }
 
     public ArrayList<Task> getEveryAvailableTask(){
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\" : {\"match\" : {\"taskStatus\" : { \"query\" : \"Requested Bidded\"}}}}";
 
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
 
     }
 
     // nick
     public Task getTaskByTaskID(String taskID){
         String json = "{\"query\": {\"match\": {\"id\": \"" + taskID + "\"}}}";
-        return gson.fromJson(get(json), Task.class);
+        return gson.fromJson(search(json), Task.class);
     }
 
     // nick

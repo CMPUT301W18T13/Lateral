@@ -836,7 +836,7 @@ public class CameraSource {
      * <p/>
      * Even though we may only need the preview size, it's necessary to find both the preview
      * size and the picture size of the camera together, because these need to have the same aspect
-     * ratio.  On some hardware, if you would only set the preview size, you will get a distorted
+     * ratio.  On some hardware, if you would only set the preview size, you will search a distorted
      * image.
      *
      * @param camera        the camera to select a preview size from

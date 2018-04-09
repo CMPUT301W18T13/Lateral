@@ -11,10 +11,6 @@ import android.util.Log;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.UserService;
 
-import org.json.JSONArray;
-
-import java.lang.reflect.Type;
-
 /**
  * Service for interfacing with Users on the ElasticSearch server
  * Note; any failure to return results will return null, so check accordingly
@@ -28,7 +24,7 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
      */
     public User getUserByUsername(String username){
         String json = "{\"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
-        return gson.fromJson(get(json), User.class);
+        return gson.fromJson(search(json), User.class);
     }
 
 
@@ -39,7 +35,7 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
      */
     public User getUserByID(String ID){
         String json = "{\"query\": {\"match\": {\"id\": \"" + ID + "\"}}}";
-        return gson.fromJson(get(json), User.class);
+        return gson.fromJson(search(json), User.class);
     }
 
 
@@ -51,7 +47,7 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
     public String getSaltAndHash(String username){
         String json = "{\"_source\": [\"saltAndHash\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
 
-        String result = get(json);
+        String result = search(json);
 
         if(result == null){ return null; }
 
@@ -68,9 +64,10 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
      * @return The ID of the user if it exists; null otherwise
      */
     public String getIdByUsername(String username){
+        // TODO: Possible bug here?
         String json = "{\"_source\": [\"id\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
 
-        String result = get(json);
+        String result = search(json);
 
         if(result == null){ return null; }
 
@@ -90,7 +87,7 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
     public String getToken(String id){
         String json = "{\"_source\": [\"token\"], \"query\": {\"match\": {\"id\": \"" + id + "\"}}}";
 
-        String result = get(json);
+        String result = search(json);
 
         if(result.equals("")){
             return null;

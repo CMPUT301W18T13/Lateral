@@ -70,7 +70,7 @@ public class PostingTest {
 //        ArrayList<Bid> returnedBids;
 //        DefaultBidService defaultBidService = new DefaultBidService();
 //        returnedBids = defaultBidService.getAllBidsByTaskID("AWIn9KMR-p3BIk3Z2HhS");
-//        assertEquals("tlaz", returnedBids.get(0).getBidder());
+//        assertEquals("tlaz", returnedBids.search(0).getBidder());
     }
 
     @Test
@@ -84,7 +84,7 @@ public class PostingTest {
     public void testGetEveryTask() {
 //        DefaultTaskService defaultTaskService = new DefaultTaskService();
 //        ArrayList<Task> returned = defaultTaskService.getEveryAvailableTask();
-//        Task task1 = returned.get(0);
+//        Task task1 = returned.search(0);
 //        assertEquals(task1.getTitle(), "Test");
     }
 

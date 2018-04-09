@@ -193,7 +193,6 @@ public class MyTaskViewActivity extends AppCompatActivity {
                 taskDoneButton.setVisibility(View.GONE);
                 break;
             case Requested:
-                // TODO: Maybe show a disabled "No Bids" button instead of hiding it
                 seeBidsButton.setVisibility(View.GONE);
                 cancelTaskButton.setVisibility(View.GONE);
                 taskDoneButton.setVisibility(View.GONE);
@@ -370,4 +369,3 @@ public class MyTaskViewActivity extends AppCompatActivity {
         }
     }
 }
-// TODO: Maybe set up RESULT_OK and RESULT_CANCELED appropriately so we don't redundantly refresh data

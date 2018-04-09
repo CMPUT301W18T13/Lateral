@@ -30,10 +30,8 @@ import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
-import com.lateral.lateral.service.UserService;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.lateral.lateral.widget.PhotoImageView;
 
 import java.text.DateFormat;

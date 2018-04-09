@@ -139,7 +139,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         /*
         Sets the task status color accordingly (colors are default, can substitute our own later)
          */
-        // get task status -> get color from status -> set background color
+        // search task status -> search color from status -> set background color
         holder.tvTaskStatus.setBackgroundColor(getColorValueFromTaskStatus(task.getStatus()));
 
         df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
@@ -167,7 +167,7 @@ public class TaskRowAdapter extends RecyclerView.Adapter<TaskRowAdapter.ViewHold
         } else if (context instanceof AssignedAndBiddedTasksViewActivity) {
             String leadingBidText;
             String outBidString;
-            //Log.d("ADAPTER", "mybid = " + mBids.get(position).getAmount() + "leading = " + bid);
+            //Log.d("ADAPTER", "mybid = " + mBids.search(position).getAmount() + "leading = " + bid);
             if ((mBids.get(position).getAmount()).equals(bid)) {
                 leadingBidText = "Your Leading Bid:";
                 outBidString = "";

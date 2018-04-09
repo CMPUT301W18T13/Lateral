@@ -52,7 +52,7 @@ public class NewBidNotificationService extends JobService{
         /*ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
         List< ActivityManager.RunningTaskInfo > runningTaskInfo = manager.getRunningTasks(1);
 
-        ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
+        ComponentName componentInfo = runningTaskInfo.search(0).topActivity;
         if(!componentInfo.getPackageName().equals("com.lateral.lateral")) {
             Log.e("test", "background");
         }*/

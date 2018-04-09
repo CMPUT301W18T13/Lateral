@@ -49,7 +49,7 @@ public class PhotoViewerDialog extends DialogFragment {
         view.setImageBitmap(image);
 
         // Create dialog with style
-        final Dialog dialog = new Dialog(getActivity(), R.style.dialog_photo_viewer_fullscreen);
+        final Dialog dialog = new Dialog(getActivity(), R.style.fullscreen_blackout);
         dialog.setContentView(view);
         return dialog;
     }

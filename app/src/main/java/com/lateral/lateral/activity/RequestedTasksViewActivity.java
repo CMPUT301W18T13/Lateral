@@ -304,7 +304,7 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
 
         // caused out of bounds index
         // can be fixed by just checking size first but this code will probably be replaces anyway
-//        if (allLocallyStoredTasks.get(0) == null) {
+//        if (allLocallyStoredTasks.search(0) == null) {
 //            Log.d("Tag", "allLocalTasks == null");
 //            return -1;
 //        } else {

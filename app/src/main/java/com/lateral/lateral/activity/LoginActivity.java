@@ -161,6 +161,7 @@ public class LoginActivity extends AppCompatActivity{
             String saltAndHash = defaultUserService.getSaltAndHash(username);
             String id = defaultUserService.getIdByUsername(username);
 
+            // TODO: Broken exception handling, but getIdByUsername may rightly return null???
             if(saltAndHash != null && id != null) {
                 View view = this.getCurrentFocus();
                 if (view != null) {

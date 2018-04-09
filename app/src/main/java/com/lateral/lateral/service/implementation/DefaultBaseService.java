@@ -14,24 +14,26 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.lateral.lateral.annotation.ElasticSearchType;
 import com.lateral.lateral.model.BaseEntity;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.service.BaseService;
 import com.searchly.jestdroid.DroidClientConfig;
 import com.searchly.jestdroid.JestClientFactory;
-import com.searchly.jestdroid.JestDroidClient;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.concurrent.ExecutionException;
 
 import io.searchbox.client.JestClient;
+import io.searchbox.client.JestResult;
 import io.searchbox.core.Delete;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
-
-// TODO: BUG: Need to ensure update/post/delete calls are complete before returning to caller!!!!
 
 /**
  * Represents a service class to handle a specified type of object
@@ -40,6 +42,9 @@ import io.searchbox.core.Update;
 public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> {
 
     static protected final int RECORD_COUNT = 10000;
+    static private String SERVER = "http://cmput301.softwareprocess.es:8080";
+    static private String INDEX = "cmput301w18t13";
+
 
     private static JestClient jestClient;
     // Stores T.class since java doesn't let you call T.class
@@ -75,131 +80,12 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      */
     public static void verifySettings() {
         if (jestClient == null) {
-            DroidClientConfig.Builder builder = new DroidClientConfig.Builder("http://cmput301.softwareprocess.es:8080");
+            DroidClientConfig.Builder builder = new DroidClientConfig.Builder(SERVER);
             DroidClientConfig config = builder.build();
 
             JestClientFactory factory = new JestClientFactory();
             factory.setDroidClientConfig(config);
-            jestClient = (JestDroidClient) factory.getObject();
-        }
-    }
-
-
-    /**
-     * Get the an item by the Jest ID of the object
-     * @param id The Jest ID of the object
-     * @return The object from the database
-     */
-    @Override
-    public T getById(String id){
-        String json = "{\"query\": {\"match\": {\"_id\": \"" + id + "\"}}}";
-        return gson.fromJson(get(json), typeArgument);
-    }
-
-    /**
-     * Gets the server's response based on the supplied query
-     * @param query The query for the server
-     * @return The server's response
-     */
-    @Override
-    public String get(String query){
-        String data = null;
-        String elasticSearchType = getElasticSearchType();
-        GetData getData = new GetData(elasticSearchType);
-
-        getData.execute(query);
-        try{
-            data = getData.get();
-        }catch(Exception e){
-            Log.i("Error", "Failed to get task from async object");
-        }
-        return data;
-    }
-
-    /**
-     * Pushes a new object to the database
-     * @param obj Object to push
-     */
-    @Override
-    public void post(T obj){
-        String elasticSearchType = getElasticSearchType();
-        PostData postData = new PostData(elasticSearchType);
-        String id = null;
-
-        String json = gson.toJson(obj);
-        Log.i("json", json);
-
-
-        postData.execute(json);
-        try{
-            id = postData.get();
-        }catch(Exception e){
-            Log.i("Error", "Failed to get task from async object");
-            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
-        }
-        obj.setId(id);
-        setDocId(id);
-
-    }
-
-    /**
-     * Updates an object currently in the database
-     * @param obj Object to be updated
-     */
-    @Override
-    public void update(T obj) {
-        String elasticSearchType = getElasticSearchType();
-        UpdateData updateData = new UpdateData(elasticSearchType, obj.getId());
-        String id = null;
-
-        String json = gson.toJson(obj);
-
-        updateData.execute("{\"doc\": " + json + "}");
-
-        try{
-            id = updateData.get();
-        } catch (Exception e){
-            Log.i("Error", "Failed to get task from async object");
-            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
-        }
-    }
-
-
-    /**
-     * Sets the ID of the object into its source for retrieval/deserialization purposes
-     * @param id The ID to set
-     */
-    public void setDocId(String id){
-        String elasticSearchType = getElasticSearchType();
-        UpdateData updateData = new UpdateData(elasticSearchType, id);
-        String testId = null;
-        String getIdJson = "{\"doc\": {\"id\": \"" + id + "\"}}";
-
-        updateData.execute(getIdJson);
-        try{
-            testId = updateData.get();
-        }catch(Exception e){
-            Log.i("Error", "Failed to get task from async object");
-            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
-        }
-
-    }
-
-    /**
-     * Deletes an object based on its Jest ID
-     * @param id The Jest ID of the object to be deleted
-     */
-    @Override
-    public void delete(String id){
-        String elasticSearchType = getElasticSearchType();
-        DeleteData deleteData = new DeleteData(elasticSearchType);
-
-        deleteData.execute(id);
-        try{
-            String success = deleteData.get();
-        }catch(Exception e){
-            Log.i("Error", "Failed to get task from async object");
-            // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
+            jestClient = factory.getObject();
         }
     }
 
@@ -214,6 +100,13 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         return ((ElasticSearchType) annotation).Name();
     }
 
+    private static boolean validateResult(JestResult result){
+        return result.isSucceeded()
+                // Success response codes
+                && result.getResponseCode() >= 200
+                && result.getResponseCode() < 300;
+    }
+
     /**
      * Gets extra value from JSON string based on the passed key
      * @param json The JSON string
@@ -225,11 +118,151 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         return jsonObject.get(key).getAsString();
     }
 
+
+
+
+
+
+
+
+
+
+    /**
+     * Get the an item by the Jest ID of the object
+     * @param id The Jest ID of the object
+     * @return The object from the database
+     */
+    @Override
+    public T getById(String id){
+
+        GetByIdData getData = new GetByIdData(getElasticSearchType());
+        getData.execute(id);
+
+        try {
+            String data = getData.get();
+            if (getData.serviceException != null)
+                return null; // TODO: Testingthrow getData.serviceException;
+
+            return gson.fromJson(data, typeArgument);
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets the server's response based on the supplied query
+     * @param query The query for the server
+     * @return The server's response
+     */
+    @Override
+    public String search(String query) {
+
+        SearchData getData = new SearchData(getElasticSearchType());
+        getData.execute(query);
+
+        try {
+            String data = getData.get();
+            if (getData.serviceException != null)
+                return null; // TODO: Testingthrow getData.serviceException;
+
+            return data;
+
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Pushes a new object to the database
+     * @param obj Object to push
+     */
+    @Override
+    public void post(T obj){
+
+        PostData postData = new PostData(getElasticSearchType());
+        postData.execute(gson.toJson(obj));
+
+        try{
+            String id = postData.get();
+            if (postData.serviceException != null)
+                return; // TODO: Testingthrow postData.serviceException;
+
+            obj.setId(id);
+            setDocId(id);
+
+        } catch(InterruptedException | ExecutionException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Updates an object currently in the database
+     * @param obj Object to be updated
+     */
+    @Override
+    public void update(T obj) {
+
+        UpdateData updateData = new UpdateData(getElasticSearchType(), obj.getId());
+        updateData.execute("{\"doc\": " + gson.toJson(obj) + "}");
+
+        try{
+            updateData.get();
+            if (updateData.serviceException != null)
+                return; // TODO: Testing throw updateData.serviceException;
+
+        } catch(InterruptedException | ExecutionException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * Sets the ID of the object into its source for retrieval/deserialization purposes
+     * @param id The ID to set
+     */
+    public void setDocId(String id){
+
+        UpdateData updateData = new UpdateData(getElasticSearchType(), id);
+        String getIdJson = "{\"doc\": {\"id\": \"" + id + "\"}}";
+        updateData.execute(getIdJson);
+
+        try{
+            updateData.get();
+            if (updateData.serviceException != null)
+                return; // TODO: Testingthrow updateData.serviceException;
+
+        } catch(InterruptedException | ExecutionException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Deletes an object based on its Jest ID
+     * @param id The Jest ID of the object to be deleted
+     */
+    @Override
+    public void delete(String id){
+
+        DeleteData deleteData = new DeleteData(getElasticSearchType());
+        deleteData.execute(id);
+
+        try{
+            deleteData.get();
+            if (deleteData.serviceException != null)
+                return; // TODO: Testingthrow deleteData.serviceException;
+
+        } catch(InterruptedException | ExecutionException e){
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * AsyncTask to post an object
      */
     public static class PostData extends AsyncTask<String, Void, String> {
         String idx;
+        ServiceException serviceException = null;
 
         /**
          * Constructor for the task
@@ -242,46 +275,85 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
 
         /**
          * To do in the background of the AsyncTask
-         * @param objs Objects to be posted
+         * @param obj Objects to be posted
          * @return The ID of the posted object
          */
         @Override
-        protected String doInBackground(String... objs) {
+        protected String doInBackground(String... obj) {
             verifySettings();
 
+            Index index = new Index.Builder(obj[0]).index(INDEX).type(idx).refresh(true).build();
             String id = null;
 
-            for(String obj: objs) {
-                Index index = new Index.Builder(obj).index("cmput301w18t13").type(idx).refresh(true).build();
-
-                try {
-                    DocumentResult result = jestClient.execute(index);
-                    if (result.isSucceeded()) {
-                        Log.i("Success", "Post was succesful");
-                        id = result.getId();
-                    } else {
-                        Log.i("Error", "A error occured");
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "Application failed to send user to server");
-                    // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
+            try {
+                DocumentResult result = jestClient.execute(index);
+                if (validateResult(result)) {
+                    id = result.getId();
+                } else {
+                    Log.e("Post Error Code", ((Integer)result.getResponseCode()).toString());
+                    serviceException = new ServiceException("Post failed");
                 }
+            } catch(IOException e){
+                Log.i("Post IOException", e.toString());
+                serviceException = new ServiceException("Error communicating with the elasticsearch server!");
             }
             return id;
         }
     }
 
     /**
-     * AsyncTask to get data from the server
+     * AsyncTask to get specific record from the server
      */
-    public static class GetData extends AsyncTask<String, Void, String> {
-        String idx;
+    public static class GetByIdData extends AsyncTask<String, Void, String> {
+        private String idx;
+        ServiceException serviceException = null;
 
         /**
          * Constructor for the task
          * @param idx Type of the object
          */
-        GetData(String idx){
+        GetByIdData(String idx){
+            this.idx = idx;
+        }
+
+        /**
+         * To do in the background of the AsyncTask
+         * @param ids item ids
+         * @return The response of the server
+         */
+        @Override
+        protected String doInBackground(String... ids) {
+            verifySettings();
+            Get get = new Get.Builder(INDEX, ids[0]).type(idx).build();
+            String data = null;
+            try{
+                JestResult result = jestClient.execute(get);
+                if (validateResult(result)){
+                    data = result.getSourceAsString();
+                } else {
+                    Log.e("Get Error Code", ((Integer)result.getResponseCode()).toString());
+                    serviceException = new ServiceException("Get failed");
+                }
+            } catch(IOException e){
+                Log.i("Get IOException", e.toString());
+                serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            }
+            return data;
+        }
+    }
+
+    /**
+     * AsyncTask to search data from the server
+     */
+    public static class SearchData extends AsyncTask<String, Void, String> {
+        private String idx;
+        ServiceException serviceException = null;
+
+        /**
+         * Constructor for the task
+         * @param idx Type of the object
+         */
+        SearchData(String idx){
             this.idx = idx;
         }
 
@@ -294,25 +366,21 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... search_parameters) {
             verifySettings();
 
-            String get = null;
-
-            /*
-            attempt to to build a search and execute it, creating object from returned json string
-             */
-            Search search = new Search.Builder(search_parameters[0]).addIndex("cmput301w18t13").addType(idx).build();
-            try {
+            Search search = new Search.Builder(search_parameters[0]).addIndex(INDEX).addType(idx).build();
+            String data = null;
+            try{
                 SearchResult result = jestClient.execute(search);
-                if (result.isSucceeded()) {
-                    get = result.getSourceAsString();
+                if (validateResult(result)){
+                    data = result.getSourceAsString();
                 } else {
-                    Log.i("Error", "Search failed to return anything");
+                    Log.e("Search Error Code", ((Integer)result.getResponseCode()).toString());
+                    serviceException = new ServiceException("Search failed");
                 }
-            } catch (Exception e) {
-                Log.i("Error", "Error communicating with the elasticsearch server!");
-                // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
+            } catch(IOException e){
+                Log.i("Search IOException", e.toString());
+                serviceException = new ServiceException("Error communicating with the elasticsearch server!");
             }
-
-            return get;
+            return data;
         }
     }
 
@@ -321,8 +389,9 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * Async task to update an item in the database
      */
     public static class UpdateData extends AsyncTask<String, Void, String> {
-        String idx;
-        String id;
+        private String idx;
+        private String id;
+        ServiceException serviceException = null;
 
         /**
          * Constructor for the task
@@ -343,19 +412,19 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... updateJson) {
             verifySettings();
 
-            Update update = new Update.Builder(updateJson[0]).index("cmput301w18t13").type(idx).id(id).refresh(true).build();
+            Update update = new Update.Builder(updateJson[0]).index(INDEX).type(idx).id(id).refresh(true).build();
 
             try {
                 DocumentResult result = jestClient.execute(update);
-                if (result.isSucceeded()) {
-                    Log.i("Success", "Update was succesful");
+                if (validateResult(result)) {
                     id = result.getId();
                 } else {
-                    Log.i("Error", "A error occured");
+                    Log.e("Update Error Code", ((Integer)result.getResponseCode()).toString());
+                    serviceException = new ServiceException("Update failed");
                 }
-            } catch (Exception e) {
-                Log.i("Error", "Application failed to send user to server");
-                // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
+            } catch(IOException e){
+                Log.i("Update IOException", e.toString());
+                serviceException = new ServiceException("Error communicating with the elasticsearch server!");
             }
             return id;
         }
@@ -366,7 +435,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * AsyncTask to delete an item by ID
      */
     public static class DeleteData extends AsyncTask<String, Void, String> {
-        String idx;
+        private String idx;
+        ServiceException serviceException = null;
 
         /**
          * Constructor
@@ -385,23 +455,21 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         protected String doInBackground(String... obj) {
             verifySettings();
 
-                Delete delete = new Delete.Builder(obj[0]).index("cmput301w18t13").type(idx).refresh(true).build();
+            Delete delete = new Delete.Builder(obj[0]).index(INDEX).type(idx).refresh(true).build();
 
-                try {
-                    DocumentResult result = jestClient.execute(delete);
-                    if (result.isSucceeded()) {
-                        Log.i("Success", "Delete was succesful");
-                    } else {
-                        Log.i("Error", "A error occured");
-                    }
-                } catch (Exception e) {
-                    Log.i("Error", "Application failed to send user to server");
-                    // TODO: Don't catch this exception! Need to rethrow so caller knows error occured
+            try {
+                DocumentResult result = jestClient.execute(delete);
+                if (!validateResult(result)) {
+                    Log.e("Delete Error Code", ((Integer)result.getResponseCode()).toString());
+                    serviceException = new ServiceException("Delete failed");
                 }
-            return "Success";
+            } catch(IOException e){
+                Log.i("Delete IOException", e.toString());
+                serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            }
+            return null;
         }
     }
-
 }
 
 

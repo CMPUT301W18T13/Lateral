@@ -31,13 +31,13 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
                 "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}], " +
                 "\"size\" : 1}";
 
-        return gson.fromJson(get(json), Bid.class);
+        return gson.fromJson(search(json), Bid.class);
     }
 
 
     /**
      * Gets all the bids with the specified taskID
-     * @param taskID Task ID to get Bids from
+     * @param taskID Task ID to search Bids from
      * @return The list of Bids
      */
     public ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID) {
@@ -45,25 +45,25 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
                 "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}]}" ;
 
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
     }
 
     /**
      * Gets all the bids with the specified taskID
-     * @param taskID Task ID to get Bids from
+     * @param taskID Task ID to search Bids from
      * @return The list of Bids
      */
     public ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID) {
         String json = "{\"size\" : " + RECORD_COUNT + ",\"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
     }
 
     public ArrayList<Bid> getAllBidsByUserID(String userId) {
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\":{\"match\":{\"bidderId\":{\"query\":\"" + userId + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>() {
         }.getType();
-        return gson.fromJson("[" + get(json) + "]", listType);
+        return gson.fromJson("[" + search(json) + "]", listType);
 
     }
 

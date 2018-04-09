@@ -56,18 +56,9 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 /**
  * Activity for viewing all available tasks
  */
-// TODO: Get the notification "x new bids!" working (or remove it)
-// TODO: BUG: Filter isn't working anymore
-// TODO: No need to store extra lists for each filter, just filter the list (which is cheap) when changing the filter
 // TODO: Show some info in the filter stating what the status colors mean!
-// TODO: BUG: Load all records, not just top 10
 // TODO: Probably remove incremental searching
-// TODO: BUG: Available Tasks still shows Assigned and Done tasks (they shouldn't be displayed here)
-// TODO: --> Change getEveryAvailableTask/getAllTask to getEveryAvailableTask/getAllAvailableTask and add "Requested or Bidded" to the query
-// TODO: --> Change getAvailableTasksByDistance to getAvailableTasksByDistance and add "Requested or Bidded" to the query
 // TODO: BUG: All filters are missing "Tasks without bids (only requested)" option
-// TODO: BUG: Still able to bid on assigned and done tasks
-// TODO: BUG: getAllTasks() uses different number than getEveryAvailableTask()
 public class AvailableTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static String INTENT_OPEN_SEARCH = "com.lateral.lateral.OPEN_SEARCH";
@@ -402,7 +393,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     public void refreshLocalArrays(String query) {
 
         if (query == null) {
-            // did not get here via search, display all
+            // did not search here via search, display all
             allLocallyStoredTasks = defaultTaskService.getEveryAvailableTask();
         } else {
             // user gave search query

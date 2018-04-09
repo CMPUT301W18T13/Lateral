@@ -22,7 +22,7 @@ public interface BaseService<T extends BaseEntity> {
      * @param query The query for the server
      * @return The server's response
      */
-    String get(String query);
+    String search(String query) throws Exception;
 
     /**
      * Returns an object based on its Jest ID

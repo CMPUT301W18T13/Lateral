@@ -42,7 +42,6 @@ import static com.lateral.lateral.model.TaskStatus.Done;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 // Just ignore this activity for now
-// TODO: Need to show my own bid along with the current lowest (unless assigned)!
 /**
  * Activity for viewing any assigned/bidden on tasks
  */
@@ -104,7 +103,6 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * Returns the target class of the activity
      * @return The target class of the activity
      */
-    // TODO probably need to change, need to hide "BID NOW!" button which will appear
     @Override
     protected Class targetClass(Task clickedTask) {
         return TaskViewActivity.class;
@@ -241,7 +239,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
     /**
      * Adds the list of tasks matching a certain Requester ID to the list of displayed tasks
-     * @param query The Requester ID to get tasks from
+     * @param query The Requester ID to search tasks from
      */
     private void returnMatchingTasks(String query) {
         DefaultTaskService taskService = new DefaultTaskService();

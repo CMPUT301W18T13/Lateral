@@ -203,8 +203,6 @@ public class AddEditTaskActivity extends AppCompatActivity {
     }
 
     public void onAddGeolocation(View v) {
-        // TODO: BUG: Need to be able to edit this field
-        // TODO: BUG: Button states shows up incorrectly when editing
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
@@ -305,7 +303,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
         if (photoIndex < 0 || photoIndex >= PhotoGallery.MAX_PHOTOS)
             throw new IllegalArgumentException("Index out of range");
 
-        // Send intent to get image
+        // Send intent to search image
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, PHOTO_REQUEST + photoIndex);

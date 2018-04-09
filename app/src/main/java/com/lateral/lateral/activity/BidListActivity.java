@@ -26,8 +26,6 @@ import com.lateral.lateral.service.implementation.DefaultUserService;
 import java.util.ArrayList;
 
 
-//TODO: Only a maximum of 10 bids are displayed
-
 /**
  * Activity to display the list of bids
  */
