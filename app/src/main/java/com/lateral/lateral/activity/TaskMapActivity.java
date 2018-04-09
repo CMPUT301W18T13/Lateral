@@ -118,7 +118,7 @@ public class TaskMapActivity extends AppCompatActivity
                     .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))));
             marker.setTag(task);
         }
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(curLoc, 15);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(curLoc, 13);
         mMap.animateCamera(cameraUpdate);
     }
 
