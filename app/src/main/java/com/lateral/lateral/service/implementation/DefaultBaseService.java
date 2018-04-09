@@ -33,7 +33,9 @@ import java.util.concurrent.ExecutionException;
 
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Delete;
+import io.searchbox.core.DeleteByQuery;
 import io.searchbox.core.DocumentResult;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
@@ -47,11 +49,14 @@ import io.searchbox.core.Update;
  */
 public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> {
 
+    static protected final int RECORD_COUNT = 1000;
+
     private static JestClient jestClient;
     // Stores T.class since java doesn't let you call T.class
     private final Class<T> typeArgument;
 
     protected final Gson gson;
+
 
     /**
      * Constructor for the service
