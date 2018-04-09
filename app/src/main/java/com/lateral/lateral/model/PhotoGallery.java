@@ -40,8 +40,6 @@ public class PhotoGallery {
     private static final int MAX_SERIALIZED_CHAR_SIZE = MAX_SERIALIZED_BYTE_SIZE/BYTE_PER_UTF8CHAR;
     // Calculation source: https://stackoverflow.com/questions/471541
     private static final int MAX_BYTE_ARRAY_SIZE = 3*(MAX_SERIALIZED_CHAR_SIZE/4 - 1);
-    private static final int BYTES_PER_PIXEL = 4; // Assuming ARGB_8888 Config is used in Bitmap
-    private static final int MAX_PIXEL_COUNT = MAX_BYTE_ARRAY_SIZE/BYTES_PER_PIXEL;
     /**
      * Generate bitmap from Uri to match DB constraints
      * @param imageData Uri of image data
@@ -49,23 +47,32 @@ public class PhotoGallery {
      */
     public static Bitmap generateBitmap(ContentResolver contentResolver, Uri imageData) throws IOException{
 
-        Bitmap bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageData);
+        Bitmap original = MediaStore.Images.Media.getBitmap(contentResolver, imageData);
 
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
+        Bitmap copy = original;
+        byte[] byteArray;
 
-        if ((width*height) >= (double)MAX_PIXEL_COUNT ){
-            double areaScale = (double)MAX_PIXEL_COUNT/((double)width*(double)height);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        copy.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byteArray = stream.toByteArray();
+        stream.close();
+
+        int areaScale = 1;
+        while (byteArray.length > MAX_BYTE_ARRAY_SIZE){
+
+            areaScale *= 2;
             double lengthScale = Math.sqrt(areaScale);
-            bitmap = Bitmap.createScaledBitmap(bitmap,
-                    (int)(width*lengthScale),
-                    (int)(height*lengthScale),
+            copy = Bitmap.createScaledBitmap(original,
+                    (int)(original.getWidth()/lengthScale),
+                    (int)(original.getHeight()/lengthScale),
                     false);
-        }
 
-        if (bitmap.getConfig() != Bitmap.Config.ARGB_8888)
-            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false);
-        return bitmap;
+            stream = new ByteArrayOutputStream();
+            copy.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byteArray = stream.toByteArray();
+            stream.close();
+        }
+        return copy;
     }
 
     private Bitmap[] photoList = new Bitmap[MAX_PHOTOS];
