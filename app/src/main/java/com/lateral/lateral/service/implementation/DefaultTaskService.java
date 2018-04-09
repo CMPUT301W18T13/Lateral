@@ -46,7 +46,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @return List of tasks matching query
      */
     public ArrayList<Task> getAllTasks(String query){
-        String json = "{\"query\": {\"match\": {\"title\": \"" + query + "\"}}}";
+        String json = "{\"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
         return gson.fromJson("[" + get(json) + "]", listType);
@@ -89,11 +89,9 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     public ArrayList<Task> getAvailableTasksByDistance(Double latitude, Double longitude, Double distance){
         String json = "{" +
                 "\"query\" : { " +
-                // TODO: Why is this commented out? It should return only Requested OR Bidded, maybe syntax was incorrect?
-                //"\"match\" : {" +
-                //"\"taskStatus\" : {" +
-                //"\"query\" : \"Requested Bidded\"}}, " +
                 "\"filtered\" : { " +
+                "\"query\" : {" +
+                "\"match\" : { \"taskStatus\" : \"Requested Bidded\"}}," +
                 "\"filter\" : { " +
                 "\"geo_distance\" : { " +
                 "\"distance\": \"" + Double.toString(distance) + "km\", " +

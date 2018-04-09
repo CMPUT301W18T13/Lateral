@@ -39,6 +39,7 @@ import com.lateral.lateral.widget.PhotoImageView;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 
 // TODO: Need progress bar in here
@@ -113,7 +114,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
     private void refresh(){
 
         try {
-            task = loadTask(taskID);
+            task = loadTask();
             refresh(task);
         } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
@@ -127,16 +128,18 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param task task
      */
     private void refresh(Task task) {
+
+        title.setText(task.getTitle());
+        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
+        date.setText(df.format(task.getDate()));
+        description.setText(task.getDescription());
+
         if (task.getLowestBidValue() == null) {
             currentBid.setText(R.string.task_view_no_bids);
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
                     String.valueOf(task.getLowestBidValue())));
         }
-        title.setText(task.getTitle());
-        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
-        date.setText(df.format(task.getDate()));
-        description.setText(task.getDescription());
 
         final Bid assignedBid = task.getAssignedBid();
         if (assignedBid != null) {
@@ -205,10 +208,9 @@ public class MyTaskViewActivity extends AppCompatActivity {
 
     /**
      * Loads a task based on its taskID
-     * @param taskID Task ID of the task
      * @return The loaded task
      */
-    private Task loadTask(String taskID){
+    private Task loadTask(){
 
         Task task = taskService.getById(taskID);
 
@@ -237,6 +239,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
      */
     public void onSetDoneButtonClick(View v){
         task.setStatus(TaskStatus.Done);
+        task.setBidsPendingNotification(0);
+        task.setBidsNotViewed(0);
         taskService.update(task);
         refresh(task);
     }
@@ -246,9 +250,10 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param v current view
      */
     public void onSetRequestedButtonClick(View v){
-        Bid assignedBid = task.getAssignedBid();
-        bidService.delete(assignedBid.getId());
+        bidService.delete(task.getAssignedBidId());
 
+        task.setBidsPendingNotification(0);
+        task.setBidsNotViewed(0);
         task.setAssignedBid(null);
         task.setAssignedBidId(null);
         task.setBids(null);
