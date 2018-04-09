@@ -284,15 +284,18 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     id = result.getId();
                     if (id == null) {
                         Log.e("Post error", "This should not be null");
-                        serviceException = new ServiceException("Post failed");
+                        throw new ServiceException("Post failed");
                     }
                 } else {
                     Log.e("Post Error Code", ((Integer)result.getResponseCode()).toString());
-                    serviceException = new ServiceException("Post failed");
+                    throw new ServiceException("Post failed");
                 }
             } catch(IOException e){
-                Log.i("Post IOException", e.toString());
+                Log.i("Get IOException", e.toString());
                 serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            } catch(ServiceException e){
+                e.printStackTrace();
+                serviceException = e;
             }
             return id;
         }
@@ -329,15 +332,18 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     data = result.getSourceAsString();
                     if (data == null) {
                         Log.e("Post error", "This should not be null");
-                        serviceException = new ServiceException("Post failed");
+                        throw new ServiceException("Post failed");
                     }
                 } else {
                     Log.e("Get Error Code", ((Integer)result.getResponseCode()).toString());
-                    serviceException = new ServiceException("Get failed");
+                    throw new ServiceException("Get failed");
                 }
             } catch(IOException e){
                 Log.i("Get IOException", e.toString());
                 serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            } catch(ServiceException e){
+                e.printStackTrace();
+                serviceException = e;
             }
             return data;
         }
@@ -375,15 +381,18 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     data = result.getSourceAsString();
                     if (data == null) {
                         Log.e("Post error", "This should not be null");
-                        serviceException = new ServiceException("Post failed");
+                        throw new ServiceException("Post failed");
                     }
                 } else {
                     Log.e("Search Error Code", ((Integer)result.getResponseCode()).toString());
-                    serviceException = new ServiceException("Search failed");
+                    throw new ServiceException("Search failed");
                 }
             } catch(IOException e){
                 Log.i("Search IOException", e.toString());
                 serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            } catch(ServiceException e){
+                e.printStackTrace();
+                serviceException = e;
             }
             return data;
         }
@@ -425,15 +434,18 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                     id = result.getId();
                     if (id == null) {
                         Log.e("Post error", "This should not be null");
-                        serviceException = new ServiceException("Post failed");
+                        throw new ServiceException("Post failed");
                     }
                 } else {
                     Log.e("Update Error Code", ((Integer)result.getResponseCode()).toString());
-                    serviceException = new ServiceException("Update failed");
+                    throw new ServiceException("Update failed");
                 }
             } catch(IOException e){
-                Log.i("Update IOException", e.toString());
+                Log.i("Get IOException", e.toString());
                 serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            } catch(ServiceException e){
+                e.printStackTrace();
+                serviceException = e;
             }
             return id;
         }
@@ -470,11 +482,14 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 DocumentResult result = jestClient.execute(delete);
                 if (!validateResult(result)) {
                     Log.e("Delete Error Code", ((Integer)result.getResponseCode()).toString());
-                    serviceException = new ServiceException("Delete failed");
+                    throw new ServiceException("Delete failed");
                 }
             } catch(IOException e){
-                Log.i("Delete IOException", e.toString());
+                Log.i("Get IOException", e.toString());
                 serviceException = new ServiceException("Error communicating with the elasticsearch server!");
+            } catch(ServiceException e){
+                e.printStackTrace();
+                serviceException = e;
             }
             return null;
         }
