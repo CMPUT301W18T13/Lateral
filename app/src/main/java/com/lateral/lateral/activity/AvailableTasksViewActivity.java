@@ -212,6 +212,9 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    /**
+     * Called when the activity starts
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -262,41 +265,6 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         }
         return true;
     }
-
-
-    // determines if a search should be executed given the previous query, and the new query
-    public void searchNeeded(String newQuery) {
-        boolean search = false;
-
-//        // user pressed space, search
-//        if (newQuery.length() > 1) {
-//
-//            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!(newQuery.substring(newQuery.length() - 2).equals(" ")))) {
-//                search = true;
-//        }
-//
-//        } else if (newQuery.equals("")) {
-//            newQuery = null;
-//            search = true;
-//        }
-
-        if ((newQuery.equals("")) && (INTENT_OPEN_SEARCH.equals(getIntent().getAction()))) {
-            search = true;
-            query = null;
-
-        }
-
-        // search needed
-        if (search) {
-            Log.d("search needed", "refreshing arrays");
-            refreshLocalArrays(query);
-            Log.d("display array", "display array from filter");
-            displayResultsFromFilter();
-        }
-
-    }
-
-
 
     /**
      * When an intent is received, handle it
