@@ -95,7 +95,9 @@
 
     </com.baoyz.widget.PullRefreshLayout>
 
-
+<!--
+<<<<<<< HEAD
+=======
     <Spinner
         android:id="@+id/availableTasksSpinner"
         android:layout_width="0dp"
@@ -107,4 +109,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+>>>>>>> c8c4f42f52925d7adae78db7cc5674edf85bb0ab
+-->
 </android.support.constraint.ConstraintLayout>

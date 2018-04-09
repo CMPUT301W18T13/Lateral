@@ -48,13 +48,15 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     public RecyclerView mRecyclerView;
     private View progressView;
 
-    private RecyclerView.Adapter mAdapter;
+    protected RecyclerView.Adapter mAdapter;
     private ArrayList<Task> matchingTasks;
     private ArrayList<Bid> matchingBids;
 
     // request code for starting 'view a task' activity
     static final int VIEW_TASK_REQUEST = 1;
     private int clickedItemPosition = 0;
+    private String clickedItemID = "";
+    private Task clickedTask;
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
     private PullRefreshLayout layout;
@@ -127,13 +129,18 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        clickedItemPosition = position;
+                        //clickedItemPosition = position;
                         Log.d("CLICK", "Click position = " + position);
 
-                        if ((clickedItemPosition >= 0) && (clickedItemPosition < matchingTasks.size())) {
+                        if ((position >= 0) && (position < matchingTasks.size())) {
 
-                            Task clickedTask = matchingTasks.get(position);
-                            Log.d("ITEM CLICKED", "item " + (matchingTasks.get(position).getId()));
+                            clickedItemPosition = position;
+
+                            //Task clickedTask = matchingTasks.get(clickedItemPosition);
+                            clickedTask = matchingTasks.get(clickedItemPosition);
+                            clickedItemID = clickedTask.getId();
+
+                            Log.d("ITEM CLICKED", "item " + (matchingTasks.get(clickedItemPosition).getId()));
                             //String RequestingUserId = clickedTask.getRequestingUserId();
 
                             // create intent to go to task view given by targetClass() --> defined in child activities
@@ -305,7 +312,21 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         }
     }
 
+//    public int getClickedItemPosition() {
+//        return this.clickedItemPosition;
+//    }
+//
+//    public String getClickedItemID() {
+//        return this.clickedItemID;
+//    }
+//
+//    public Task getClickedTask() {
+//        return this.clickedTask;
+//    }
 
 
-
+    public void addTask(Task task, int position) {
+        matchingTasks.set(position, task);
+        mAdapter.notifyItemChanged(position);
+    }
 }

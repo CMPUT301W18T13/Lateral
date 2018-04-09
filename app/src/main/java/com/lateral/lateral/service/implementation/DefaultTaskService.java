@@ -37,6 +37,8 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @param query The keywords to search tasks from
      * @return List of tasks matching query
      */
+    // TODO: Purge this method completely, it shouldn't be used
+    @Deprecated
     public ArrayList<Task> getAllTasks(String query){
         query = StringHelper.makeJsonSafe(query);
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
@@ -98,6 +100,20 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
     public ArrayList<Task> getEveryAvailableTask(){
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\" : {\"match\" : {\"taskStatus\" : { \"query\" : \"Requested Bidded\"}}}}";
+
+        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+        return gson.fromJson("[" + search(json) + "]", listType);
+
+    }
+
+    // TODO: VITAL ask Tyler to implement this
+    /*
+    should behave similiar to getEveryAvailableTasks (only display with status' Requested and Bidded) but add query searching
+     */
+    public ArrayList<Task> getEveryAvailableTaskViaQuery(String query) {
+        query = StringHelper.makeJsonSafe(query);
+
+        String json = "{\"size\" : " + RECORD_COUNT + ",\"query\" : {\"match\" : {\"description\" : { \"query\" : \"Requested Bidded\"}}}}";
 
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
         return gson.fromJson("[" + search(json) + "]", listType);

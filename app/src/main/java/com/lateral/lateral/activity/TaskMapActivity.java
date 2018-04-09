@@ -103,6 +103,11 @@ public class TaskMapActivity extends AppCompatActivity
         }
     }
 
+//    @Override
+//    protected void  onActivityResult(int requestCode, int resultCode, Intent data) {
+//        drawMapMarkers();
+//    }
+
     private void drawMapMarkers(){
         LatLng curLoc = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
         tasks = defaultTaskService.getAvailableTasksByDistance(mLastKnownLocation.getLatitude(),
@@ -169,7 +174,19 @@ public class TaskMapActivity extends AppCompatActivity
     @Override
     public void onInfoWindowClick(Marker marker) {
         Task markerTask = (Task)marker.getTag();
-        Intent taskIntent = new Intent(this, TaskViewActivity.class);
+        Class targetClass;
+
+        if (markerTask == null) {
+            return;
+        }
+
+        if (markerTask.getRequestingUserId().equals(LOGGED_IN_USER.getId())) {
+            targetClass = MyTaskViewActivity.class;
+        } else {
+            targetClass = TaskViewActivity.class;
+        }
+
+        Intent taskIntent = new Intent(this, targetClass);
         taskIntent.putExtra(TaskViewActivity.EXTRA_TASK_ID, markerTask.getId());
         startActivity(taskIntent);
     }

@@ -14,6 +14,8 @@ public class TaskTest {
 
     @Test
     public void testTitle(){
+        assertTrue(false);
+        assertTrue(false);
         String testTitle = "Cleaning Task";
         Task task = new Task(testTitle);
         assertEquals(task.getTitle(), testTitle);
