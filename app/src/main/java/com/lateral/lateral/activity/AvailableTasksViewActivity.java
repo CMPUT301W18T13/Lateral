@@ -420,7 +420,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         } else {
             // user gave search query
             // TODO: Wrong, need to getAvailableTasks
-            allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
+            allLocallyStoredTasks = defaultTaskService.getEveryAvailableTaskViaQuery(query);
         }
 
 
