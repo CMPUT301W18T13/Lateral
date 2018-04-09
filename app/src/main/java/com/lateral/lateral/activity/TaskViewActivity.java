@@ -230,48 +230,44 @@ public class TaskViewActivity extends AppCompatActivity {
      * @param v The current view
      */
     public void onBidButtonClick(View v){
-        final BidDialog bidCreationDialog=new BidDialog(TaskViewActivity.this);
+        final BidDialog bidCreationDialog = new BidDialog(TaskViewActivity.this);
         bidCreationDialog.setCanceledOnTouchOutside(false);
         bidCreationDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                Bid newBid = bidCreationDialog.getNewBid();
-                if (newBid != null){
-                    newBid.setTaskId(taskID);
-                    newBid.setBidderId(LOGGED_IN_USER.getId());
+            Bid newBid = bidCreationDialog.getNewBid();
+            if (newBid != null){
+                newBid.setTaskId(taskID);
+                newBid.setBidderId(LOGGED_IN_USER.getId());
 
-                    int bidsPendingNotification = task.getBidsPendingNotification();
-                    int bidsNotViewed = task.getBidsNotViewed();
+                int bidsPendingNotification = task.getBidsPendingNotification();
+                int bidsNotViewed = task.getBidsNotViewed();
 
-                    // Delete old bids associated with user
-                    ArrayList<Bid> oldUserBids = bidService.getAllBidsByUserID(LOGGED_IN_USER.getId());
-                    ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
-                    for (Bid oldUserBid : oldUserBids){
-                        bidService.delete(oldUserBid.getId());
-                        for (Bid taskBid: taskBids) {
-                            if (taskBid.getId().equals(oldUserBid.getId())) {
-                                if (taskBids.indexOf(taskBid) >= (taskBids.size() - bidsNotViewed)) {
-                                    bidsNotViewed -= 1;
-                                }
-                            }
+                // Delete old bids associated with user
+                ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID, 0);
+                for (Bid bid : taskBids){
+                    if (bid.getBidderId().equals(LOGGED_IN_USER.getId())){
+                        bidService.delete(bid.getId());
+                        if (taskBids.indexOf(bid) >= (taskBids.size() - bidsNotViewed)) {
+                            bidsNotViewed -= 1;
                         }
                     }
-
-                    task.setBidsPendingNotification(bidsPendingNotification + 1);
-                    task.setBidsNotViewed(bidsNotViewed + 1);
-                    task.setStatus(TaskStatus.Bidded);
-
-                    bidService.post(newBid);// Make sure bid has task Id
-                    taskService.update(task);
-                    final Bid lowestBid = bidService.getLowestBid(taskID);
-
-                    task.setLowestBid(lowestBid);
-                    task.setLowestBidValue(lowestBid.getAmount());
-                    currentBid.setText(getString(R.string.dollar_amount_display,
-                            String.valueOf(lowestBid.getAmount())));
-
-                    taskService.update(task);
                 }
+
+                task.setBidsPendingNotification(bidsPendingNotification + 1);
+                task.setBidsNotViewed(bidsNotViewed + 1);
+                task.setStatus(TaskStatus.Bidded);
+
+                bidService.post(newBid);// Make sure bid has task Id
+                final Bid lowestBid = bidService.getLowestBid(taskID);
+
+                task.setLowestBid(lowestBid);
+                task.setLowestBidValue(lowestBid.getAmount());
+                currentBid.setText(getString(R.string.dollar_amount_display,
+                        String.valueOf(lowestBid.getAmount())));
+
+                taskService.update(task);
+            }
             }
         });
         bidCreationDialog.show();

@@ -102,10 +102,10 @@ public class ScanQRCodeActivity extends AppCompatActivity {
 
                 if (task != null){
                     if (task.getStatus() == TaskStatus.Done){
-                        Toast.makeText(this, "This task has already been completed!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "This task has already been completed", Toast.LENGTH_LONG).show();
                     }
                     else if (task.getStatus() == TaskStatus.Assigned){
-                        Toast.makeText(this, "This task is already assigned!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, "This task is already assigned", Toast.LENGTH_LONG).show();
                     } else if(task.getRequestingUserId().equals(MainActivity.LOGGED_IN_USER)){
                         Intent intent = new Intent(ScanQRCodeActivity.this, MyTaskViewActivity.class);
                         intent.putExtra(MyTaskViewActivity.EXTRA_TASK_ID, taskId);
@@ -120,11 +120,11 @@ public class ScanQRCodeActivity extends AppCompatActivity {
                     }
                 }
                 else{
-                    Toast.makeText(this, "Couldn't find task!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "Task could not be found", Toast.LENGTH_LONG).show();
                 }
             }
             else{
-                Toast.makeText(this, "Couldn't resolve Task from QR Code!", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Couldn't resolve Task from QR Code", Toast.LENGTH_LONG).show();
             }
         }
         else {

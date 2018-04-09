@@ -48,7 +48,7 @@ public class EditUserActivity extends AppCompatActivity {
     private View mSignUpForm;
     private View mProgressBar;
 
-    private User mCurrentUser;
+    private User mCurrentUser = MainActivity.LOGGED_IN_USER;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
