@@ -158,25 +158,24 @@ public class LoginActivity extends AppCompatActivity{
             // perform the user login attempt.
 
             DefaultUserService defaultUserService = new DefaultUserService();
-            String saltAndHash = defaultUserService.getSaltAndHash(username);
             String id = defaultUserService.getIdByUsername(username);
+            if (id == null){
+                mUsernameView.setError("User does not exist");
+                return;
+            }
 
-            // TODO: Broken exception handling, but getIdByUsername may rightly return null???
-            if(saltAndHash != null && id != null) {
-                View view = this.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
+            String saltAndHash = defaultUserService.getSaltAndHash(username);
+
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                mAuthTask = new UserLoginTask(password, saltAndHash, id);
-                mAuthTask.execute((Void) null);
-                showProgress(true);
             }
-            else{
-                mUsernameView.setError(getString(R.string.network_connection_fail_message));
-            }
+            mAuthTask = new UserLoginTask(password, saltAndHash, id);
+            mAuthTask.execute((Void) null);
+            showProgress(true);
         }
     }
 

@@ -312,6 +312,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 DocumentResult result = jestClient.execute(index);
                 if (validateResult(result)) {
                     id = result.getId();
+                    if (id == null) throw new RuntimeException("This should not ever be null");
+
                 } else {
                     Log.e("Post Error Code", ((Integer)result.getResponseCode()).toString());
                     serviceException = new ServiceException("Post failed");
@@ -353,6 +355,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 JestResult result = jestClient.execute(get);
                 if (validateResult(result)){
                     data = result.getSourceAsString();
+                    if (id == null) throw new RuntimeException("This should not ever be null");
                 } else {
                     Log.e("Get Error Code", ((Integer)result.getResponseCode()).toString());
                     serviceException = new ServiceException("Get failed");
@@ -395,6 +398,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 SearchResult result = jestClient.execute(search);
                 if (validateResult(result)){
                     data = result.getSourceAsString();
+                    if (data == null) throw new RuntimeException("This should not ever be null");
                 } else {
                     Log.e("Search Error Code", ((Integer)result.getResponseCode()).toString());
                     serviceException = new ServiceException("Search failed");
@@ -441,6 +445,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 DocumentResult result = jestClient.execute(update);
                 if (validateResult(result)) {
                     id = result.getId();
+                    if (id == null) throw new RuntimeException("This should not ever be null");
                 } else {
                     Log.e("Update Error Code", ((Integer)result.getResponseCode()).toString());
                     serviceException = new ServiceException("Update failed");

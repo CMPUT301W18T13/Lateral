@@ -64,7 +64,7 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
      * @return The ID of the user if it exists; null otherwise
      */
     public String getIdByUsername(String username){
-        // TODO: Possible bug here?
+
         String json = "{\"_source\": [\"id\"], \"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
 
         String result = search(json);
