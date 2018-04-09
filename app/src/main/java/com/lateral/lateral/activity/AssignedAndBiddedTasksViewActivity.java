@@ -26,7 +26,9 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultBidService;
@@ -116,22 +118,20 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Log.d("LOGGED IN USER", LOGGED_IN_USER.getId());
-        //returnMatchingTasks(thisUserID);
-
-        initializeLocalArrays();
-        displayResultsFromFilter();
-
+        // TODO: Check return value
+        boolean success = initializeLocalArrays();
+        if (success) displayResultsFromFilter();
 
         // listen refresh event
-        layout = (PullRefreshLayout) findViewById(R.id.AssignedAndBiddedSwipeRefreshLayout);
+        layout = findViewById(R.id.AssignedAndBiddedSwipeRefreshLayout);
         layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // start refresh
                 //returnMatchingTasks(thisUserID);
-                initializeLocalArrays();
-                displayResultsFromFilter();
+                boolean success = initializeLocalArrays();
+                // TODO: Check return value
+                if (success) displayResultsFromFilter();
                 layout.setRefreshing(false);
             }
         });
@@ -192,57 +192,6 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         navigationView.setCheckedItem(R.id.nav_bidded_tasks);
     }
 
-    /**
-     * Called when the options menu is created
-     * @param menu The menu created
-     * @return True
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-//        //SearchView searchView;
-//
-//        // Inflate the options menu from XML
-//        getMenuInflater().inflate(R.menu.available_task_view_menu, menu);
-//
-//        // Get the SearchView and set the searchable configuration
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-        super.onCreateOptionsMenu(menu);
-
-        return true;
-    }
-
-//    /**
-//     * Adds a list of tasks to the currently displayed lists
-//     * @param returnedTasks The list of tasks to add
-//     */
-//    private void addTasks(ArrayList<Task> returnedTasks) {
-//        matchingTasks.addAll(returnedTasks);
-//        mAdapter.notifyItemInserted(matchingTasks.size() - 1);
-//
-//    }
-
-//    /**
-//     * Clear the list of displayed tasks
-//     */
-//    private void clearList() {
-//        final int size = matchingTasks.size();
-//        matchingTasks.clear();
-//        mAdapter.notifyItemRangeRemoved(0, size);
-//    }
-
-    /**
-     * Adds the list of tasks matching a certain Requester ID to the list of displayed tasks
-     * @param query The Requester ID to search tasks from
-     */
-    private void returnMatchingTasks(String query) {
-        DefaultTaskService taskService = new DefaultTaskService();
-        addTasks(taskService.getTasksByBidder(query), null);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -252,9 +201,9 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
             // TODO  --> eventually change to only update position clicked
             //      -->does not work rn because list order changes when task updated
             //returnMatchingTasks(thisUserID);
-            initializeLocalArrays();
-            displayResultsFromFilter();
-
+            // TODO: Check return value
+            boolean success = initializeLocalArrays();
+            if (success) displayResultsFromFilter();
         }
     }
 
@@ -263,26 +212,25 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      */
-    public void initializeLocalArrays() {
-        //allLocallyStoredTasks = defaultTaskService.getTasksByBidder(LOGGED_IN_USER.getId());
+    public boolean initializeLocalArrays() {
 
         Task curTask;
-        TaskStatus taskStatus;
 
         // clear in case we are refreshing
         allLocallyStoredTasks.clear();
-//        tasksWithBids.clear();
-//        assignedTasks.clear();
-//        doneTasks.clear();
         myBids.clear();
 
-        myBids = defaultBidService.getAllBidsByUserID(LOGGED_IN_USER.getId());       // SearchQuery
-        //ArrayList<Task> biddedTasks = new ArrayList<Task>();
+        try {
+            myBids = defaultBidService.getAllBidsByUserID(LOGGED_IN_USER.getId());
 
-
-        for (Bid bid : myBids) {
-            curTask = defaultTaskService.getTaskByTaskID(bid.getTaskId());           // Search query
-            allLocallyStoredTasks.add(curTask);
+            for (Bid bid : myBids) {
+                curTask = defaultTaskService.getTaskByTaskID(bid.getTaskId());
+                allLocallyStoredTasks.add(curTask);
+            }
+            return true;
+        } catch (Exception e){
+            ErrorDialog.show(this, "Failed to load tasks");
+            return false;
         }
     }
 
@@ -394,6 +342,5 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
 }
 

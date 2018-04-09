@@ -7,6 +7,7 @@
 package com.lateral.lateral.service;
 
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.ServiceException;
 
 import java.util.ArrayList;
 
@@ -19,20 +20,20 @@ public interface BidService extends BaseService<Bid> {
      * @param taskID Jest ID of the task
      * @return The lowest bid
      */
-    Bid getLowestBid(String taskID);
+    Bid getLowestBid(String taskID) throws ServiceException;
 
     /**
      * Delete all bids for the given task
      * @param taskID Jest ID of the task
      */
-    void deleteBidsByTask(String taskID);
+    void deleteBidsByTask(String taskID) throws ServiceException;
 
-    ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID);
+    ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID) throws ServiceException;
 
-    ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID);
+    ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID) throws ServiceException;
 
-    ArrayList<Bid> getAllBidsByUserID(String userId);
+    ArrayList<Bid> getAllBidsByUserID(String userId) throws ServiceException;
 
-    void deleteOtherBidsByTask(String taskID, String keepBidId);
+    void deleteOtherBidsByTask(String taskID, String keepBidId) throws ServiceException;
 
 }

@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
@@ -187,11 +189,14 @@ public class SignUpActivity extends AppCompatActivity {
             // Create and store the user
             User user = new User(username, phoneNumber, email, saltAndHash);
             DefaultUserService defaultUserService = new DefaultUserService();
-            Log.i("SignUpActivity", "Posting user...");
-            defaultUserService.post(user);
+            try {
+                defaultUserService.post(user);
+            } catch (ServiceException e){
+                ErrorDialog.show(this, "Failed to create user");
+                return;
+            }
 
             String id = user.getId();
-            Log.i("SignUpActivity", "ID is " + id);
 
             // Start the next activity with the user logged in
             saveUserToken(user, getApplicationContext());

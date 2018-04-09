@@ -21,6 +21,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
@@ -42,7 +44,14 @@ public class MapActivity extends AppCompatActivity
 
         taskId = getIntent().getStringExtra(EXTRA_TASK_ID);
         defaultTaskService = new DefaultTaskService();
-        task = defaultTaskService.getById(taskId);
+        try {
+            task = defaultTaskService.getById(taskId);
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to load task");
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
+        }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

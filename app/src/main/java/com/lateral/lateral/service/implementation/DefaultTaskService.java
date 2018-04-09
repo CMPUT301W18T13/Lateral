@@ -11,6 +11,7 @@ import com.google.gson.GsonBuilder;
 import com.lateral.lateral.helper.StringHelper;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.BidService;
 import com.lateral.lateral.service.TaskService;
@@ -39,7 +40,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      */
     // TODO: Purge this method completely, it shouldn't be used
     @Deprecated
-    public ArrayList<Task> getAllTasks(String query){
+    public ArrayList<Task> getAllTasks(String query) throws ServiceException {
         query = StringHelper.makeJsonSafe(query);
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
@@ -52,7 +53,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @param requesterID The ID of the requester
      * @return The list associated tasks
      */
-    public ArrayList<Task> getAllTasksByRequesterID(String requesterID){
+    public ArrayList<Task> getAllTasksByRequesterID(String requesterID) throws ServiceException {
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\":{\"match\":{\"requestingUserId\":{\"query\":\"" + requesterID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
@@ -68,7 +69,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @param taskID The ID of the task
      */
     @Override
-    public void delete(String taskID){
+    public void delete(String taskID) throws ServiceException {
         if (taskID == null){
             throw new IllegalArgumentException("Null passed");
         }
@@ -84,7 +85,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @param distance Distance from specified location
      * @return The list of all Tasks within distance of location
      */
-    public ArrayList<Task> getAvailableTasksByDistance(Double latitude, Double longitude, Double distance){
+    public ArrayList<Task> getAvailableTasksByDistance(Double latitude, Double longitude, Double distance) throws ServiceException {
         String json = "{\"size\" : " + RECORD_COUNT + ", " +
                 "\"query\" : { " +
                 "\"filtered\" : { " +
@@ -101,7 +102,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
         return gson.fromJson("[" + search(json) + "]", listType);
     }
 
-    public ArrayList<Task> getEveryAvailableTask(){
+    public ArrayList<Task> getEveryAvailableTask() throws ServiceException {
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\" : {\"match\" : {\"taskStatus\" : { \"query\" : \"Requested Bidded\"}}}}";
 
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
@@ -113,7 +114,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     /*
     should behave similiar to getEveryAvailableTasks (only display with status' Requested and Bidded) but add query searching
      */
-    public ArrayList<Task> getEveryAvailableTaskViaQuery(String query) {
+    public ArrayList<Task> getEveryAvailableTaskViaQuery(String query) throws ServiceException {
         query = StringHelper.makeJsonSafe(query);
 
         String json = "{\"size\" : " + RECORD_COUNT + ",\"query\" : {\"match\" : {\"description\" : { \"query\" : \"Requested Bidded\"}}}}";
@@ -124,13 +125,13 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     }
 
     // nick
-    public Task getTaskByTaskID(String taskID){
+    public Task getTaskByTaskID(String taskID) throws ServiceException {
         String json = "{\"query\": {\"match\": {\"id\": \"" + taskID + "\"}}}";
         return gson.fromJson(search(json), Task.class);
     }
 
     // nick
-    public ArrayList<Task> getTasksByBidder(String bidderID) {
+    public ArrayList<Task> getTasksByBidder(String bidderID) throws ServiceException {
         DefaultBidService defaultBidService = new DefaultBidService();
         ArrayList<Bid> userBids = defaultBidService.getAllBidsByUserID(bidderID);       // SearchQuery
         ArrayList<Task> biddedTasks = new ArrayList<Task>();

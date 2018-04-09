@@ -27,6 +27,8 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
@@ -54,9 +56,7 @@ https://developer.android.com/guide/topics/search/search-dialog.html#LifeCycle
 /**
  * Activity for viewing all available tasks
  */
-// TODO: Show some info in the filter stating what the status colors mean!
-// TODO: Probably remove incremental searching
-// TODO: BUG: All filters are missing "Tasks without bids (only requested)" option
+
 public class AvailableTasksViewActivity extends TaskRecyclerViewActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     public static String INTENT_OPEN_SEARCH = "com.lateral.lateral.OPEN_SEARCH";
@@ -187,8 +187,9 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             @Override
             public void onRefresh() {
                 // start refresh
-                refreshLocalArrays(query);
-                displayResultsFromFilter();
+                // TODO: Check return value
+                boolean success = refreshLocalArrays(query);
+                if (success) displayResultsFromFilter();
                 layout.setRefreshing(false);
             }
         });
@@ -268,30 +269,16 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     public void searchNeeded(String newQuery) {
         boolean search = false;
 
-//        // user pressed space, search
-//        if (newQuery.length() > 1) {
-//
-//            if ((newQuery.substring(newQuery.length() -1).equals(" ")) && (!(newQuery.substring(newQuery.length() - 2).equals(" ")))) {
-//                search = true;
-//        }
-//
-//        } else if (newQuery.equals("")) {
-//            newQuery = null;
-//            search = true;
-//        }
-
         if ((newQuery.equals("")) && (INTENT_OPEN_SEARCH.equals(getIntent().getAction()))) {
             search = true;
             query = null;
-
         }
 
         // search needed
         if (search) {
-            Log.d("search needed", "refreshing arrays");
-            refreshLocalArrays(query);
-            Log.d("display array", "display array from filter");
-            displayResultsFromFilter();
+            // TODO: Check return value
+            boolean success = refreshLocalArrays(query);
+            if (success) displayResultsFromFilter();
         }
 
     }
@@ -330,15 +317,9 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
             //Log.d("Available Tasks", "Got here via search button");
             clearList();
             query = intent.getStringExtra(SearchManager.QUERY);
-            // TODO handle exception (no internet access crashes app)
-            /*
-            Leave for now
-            String jsonQuery = "{\"query\": {\"multi_match\": {\"title\": {\"query\" : \"" + searchField + "\"," +
-                " \"fields\" : [\"title^3\", \"description\"]}}}}";
-             */
-            Log.d("QUERY ", query);
-            refreshLocalArrays(query);
-            displayResultsFromFilter();
+            // TODO: Check return value
+            boolean success = refreshLocalArrays(query);
+            if (success) displayResultsFromFilter();
 
         } else {
             query = null;
@@ -353,55 +334,18 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     }
 
     /**
-     * Returns any tasks matching the given query
-     * @param query Query to check on
-     */
-    private void returnMatchingTask(String query) {
-        DefaultTaskService taskService = new DefaultTaskService();
-        addTasks(taskService.getAllTasks(query), null);
-    }
-
-
-
-
-    /**
      * Called when user returns from viewing a task (assuming they got to it from a recyclerView)
      * Can modify to catch specific results if needed
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
-            //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
-            //Log.d("OLDCLICK", "the item the user clicked was: " + getClickedItemPosition());
-            //Task clickedTask = allLocallyStoredTasks.get(getClickedItemPosition());
-//            Task clickedTask = getClickedTask();
-//            int positionInAllLocallyStoredTasks = allLocallyStoredTasks.indexOf(clickedTask);
-//            String clickedTaskID = clickedTask.getId();
-//            clickedTask = defaultTaskService.getTaskByTaskID(clickedTaskID);
-//            allLocallyStoredTasks.set(positionInAllLocallyStoredTasks, clickedTask);
-//            addTask(clickedTask, getClickedItemPosition());
-
-            //mAdapter.notifyItemChanged(clickedItemPosition);
-            ////refreshLocalArrays(null);
-
-            refreshLocalArrays(query);
-            displayResultsFromFilter();
+            // TODO: Check return value
+            boolean success = refreshLocalArrays(query);
+            if (success) displayResultsFromFilter();
 
         }
     }
-
-
-//    /**
-//     * Avoids onItemSelected call during initialization (spinner related)
-//     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
-//     * Answered by User: Bill Mote
-//     * April 2, 2018
-//     */
-//    @Override
-//    public void onUserInteraction() {
-//        super.onUserInteraction();
-//        userIsInteracting = true;
-//    }
 
 
     /**
@@ -411,31 +355,22 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
      * @param query if null, indicates user got to AvailableTasksViewActivity from button, therefore load all tasks,
      *              if not null, indicates user got to activity from a searchbar, therefore load tasks from query
      */
-    public void refreshLocalArrays(String query) {
+    public boolean refreshLocalArrays(String query) {
 
-
-        if (query == null) {
-            // did not search here via search, display all
-            allLocallyStoredTasks = defaultTaskService.getEveryAvailableTask();
-        } else {
-            // user gave search query
-            // TODO: Wrong, need to getAvailableTasks
-            allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
+        try{
+            if (query == null) {
+                // did not search here via search, display all
+                allLocallyStoredTasks = defaultTaskService.getEveryAvailableTask();
+            } else {
+                // user gave search query
+                // TODO: Wrong, need to getAvailableTasks
+                allLocallyStoredTasks = defaultTaskService.getAllTasks(query);
+            }
+            return true;
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to load tasks");
+            return false;
         }
-
-
-        // clear in case we are refreshing
-        //tasksWithBids.clear();
-
-//        for (Task curTask : allLocallyStoredTasks) {
-//            TaskStatus status = curTask.getStatus();
-//            if (status == Bidded) {
-//                // extract bidded tasks
-//                tasksWithBids.add(curTask);
-//            }
-//        }
-
-
     }
 
     /**

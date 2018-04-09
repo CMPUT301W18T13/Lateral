@@ -7,6 +7,7 @@
 package com.lateral.lateral.service;
 
 import com.lateral.lateral.model.BaseEntity;
+import com.lateral.lateral.model.ServiceException;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -29,23 +30,23 @@ public interface BaseService<T extends BaseEntity> {
      * @param id The Jest ID of the object
      * @return The object from the database
      */
-    T getById(String id);
+    T getById(String id) throws ServiceException;
 
     /**
      * Pushes a certain object to the database
      * @param obj Object to push
      */
-    void post(T obj);
+    void post(T obj) throws ServiceException;
 
     /**
      * Deletes a certain object based on its Jest ID
      * @param id The Jest ID of the object to be deleted
      */
-    public void delete(String id);
+    public void delete(String id) throws ServiceException;
 
     /**
      * Updates the instance of a given object in the database
      * @param obj Object to be updated
      */
-    public void update(T obj);
+    public void update(T obj) throws ServiceException;
 }

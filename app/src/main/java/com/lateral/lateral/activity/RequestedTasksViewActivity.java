@@ -26,6 +26,8 @@ import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
@@ -113,20 +115,8 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //try {
-        if (initializeLocalArrays() == -1) {
-//            Toast errorToast = Toast.makeText(this, "Error loading tasks", Toast.LENGTH_SHORT);
-//            errorToast.show();
-            //requestedErrorWarning.setVisibility(View.VISIBLE);
-            setErrorMessageVisibility(true);
-            return;
-        }
-
-        //} catch (Exception e) {
-//            Toast errorToast = Toast.makeText(this, "Error loading tasks", Toast.LENGTH_SHORT);
-//            errorToast.show();
-        //}
-        displayResultsFromFilter();
+        boolean success = initializeLocalArrays();
+        if (success) displayResultsFromFilter();
 
         // Move to 'create new task' activity when fab pressed
         final FloatingActionButton addNewTaskFab = (FloatingActionButton) findViewById(R.id.addNewTaskFab);
@@ -144,8 +134,8 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                initializeLocalArrays();
-                displayResultsFromFilter();
+                boolean success = initializeLocalArrays();
+                if (success) displayResultsFromFilter();
                 layout.setRefreshing(false);
             }
         });
@@ -248,13 +238,6 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
         return true;
     }
 
-//    /**
-//     * Returns any tasks matching the given query
-//     * @param query Query to check on
-//     */
-//    private void returnMatchingTasks(String query) {
-//        addTasks(defaultTaskService.getAllTasksByRequesterID(query), null);
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -267,70 +250,35 @@ public class RequestedTasksViewActivity extends TaskRecyclerViewActivity impleme
             //      -->does not work rn because list order changes when task updated
             // For now. refreshes entire list
             Log.d("VIEW_TASK_REQUEST", "returned, update adapter");
-            initializeLocalArrays();
-            displayResultsFromFilter();
+
+            boolean success = initializeLocalArrays();
+            if (success) displayResultsFromFilter();
 
         } else if (resultCode == RESULT_OK && requestCode == ADD_EDIT_TASK_CODE) {
             // User wants to add a whole new task
             // if added, notify data set added
             // for now, refreshes entire list
             Log.d("ADD_EDIT_TASK_CODE", "returned");
-            initializeLocalArrays();
-            displayResultsFromFilter();
+
+            boolean success = initializeLocalArrays();
+            if (success) displayResultsFromFilter();
 
         }
     }
-
-//    /**
-//     * Avoids onItemSelected call during initialization (spinner related)
-//     * https://stackoverflow.com/questions/13397933/android-spinner-avoid-onitemselected-calls-during-initialization
-//     * Answered by User: Bill Mote
-//     * April 2, 2018
-//     */
-//    @Override
-//    public void onUserInteraction() {
-//        super.onUserInteraction();
-//        userIsInteracting = true;
-//    }
 
     /**
      * on creation or refresh, fills local arrays "allLocallyStoredTasks, tasksWithBids, assignedTasks, doneTasks" with
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      * --> Assumes globals are already correctly set
      */
-    public int initializeLocalArrays() {
-        allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(LOGGED_IN_USER.getId());
-
-
-        // caused out of bounds index
-        // can be fixed by just checking size first but this code will probably be replaces anyway
-//        if (allLocallyStoredTasks.search(0) == null) {
-//            Log.d("Tag", "allLocalTasks == null");
-//            return -1;
-//        } else {
-//            Log.d("alltasks", "all tasks is not null");
-//        }
-
-        Log.d("SIZE", "size of array = " + allLocallyStoredTasks.size());
-
-        // clear in case we are refreshing
-//        tasksWithBids.clear();
-//        assignedTasks.clear();
-//        doneTasks.clear();
-//
-//        for (Task curTask : allLocallyStoredTasks) {
-//            TaskStatus status = curTask.getStatus();
-//            if (status == Bidded) {
-//                // extract
-//                tasksWithBids.add(curTask);
-//            } else if (status == Assigned) {
-//                assignedTasks.add(curTask);
-//            } else if (status == Done) {
-//                doneTasks.add(curTask);
-//            }
-//        }
-
-        return 1;
+    public boolean initializeLocalArrays() {
+        try {
+            allLocallyStoredTasks = defaultTaskService.getAllTasksByRequesterID(LOGGED_IN_USER.getId());
+            return true;
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to load tasks");
+            return false;
+        }
     }
 
     /**

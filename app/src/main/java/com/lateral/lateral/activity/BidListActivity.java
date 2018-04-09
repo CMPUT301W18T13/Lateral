@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.ListView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.TaskService;
 import com.lateral.lateral.service.UserService;
@@ -56,23 +58,30 @@ public class BidListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String taskID = intent.getStringExtra(TASK_ID);
         DefaultBidService bidService = new DefaultBidService();
-        ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID);
+        try {
 
+            ArrayList<Bid> bids = bidService.getAllBidsByTaskIDAmountSorted(taskID);
 
-        UserService userService = new DefaultUserService();
-        TaskService taskService = new DefaultTaskService();
-        Task task = taskService.getById(taskID);
-        task.setBidsNotViewed(0);
-        task.setBidsPendingNotification(0);
-        taskService.update(task);
-        for (Bid bid: bids){
-            bid.setBidder(userService.getById(bid.getBidderId()));
+            UserService userService = new DefaultUserService();
+            TaskService taskService = new DefaultTaskService();
+            Task task = taskService.getById(taskID);
+            task.setBidsNotViewed(0);
+            task.setBidsPendingNotification(0);
+            taskService.update(task);
+            for (Bid bid : bids) {
+                bid.setBidder(userService.getById(bid.getBidderId()));
+            }
+
+            BidRowAdapter adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
+            adapter.setUsernameFormat(getString(R.string.bid_card_username_text_field));
+            adapter.setAmountFormat(getString(R.string.bid_card_amount_text_field));
+            bidListView.setAdapter(adapter);
+
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to load bids");
+            setResult(RESULT_CANCELED);
+            finish();
         }
-
-        BidRowAdapter adapter = new BidRowAdapter(this, bids, task, BidListActivity.this);
-        adapter.setUsernameFormat(getString(R.string.bid_card_username_text_field));
-        adapter.setAmountFormat(getString(R.string.bid_card_amount_text_field));
-        bidListView.setAdapter(adapter);
     }
 
     /**

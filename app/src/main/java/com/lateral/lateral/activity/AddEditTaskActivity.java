@@ -24,6 +24,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
@@ -31,7 +33,9 @@ import com.lateral.lateral.Constants;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.ImageSelectionDialog;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.PhotoGallery;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.helper.PhotoGenerator;
 import com.lateral.lateral.service.TaskService;
@@ -206,58 +210,53 @@ public class AddEditTaskActivity extends AppCompatActivity {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-        } catch (Exception e) {
-            String error = "Error occurred loading PlacePicker";
-            Log.i("AddEditTaskActivity", error);
-            Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+            Log.e("Error", "Failed to load PlacePicker");
+            ErrorDialog.show(this, "Geolocation service failed to open");
         }
     }
 
     private void addNewTask(String title, String desc) {
 
+        Task newTask = new Task(title, desc);
+        newTask.setRequestingUserId(LOGGED_IN_USER.getId());
+
+        String username = LOGGED_IN_USER.getUsername();
+        newTask.setRequestingUserUsername(username);
+
+        if (latLng != null) {
+            newTask.setLocation(latLng.latitude, latLng.longitude, address);
+        }
+
+        newTask.setPhotoGallery(this.gallery);
+
         try {
-            Task newTask = new Task(title, desc);
-            newTask.setRequestingUserId(LOGGED_IN_USER.getId());
-
-            String username = LOGGED_IN_USER.getUsername();
-            newTask.setRequestingUserUsername(username);
-
-            if (latLng != null) {
-                newTask.setLocation(latLng.latitude, latLng.longitude, address);
-            }
-
-            newTask.setPhotoGallery(this.gallery);
-
             service.post(newTask);
             Toast postTask = Toast.makeText(this, "Task added", Toast.LENGTH_SHORT);
             postTask.show();
-
             setResult(RESULT_OK);
             finish();
-        } catch (Exception e) {
-            Toast errorToast = Toast.makeText(this, "Task failed to be posted", Toast.LENGTH_SHORT);
-            errorToast.show();
+        } catch (ServiceException e) {
+            ErrorDialog.show(this, "Failed to post task");
         }
     }
 
     private void updateTask(String title, String desc) {
 
+        editTask.setTitle(title);
+        editTask.setDescription(desc);
+        if (latLng != null)
+            editTask.setLocation(latLng.latitude, latLng.longitude, address);
+
         try {
-            editTask.setTitle(title);
-            editTask.setDescription(desc);
-            if (latLng != null)
-                editTask.setLocation(latLng.latitude, latLng.longitude, address);
             service.update(editTask);
             Toast postTask = Toast.makeText(this, "Task updated", Toast.LENGTH_SHORT);
             postTask.show();
 
             setResult(RESULT_OK);
             finish();
-
-        } catch (Exception e) {
-            Log.e("Update task", e.toString());
-            Toast errorToast = Toast.makeText(this, "Task failed to update", Toast.LENGTH_SHORT);
-            errorToast.show();
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to update task");
         }
     }
 
@@ -279,17 +278,17 @@ public class AddEditTaskActivity extends AppCompatActivity {
             dialog.setOnOptionSelectedListener(new ImageSelectionDialog.SelectionListener() {
                 @Override
                 public void onOptionSelected(DialogInterface dialog, int selection, int photoIndex, Bitmap image) {
-                    dialog.dismiss();
-                    if (selection == ImageSelectionDialog.MODE_IMAGE) {
-                        PhotoViewerDialog viewDialog = PhotoViewerDialog.newInstance(image);
-                        viewDialog.show(getFragmentManager(), "photo_dialog");
-                    } else if (selection == ImageSelectionDialog.MODE_REPLACE) {
-                        addNewImage(photoIndex);
-                    } else if (selection == ImageSelectionDialog.MODE_DELETE) {
-                        // Insert null to delete
-                        AddEditTaskActivity.this.gallery.insert(null, photoIndex);
-                        refreshImages();
-                    }
+                dialog.dismiss();
+                if (selection == ImageSelectionDialog.MODE_IMAGE) {
+                    PhotoViewerDialog viewDialog = PhotoViewerDialog.newInstance(image);
+                    viewDialog.show(getFragmentManager(), "photo_dialog");
+                } else if (selection == ImageSelectionDialog.MODE_REPLACE) {
+                    addNewImage(photoIndex);
+                } else if (selection == ImageSelectionDialog.MODE_DELETE) {
+                    // Insert null to delete
+                    AddEditTaskActivity.this.gallery.insert(null, photoIndex);
+                    refreshImages();
+                }
                 }
             });
             dialog.show();
@@ -327,8 +326,7 @@ public class AddEditTaskActivity extends AppCompatActivity {
                 gallery.insert(image, requestCode - PHOTO_REQUEST);
                 refreshImages();
             } catch (IOException e) {
-                Log.i("AddEditTaskActivity", "Failed to load image");
-                Toast.makeText(this, "Image could not be loaded", Toast.LENGTH_SHORT).show();
+                ErrorDialog.show(this, "Image could not be loaded");
             }
         }
     }

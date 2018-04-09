@@ -24,8 +24,10 @@ import android.widget.Toast;
 import com.lateral.lateral.dialog.BidDialog;
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
@@ -176,7 +178,11 @@ public class TaskViewActivity extends AppCompatActivity {
      * @return The loaded task
      */
     private Task loadTask() {
-        return taskService.getById(taskID);
+        try {
+            return taskService.getById(taskID);
+        }catch (ServiceException e){
+            ErrorDialog.show(this, "Task failed to load");
+        }
     }
 
     /**
@@ -265,28 +271,33 @@ public class TaskViewActivity extends AppCompatActivity {
                 int bidsPendingNotification = task.getBidsPendingNotification();
                 int bidsNotViewed = task.getBidsNotViewed();
 
-                // Delete old bids associated with user
-                ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID);
-                for (Bid bid : taskBids) {
-                    if (bid.getBidderId().equals(LOGGED_IN_USER.getId())) {
-                        bidService.delete(bid.getId());
-                        if (taskBids.indexOf(bid) >= (taskBids.size() - bidsNotViewed)) {
-                            bidsNotViewed -= 1;
+                try{
+                    // Delete old bids associated with user
+                    ArrayList<Bid> taskBids = bidService.getAllBidsByTaskIDDateSorted(taskID);
+                    for (Bid bid : taskBids) {
+                        if (bid.getBidderId().equals(LOGGED_IN_USER.getId())) {
+                            bidService.delete(bid.getId());
+                            if (taskBids.indexOf(bid) >= (taskBids.size() - bidsNotViewed)) {
+                                bidsNotViewed -= 1;
+                            }
                         }
                     }
+
+                    bidService.post(newBid);
+                    final Bid lowestBid = bidService.getLowestBid(taskID);
+
+                    task.setBidsPendingNotification(bidsPendingNotification + 1);
+                    task.setBidsNotViewed(bidsNotViewed + 1);
+                    task.setStatus(TaskStatus.Bidded);
+                    if (lowestBid == null) task.setLowestBidValue(null);
+                    else task.setLowestBidValue(lowestBid.getAmount());
+
+                    taskService.update(task);
+                    refresh(task);
+                } catch (Exception e){
+                    ErrorDialog.show(TaskViewActivity.this, "Failed to save bid");
                 }
 
-                bidService.post(newBid);
-                final Bid lowestBid = bidService.getLowestBid(taskID);
-
-                task.setBidsPendingNotification(bidsPendingNotification + 1);
-                task.setBidsNotViewed(bidsNotViewed + 1);
-                task.setStatus(TaskStatus.Bidded);
-                if (lowestBid == null) task.setLowestBidValue(null);
-                else task.setLowestBidValue(lowestBid.getAmount());
-
-                taskService.update(task);
-                refresh(task);
             }
             }
         });

@@ -8,6 +8,7 @@ package com.lateral.lateral.service.implementation;
 
 import com.google.common.reflect.TypeToken;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.service.BidService;
 
 import java.lang.reflect.Type;
@@ -24,7 +25,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @return The Bid with the lowest price
      */
     @Override
-    public Bid getLowestBid(String taskID){
+    public Bid getLowestBid(String taskID) throws ServiceException {
         String json = "{\"query\": " +
                 "{\"match\": " +
                 "{\"taskId\": \"" + taskID + "\"}}, " +
@@ -40,7 +41,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Task ID to search Bids from
      * @return The list of Bids
      */
-    public ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID) {
+    public ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID) throws ServiceException {
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}, " +
                 "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}]}" ;
 
@@ -53,13 +54,13 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Task ID to search Bids from
      * @return The list of Bids
      */
-    public ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID) {
+    public ArrayList<Bid> getAllBidsByTaskIDDateSorted(String taskID) throws ServiceException {
         String json = "{\"size\" : " + RECORD_COUNT + ",\"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
         return gson.fromJson("[" + search(json) + "]", listType);
     }
 
-    public ArrayList<Bid> getAllBidsByUserID(String userId) {
+    public ArrayList<Bid> getAllBidsByUserID(String userId) throws ServiceException {
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\":{\"match\":{\"bidderId\":{\"query\":\"" + userId + "\"}}}}";
         Type listType = new TypeToken<ArrayList<Bid>>() {
         }.getType();
@@ -71,7 +72,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * Delete all bids for the given task
      * @param taskID Jest ID of the task
      */
-    public void deleteBidsByTask(String taskID){
+    public void deleteBidsByTask(String taskID) throws ServiceException {
         if (taskID == null){
             throw new IllegalArgumentException("Null passed");
         }
@@ -87,7 +88,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
      * @param taskID Jest ID of the task
      * @param keepBidId the bid to keep
      */
-    public void deleteOtherBidsByTask(String taskID, String keepBidId){
+    public void deleteOtherBidsByTask(String taskID, String keepBidId) throws ServiceException {
         if (taskID == null){
             throw new IllegalArgumentException("Null passed");
         }

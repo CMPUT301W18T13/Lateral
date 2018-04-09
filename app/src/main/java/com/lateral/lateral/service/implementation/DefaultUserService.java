@@ -8,6 +8,7 @@ package com.lateral.lateral.service.implementation;
 
 import android.util.Log;
 
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.UserService;
 
@@ -22,7 +23,7 @@ public class DefaultUserService extends DefaultBaseService<User> implements User
      * @param username Username of the user
      * @return The User with this username if it exists; null otherwise
      */
-    public User getUserByUsername(String username){
+    public User getUserByUsername(String username) throws ServiceException {
         String json = "{\"query\": {\"match\": {\"username\": \"" + username + "\"}}}";
         return gson.fromJson(search(json), User.class);
     }

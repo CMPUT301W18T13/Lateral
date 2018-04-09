@@ -29,6 +29,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
@@ -158,7 +160,15 @@ public class LoginActivity extends AppCompatActivity{
             // perform the user login attempt.
 
             DefaultUserService defaultUserService = new DefaultUserService();
-            User user = defaultUserService.getUserByUsername(username);
+            User user = null;
+            try {
+                user = defaultUserService.getUserByUsername(username);
+            } catch (ServiceException e){
+                ErrorDialog.show(this, "Failed to get username");
+                // TODO: Test that this works
+                return;
+
+            }
             if (user == null){
                 mUsernameView.setError("User not found");
                 return;
@@ -173,6 +183,7 @@ public class LoginActivity extends AppCompatActivity{
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
+            // TODO: Need error handling here
             mAuthTask = new UserLoginTask(password, saltAndHash, user.getId());
             mAuthTask.execute((Void) null);
             showProgress(true);
@@ -267,8 +278,13 @@ public class LoginActivity extends AppCompatActivity{
 
             if (success) {
                 DefaultUserService defaultUserService = new DefaultUserService();
-                User user = defaultUserService.getById(mId);
-
+                User user;
+                try {
+                    // TODO: Need proper error handling
+                    user = defaultUserService.getById(mId);
+                }catch(ServiceException e){
+                    return;
+                }
                 if(user != null) {
                     saveUserToken(user, getApplicationContext());
                     login(mId, getApplicationContext());

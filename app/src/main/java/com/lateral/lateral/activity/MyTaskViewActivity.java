@@ -24,8 +24,10 @@ import android.widget.Toast;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.model.User;
@@ -116,9 +118,8 @@ public class MyTaskViewActivity extends AppCompatActivity {
         try {
             task = loadTask();
             refresh(task);
-        } catch (Exception e){
-            Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
-            errorToast.show();
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to load task");
             setResult(RESULT_CANCELED);
             finish();
         }
@@ -209,7 +210,7 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * Loads a task based on its taskID
      * @return The loaded task
      */
-    private Task loadTask(){
+    private Task loadTask() throws ServiceException{
 
         Task task = taskService.getById(taskID);
 
@@ -237,11 +238,15 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param v current view
      */
     public void onSetDoneButtonClick(View v){
-        task.setStatus(TaskStatus.Done);
-        task.setBidsPendingNotification(0);
-        task.setBidsNotViewed(0);
-        taskService.update(task);
-        refresh(task);
+        try {
+            task.setStatus(TaskStatus.Done);
+            task.setBidsPendingNotification(0);
+            task.setBidsNotViewed(0);
+            taskService.update(task);
+            refresh(task);
+        } catch (ServiceException e){
+            ErrorDialog.show(this, "Failed to update task");
+        }
     }
 
     /**
@@ -249,18 +254,22 @@ public class MyTaskViewActivity extends AppCompatActivity {
      * @param v current view
      */
     public void onSetRequestedButtonClick(View v){
-        bidService.delete(task.getAssignedBidId());
+        try {
+            bidService.delete(task.getAssignedBidId());
 
-        task.setBidsPendingNotification(0);
-        task.setBidsNotViewed(0);
-        task.setAssignedBid(null);
-        task.setAssignedBidId(null);
-        task.setBids(null);
-        task.setLowestBidValue(null);
-        task.setStatus(TaskStatus.Requested);
+            task.setBidsPendingNotification(0);
+            task.setBidsNotViewed(0);
+            task.setAssignedBid(null);
+            task.setAssignedBidId(null);
+            task.setBids(null);
+            task.setLowestBidValue(null);
+            task.setStatus(TaskStatus.Requested);
 
-        taskService.update(task);
-        refresh(task);
+            taskService.update(task);
+            refresh(task);
+        } catch (Exception e){
+            ErrorDialog.show(this, "Failed to update task");
+        }
     }
 
     /**
@@ -343,10 +352,15 @@ public class MyTaskViewActivity extends AppCompatActivity {
             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     dialog.dismiss();
-                    taskService.delete(taskID);
-                    Toast postTask = Toast.makeText(MyTaskViewActivity.this,
-                            "Task deleted", Toast.LENGTH_SHORT);
-                    postTask.show();
+                    try {
+                        taskService.delete(taskID);
+                        Toast postTask = Toast.makeText(MyTaskViewActivity.this,
+                                "Task deleted", Toast.LENGTH_SHORT);
+                        postTask.show();
+                    } catch (ServiceException e){
+                        ErrorDialog.show(MyTaskViewActivity.this, "Failed to delete task");
+                        return;
+                    }
                     setResult(RESULT_OK);
                     finish();
                 }

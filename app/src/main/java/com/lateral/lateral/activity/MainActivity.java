@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.lateral.lateral.service.notification.NotificationServiceScheduler;
@@ -52,7 +54,13 @@ public class MainActivity extends AppCompatActivity
             String user = extras.getString("userId");
             if (user != null) {
                 DefaultUserService defaultUserService = new DefaultUserService();
-                LOGGED_IN_USER = defaultUserService.getById(user);
+                try {
+                    LOGGED_IN_USER = defaultUserService.getById(user);
+                } catch (ServiceException e){
+                    ErrorDialog.show(this, "Failed to load current user");
+                    setResult(RESULT_CANCELED);
+                    finish();
+                }
             }
         }
         Log.i("MainActivity", "AFT Logged in user's ID: " + LOGGED_IN_USER.getId());

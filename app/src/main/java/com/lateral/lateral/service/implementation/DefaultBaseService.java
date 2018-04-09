@@ -122,7 +122,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @return The object from the database
      */
     @Override
-    public T getById(String id){
+    public T getById(String id) throws ServiceException {
 
         GetByIdData getData = new GetByIdData(getElasticSearchType());
         getData.execute(id);
@@ -130,8 +130,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try {
             String data = getData.get();
             if (getData.serviceException != null)
-                // TODO: Temporary, will redo this!!! throw getData.serviceException;
-                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                throw getData.serviceException;
 
             return gson.fromJson(data, typeArgument);
 
@@ -146,7 +145,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @return The server's response
      */
     @Override
-    public String search(String query) {
+    public String search(String query) throws ServiceException {
 
         SearchData getData = new SearchData(getElasticSearchType());
         getData.execute(query);
@@ -154,8 +153,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try {
             String data = getData.get();
             if (getData.serviceException != null)
-                // TODO: Temporary, will redo this!!! throw getData.serviceException;
-                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                throw getData.serviceException;
 
             return data;
 
@@ -169,7 +167,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @param obj Object to push
      */
     @Override
-    public void post(T obj){
+    public void post(T obj) throws ServiceException {
 
         PostData postData = new PostData(getElasticSearchType());
         postData.execute(gson.toJson(obj));
@@ -177,8 +175,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             String id = postData.get();
             if (postData.serviceException != null)
-                // TODO: Temporary, will redo this!!! throw postData.serviceException;
-                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                throw postData.serviceException;
 
             obj.setId(id);
             setDocId(id);
@@ -193,7 +190,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @param obj Object to be updated
      */
     @Override
-    public void update(T obj) {
+    public void update(T obj) throws ServiceException {
 
         UpdateData updateData = new UpdateData(getElasticSearchType(), obj.getId());
         updateData.execute("{\"doc\": " + gson.toJson(obj) + "}");
@@ -201,8 +198,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             updateData.get();
             if (updateData.serviceException != null)
-                // TODO: Temporary, will redo this!!! throw updateData.serviceException;
-                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                throw updateData.serviceException;
 
         } catch(InterruptedException | ExecutionException e){
             throw new RuntimeException(e);
@@ -214,7 +210,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * Sets the ID of the object into its source for retrieval/deserialization purposes
      * @param id The ID to set
      */
-    public void setDocId(String id){
+    public void setDocId(String id) throws ServiceException {
 
         UpdateData updateData = new UpdateData(getElasticSearchType(), id);
         String getIdJson = "{\"doc\": {\"id\": \"" + id + "\"}}";
@@ -223,8 +219,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             updateData.get();
             if (updateData.serviceException != null)
-                // TODO: Temporary, will redo this!!! throw updateData.serviceException;
-                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                throw updateData.serviceException;
 
         } catch(InterruptedException | ExecutionException e){
             throw new RuntimeException(e);
@@ -236,7 +231,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
      * @param id The Jest ID of the object to be deleted
      */
     @Override
-    public void delete(String id){
+    public void delete(String id) throws ServiceException {
         if (id == null){
             throw new IllegalArgumentException("Null passed");
         }
@@ -247,8 +242,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             deleteData.get();
             if (deleteData.serviceException != null)
-                // TODO: Temporary, will redo this!!! throw deleteData.serviceException;
-                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                throw deleteData.serviceException;
 
         } catch(InterruptedException | ExecutionException e){
             throw new RuntimeException(e);

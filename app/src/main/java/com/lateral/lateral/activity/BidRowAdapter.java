@@ -17,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Bid;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.BidService;
@@ -104,10 +106,6 @@ public class BidRowAdapter extends BaseAdapter {
         TextView usernameTextView = vi.findViewById(R.id.username_tv);
         TextView amountTextView = vi.findViewById(R.id.amount_tv);
 
-        //prevent the resizing of TextViews
-        //usernameTextView.setMaxWidth(usernameTextView.getWidth());
-        //amountTextView.setMaxWidth(usernameTextView.getWidth());
-
         String username = bid.getBidder().getUsername();
         String formattedUsername = String.format(usernameFormat, username);
         usernameTextView.setText(formattedUsername);
@@ -122,7 +120,7 @@ public class BidRowAdapter extends BaseAdapter {
         acceptButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-
+            try{
                 BidService bidService = new DefaultBidService();
                 // Delete all other bids except the one being assigned
                 bidService.deleteOtherBidsByTask(task.getId(), bid.getId());
@@ -133,16 +131,18 @@ public class BidRowAdapter extends BaseAdapter {
                 task.setStatus(TaskStatus.Assigned);
 
                 TaskService taskService = new DefaultTaskService();
-                try{
-                    taskService.update(task);
-                } catch(Exception e){
-                    Toast errorToast = Toast.makeText(context,
-                            "Failed to update task", Toast.LENGTH_SHORT);
-                    errorToast.show();
-                }
+
+                taskService.update(task);
+                Toast errorToast = Toast.makeText(context,
+                        "Failed to update task", Toast.LENGTH_SHORT);
+                errorToast.show();
+
 
                 bidListActivity.setResult(Activity.RESULT_OK);
                 ((Activity)context).finish();
+            } catch (ServiceException e){
+                ErrorDialog.show(context, "An error occurred while declining bid.");
+            }
             }
         });
 
@@ -150,6 +150,8 @@ public class BidRowAdapter extends BaseAdapter {
             @Override
             public void onClick(View v)
             {
+
+            try{
                 bids.remove(bid);
                 BidService bidService = new DefaultBidService();
                 bidService.delete(bid.getId());
@@ -167,6 +169,9 @@ public class BidRowAdapter extends BaseAdapter {
                 taskService.update(task);
 
                 notifyDataSetChanged();
+            } catch (ServiceException e){
+                ErrorDialog.show(context, "An error occurred while declining bid.");
+            }
             }
         });
 

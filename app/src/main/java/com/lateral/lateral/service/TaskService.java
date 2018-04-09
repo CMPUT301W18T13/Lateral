@@ -6,6 +6,7 @@
 
 package com.lateral.lateral.service;
 
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.User;
 
@@ -16,5 +17,5 @@ import java.util.ArrayList;
  */
 public interface TaskService extends BaseService<Task> {
 
-    ArrayList<Task> getAllTasksByRequesterID(String requesterID);
+    ArrayList<Task> getAllTasksByRequesterID(String requesterID) throws ServiceException;
 }

@@ -6,6 +6,7 @@
 
 package com.lateral.lateral.service;
 
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 
 /**
@@ -13,5 +14,5 @@ import com.lateral.lateral.model.User;
  */
 public interface UserService extends BaseService<User>{
 
-    User getUserByUsername(String username);
+    User getUserByUsername(String username) throws ServiceException;
 }

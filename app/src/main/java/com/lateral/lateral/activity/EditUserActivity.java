@@ -23,6 +23,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lateral.lateral.R;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultUserService;
 
@@ -198,7 +200,15 @@ public class EditUserActivity extends AppCompatActivity {
             // If there's anything new
             if(newPassword || newEmail || newPhoneNumber) {
                 DefaultUserService defaultUserService = new DefaultUserService();
-                defaultUserService.update(mCurrentUser);
+                try {
+                    defaultUserService.update(mCurrentUser);
+                } catch (ServiceException e){
+                    ErrorDialog.show(this, "Failed to update user");
+                    showProgress(false);
+                    // TODO: Test this
+                    focusView.requestFocus();
+                    return;
+                }
             }
 
             // Start the next activity with the user logged in

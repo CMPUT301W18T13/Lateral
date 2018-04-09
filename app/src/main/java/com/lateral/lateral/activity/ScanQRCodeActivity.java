@@ -21,6 +21,8 @@ import com.google.android.gms.vision.barcode.Barcode;
 
 import com.lateral.lateral.R;
 import com.lateral.lateral.barcodereader.BarcodeCaptureActivity;
+import com.lateral.lateral.helper.ErrorDialog;
+import com.lateral.lateral.model.ServiceException;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
@@ -97,7 +99,13 @@ public class ScanQRCodeActivity extends AppCompatActivity {
                 String taskId = url.substring(domain.length());
 
                 DefaultTaskService defaultTaskService = new DefaultTaskService();
-                Task task = defaultTaskService.getTaskByTaskID(taskId);
+                Task task;
+                try {
+                    task = defaultTaskService.getTaskByTaskID(taskId);
+                } catch (ServiceException e){
+                    ErrorDialog.show(this, "Failed to load task");
+                    return;
+                }
 
                 if (task != null){
                     if (task.getStatus() == TaskStatus.Done){

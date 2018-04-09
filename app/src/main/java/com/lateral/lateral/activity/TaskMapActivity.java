@@ -40,6 +40,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.lateral.lateral.helper.ErrorDialog;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
 
@@ -103,16 +104,17 @@ public class TaskMapActivity extends AppCompatActivity
         }
     }
 
-//    @Override
-//    protected void  onActivityResult(int requestCode, int resultCode, Intent data) {
-//        drawMapMarkers();
-//    }
-
     private void drawMapMarkers(){
         LatLng curLoc = new LatLng(mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude());
-        tasks = defaultTaskService.getAvailableTasksByDistance(mLastKnownLocation.getLatitude(),
-                mLastKnownLocation.getLongitude(),
-                5.0);
+
+        try {
+            tasks = defaultTaskService.getAvailableTasksByDistance(mLastKnownLocation.getLatitude(),
+                    mLastKnownLocation.getLongitude(),
+                    5.0);
+        } catch (Exception e){
+            ErrorDialog.show(this, "Failed to load tasks");
+            return;
+        }
 
         Log.i("Size", String.valueOf(tasks.size()));
         for(Task task: tasks){
