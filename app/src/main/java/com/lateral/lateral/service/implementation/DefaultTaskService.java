@@ -117,7 +117,15 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
     public ArrayList<Task> getEveryAvailableTaskViaQuery(String query) throws ServiceException {
         query = StringHelper.makeJsonSafe(query);
 
-        String json = "{\"size\" : " + RECORD_COUNT + ",\"query\" : {\"match\" : {\"description\" : { \"query\" : \"Requested Bidded\"}}}}";
+        String json = "{\"size\" : " + RECORD_COUNT + ", " +
+        "\"query\" : { " +
+                "\"bool\" : { " +
+                "\"must\" : [ " +
+                "{\"match\" : {\"description\" : \"" + query + "\" }}," +
+                "{\"match\" : {\"taskStatus\" : \"Requested Bidded\" }}]," +
+                "\"should\" : {" +
+                "match : {\"title\" : \"" + query +" \" }}" +
+                "}}}}";
 
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
         return gson.fromJson("[" + search(json) + "]", listType);

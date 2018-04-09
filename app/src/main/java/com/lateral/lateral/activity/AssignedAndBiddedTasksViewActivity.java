@@ -80,10 +80,17 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         return R.id.assignedTaskViewList;
     }
 
+    /**
+     * Gets the ID of the progress bar
+     * @return The R-id of the progress bar
+     */
     @Override
     protected int getProgressBarID() { return R.id.bidded_task_view_progress;}
-    //bidded_task_view_progress
 
+    /**
+     * Gets the ID of the error message
+     * @return The R-id of the error message
+     */
     @Override
     protected int getErrorMessageID() {
         return R.id.assignedAndBiddedErrorWarning;
@@ -185,6 +192,9 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
     }
 
+    /**
+     * Called when the activity is started
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -193,6 +203,12 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
     }
 
 
+    /**
+     * Called when the activity finishes with result
+     * @param requestCode The code the request was made with
+     * @param resultCode The result obtained
+     * @param data Any additional data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {

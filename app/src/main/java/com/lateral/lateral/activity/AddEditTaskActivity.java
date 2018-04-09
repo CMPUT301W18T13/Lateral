@@ -99,6 +99,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
         refresh();
     }
 
+    /**
+     * Refreshes the task
+     */
     protected void refresh() {
         latLng = null;
         if (taskID == null) {
@@ -131,6 +134,9 @@ public class AddEditTaskActivity extends AppCompatActivity {
         refreshImages();
     }
 
+    /**
+     * Refreshes the images on the task
+     */
     private void refreshImages() {
         for (int i = 0; i < PhotoGallery.MAX_PHOTOS; i++) {
             PhotoImageView view = imageLayout.findViewWithTag("image" + String.valueOf(i));
@@ -216,6 +222,11 @@ public class AddEditTaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adds a new task with the given title and description
+     * @param title The new task's title
+     * @param desc The new task's description
+     */
     private void addNewTask(String title, String desc) {
 
         Task newTask = new Task(title, desc);
@@ -241,6 +252,11 @@ public class AddEditTaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Updates a task with the given title and description
+     * @param title The updated title
+     * @param desc The updated description
+     */
     private void updateTask(String title, String desc) {
 
         editTask.setTitle(title);
@@ -298,6 +314,10 @@ public class AddEditTaskActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adds a new image
+     * @param photoIndex index of the new photo
+     */
     private void addNewImage(int photoIndex) {
         if (photoIndex < 0 || photoIndex >= PhotoGallery.MAX_PHOTOS)
             throw new IllegalArgumentException("Index out of range");
@@ -308,6 +328,12 @@ public class AddEditTaskActivity extends AppCompatActivity {
         startActivityForResult(photoPickerIntent, PHOTO_REQUEST + photoIndex);
     }
 
+    /**
+     * Called when the activity finishes with result
+     * @param requestCode The code the request was made with
+     * @param resultCode The result obtained
+     * @param data Any additional data
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
