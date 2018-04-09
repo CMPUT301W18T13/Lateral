@@ -22,8 +22,6 @@ import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
-import com.lateral.lateral.service.implementation.DefaultBidService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 import com.lateral.lateral.widget.PhotoImageView;
 
 import java.math.BigDecimal;

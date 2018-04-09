@@ -122,8 +122,16 @@ public class BidRowAdapter extends BaseAdapter {
         acceptButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                BidService bidService = new DefaultBidService();
+                // Delete all other bids except the one being assigned
+                bidService.deleteOtherBidsByTask(task.getId(), bid.getId());
+
+                // This is now the only bid, so it must be lowest
+                task.setLowestBidValue(bid.getAmount());
                 task.setAssignedBidId(bid.getId());
                 task.setStatus(TaskStatus.Assigned);
+
                 TaskService taskService = new DefaultTaskService();
                 try{
                     taskService.update(task);
@@ -145,11 +153,18 @@ public class BidRowAdapter extends BaseAdapter {
                 BidService bidService = new DefaultBidService();
                 bidService.delete(bid.getId());
 
+                // Get new lowest bid
+                Bid lowest = bidService.getLowestBid(task.getId());
+                if (lowest == null) task.setLowestBidValue(null);
+                else task.setLowestBidValue(lowest.getAmount());
+
                 if (bids.size() == 0){
                     task.setStatus(TaskStatus.Requested);
-                    TaskService taskService = new DefaultTaskService();
-                    taskService.update(task);
                 }
+
+                TaskService taskService = new DefaultTaskService();
+                taskService.update(task);
+
                 notifyDataSetChanged();
             }
         });

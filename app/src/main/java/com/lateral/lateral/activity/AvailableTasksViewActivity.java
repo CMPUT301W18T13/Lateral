@@ -384,10 +384,20 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
-            Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+            //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
+            //Log.d("OLDCLICK", "the item the user clicked was: " + getClickedItemPosition());
+//            Task clickedTask = allLocallyStoredTasks.get(getClickedItemPosition());
+//            int positionInAllLocallyStoredTasks = allLocallyStoredTasks.indexOf(clickedTask);
+//            String clickedTaskID = clickedTask.getId();
+//            clickedTask = defaultTaskService.getTaskByTaskID(clickedTaskID);
+//            allLocallyStoredTasks.set(positionInAllLocallyStoredTasks, clickedTask);
+//            addTask(clickedTask, getClickedItemPosition());
+
             //mAdapter.notifyItemChanged(clickedItemPosition);
             // TODO --> update task clicked when user returns
             ////refreshLocalArrays(null);
+
+            refreshLocalArrays(query);
             displayResultsFromFilter();
 
         }

@@ -7,11 +7,9 @@ public final class Constants {
     public static int USERNAME_CHAR_MINIMUM = 8;
     public static int USERNAME_CHAR_LIMIT = 16;
     public static int PASSWORD_CHAR_MINIMUM = 8;
-    public static int PHONE_NUMBER_CHAR_SIZE = 10;
 
     public static int TITLE_CHAR_LIMIT = 30;
     public static int DESCRIPTION_CHAR_LIMIT = 300;
-    public static int PHOTOGRAPH_MAX_BYTES = 65536;
 
     public static int MIN_BID_AMOUNT = 0;
 

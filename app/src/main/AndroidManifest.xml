@@ -98,6 +98,7 @@
             android:label="@string/title_activity_task_map" />
         <activity
             android:name=".activity.BidListActivity"
+            android:label="@string/title_activity_bid_list"
             android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.EditUserActivity"

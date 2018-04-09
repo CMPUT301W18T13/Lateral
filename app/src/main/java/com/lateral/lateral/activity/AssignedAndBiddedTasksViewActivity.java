@@ -22,7 +22,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.baoyz.widget.PullRefreshLayout;
@@ -30,10 +29,8 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
-import com.lateral.lateral.model.User;
 import com.lateral.lateral.service.implementation.DefaultBidService;
 import com.lateral.lateral.service.implementation.DefaultTaskService;
-import com.lateral.lateral.service.implementation.DefaultUserService;
 
 import java.util.ArrayList;
 
@@ -248,7 +245,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      */
     private void returnMatchingTasks(String query) {
         DefaultTaskService taskService = new DefaultTaskService();
-        addTasks(taskService.getBiddedTasks(query), null);
+        addTasks(taskService.getTasksByBidder(query), null);
     }
 
 
@@ -272,7 +269,7 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      * their correct tasks, when the user changes the filter value, the recycler view is then set to the corresponding array
      */
     public void initializeLocalArrays() {
-        //allLocallyStoredTasks = defaultTaskService.getBiddedTasks(LOGGED_IN_USER.getId());
+        //allLocallyStoredTasks = defaultTaskService.getTasksByBidder(LOGGED_IN_USER.getId());
 
         Task curTask;
         TaskStatus taskStatus;

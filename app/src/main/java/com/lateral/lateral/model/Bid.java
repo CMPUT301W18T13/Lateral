@@ -12,7 +12,6 @@ import com.lateral.lateral.annotation.ElasticSearchType;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-// TODO: Maybe store bidderUsername as well as bidderId for efficiency?
 /**
  * Represents a bid object that is associated with a certain task
  */

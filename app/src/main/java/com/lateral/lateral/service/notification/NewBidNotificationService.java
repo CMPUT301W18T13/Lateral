@@ -125,7 +125,7 @@ public class NewBidNotificationService extends JobService{
             bidsToGrab = task.getBidsPendingNotification();
             //TODO: Create mutual exclusion for read and write of elastic search data
             if (bidsToGrab > 0){
-                taskBids = bidService.getAllBidsByTaskIDDateSorted(task.getId(), 0);
+                taskBids = bidService.getAllBidsByTaskIDDateSorted(task.getId());
 
                 numberOfBids = taskBids.size();
 
