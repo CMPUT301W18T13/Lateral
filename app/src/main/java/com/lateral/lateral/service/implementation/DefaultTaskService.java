@@ -113,6 +113,19 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
 
     }
 
+    // TODO VITAL ask Tyler to implement this
+    /*
+    should behave similiar to getEveryAvailableTasks (only display with status' Requested and Bidded) but add query searching
+     */
+    public ArrayList<Task> getEveryAvailableTaskViaQuery(String query) {
+
+        String json = "{\"from\" : 0, \"size\" : 50,\"query\" : {\"match\" : {\"title\" : { \"query\" : \"Requested Bidded\"}}}}";
+
+        Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
+        return gson.fromJson("[" + get(json) + "]", listType);
+
+    }
+
     // nick
     public Task getTaskByTaskID(String taskID){
         String json = "{\"query\": {\"match\": {\"id\": \"" + taskID + "\"}}}";

@@ -279,9 +279,9 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
 
         // clear in case we are refreshing
         allLocallyStoredTasks.clear();
-        tasksWithBids.clear();
-        assignedTasks.clear();
-        doneTasks.clear();
+//        tasksWithBids.clear();
+//        assignedTasks.clear();
+//        doneTasks.clear();
         myBids.clear();
 
         myBids = defaultBidService.getAllBidsByUserID(LOGGED_IN_USER.getId());       // SearchQuery
@@ -291,16 +291,16 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
         for (Bid bid : myBids) {
             curTask = defaultTaskService.getTaskByTaskID(bid.getTaskId());           // Search query
             allLocallyStoredTasks.add(curTask);
-            taskStatus = curTask.getStatus();
+            //taskStatus = curTask.getStatus();
 
-            if (taskStatus == Bidded) {
-                // extract
-                tasksWithBids.add(curTask);
-            } else if (taskStatus == Assigned) {
-                assignedTasks.add(curTask);
-            } else if (taskStatus == Done) {
-                doneTasks.add(curTask);
-            }
+//            if (taskStatus == Bidded) {
+//                // extract
+//                tasksWithBids.add(curTask);
+//            } else if (taskStatus == Assigned) {
+//                assignedTasks.add(curTask);
+//            } else if (taskStatus == Done) {
+//                doneTasks.add(curTask);
+//            }
 
         }
 
@@ -331,22 +331,55 @@ public class AssignedAndBiddedTasksViewActivity extends TaskRecyclerViewActivity
      */
     public void displayResultsFromFilter() {
 
+//        if (currentFilter == 0) {
+//            // display refreshed all
+//            addTasks(allLocallyStoredTasks, myBids);
+//
+//        } else if (currentFilter == 1) {
+//            // display refreshed bidded
+//            addTasks(tasksWithBids, myBids);
+//
+//        } else if (currentFilter == 2) {
+//            // display refreshed assigned
+//            addTasks(assignedTasks, myBids);
+//
+//        } else if (currentFilter == 3) {
+//            // display refreshed done
+//            addTasks(doneTasks, myBids);
+//        }
+
+        ArrayList<Task> filteredTasks = new ArrayList<Task>();
+
         if (currentFilter == 0) {
             // display refreshed all
             addTasks(allLocallyStoredTasks, myBids);
-
-        } else if (currentFilter == 1) {
-            // display refreshed bidded
-            addTasks(tasksWithBids, myBids);
-
-        } else if (currentFilter == 2) {
-            // display refreshed assigned
-            addTasks(assignedTasks, myBids);
-
-        } else if (currentFilter == 3) {
-            // display refreshed done
-            addTasks(doneTasks, myBids);
+            return;
         }
+
+
+        for (Task localTask : allLocallyStoredTasks) {
+            TaskStatus status = localTask.getStatus();
+
+            // extract Bidded tasks
+            if (currentFilter == 1) {
+                if (status == Bidded) {
+                    filteredTasks.add(localTask);
+                }
+            } else if (currentFilter == 2) {
+                if (status == Assigned) {
+                    filteredTasks.add(localTask);
+                }
+
+            } else if (currentFilter == 3) {
+                if (status == Done) {
+                    filteredTasks.add(localTask);
+                }
+
+            }
+        }
+
+        addTasks(filteredTasks, myBids);
+
     }
 
 
