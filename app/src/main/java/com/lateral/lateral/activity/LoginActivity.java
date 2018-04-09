@@ -158,13 +158,13 @@ public class LoginActivity extends AppCompatActivity{
             // perform the user login attempt.
 
             DefaultUserService defaultUserService = new DefaultUserService();
-            String id = defaultUserService.getIdByUsername(username);
-            if (id == null){
-                mUsernameView.setError("User does not exist");
+            User user = defaultUserService.getUserByUsername(username);
+            if (user == null){
+                mUsernameView.setError("User not found");
                 return;
             }
 
-            String saltAndHash = defaultUserService.getSaltAndHash(username);
+            String saltAndHash = user.getSaltAndHash();
 
             View view = this.getCurrentFocus();
             if (view != null) {
@@ -173,7 +173,7 @@ public class LoginActivity extends AppCompatActivity{
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
-            mAuthTask = new UserLoginTask(password, saltAndHash, id);
+            mAuthTask = new UserLoginTask(password, saltAndHash, user.getId());
             mAuthTask.execute((Void) null);
             showProgress(true);
         }

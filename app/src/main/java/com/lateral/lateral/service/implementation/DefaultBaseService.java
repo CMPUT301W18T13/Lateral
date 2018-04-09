@@ -107,17 +107,6 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 && result.getResponseCode() < 300;
     }
 
-    /**
-     * Gets extra value from JSON string based on the passed key
-     * @param json The JSON string
-     * @param key The key corresponding to the value
-     * @return The value associated with the key
-     */
-    public String getValueFromJson(String json, String key){
-        JsonObject jsonObject = gson.fromJson(json, JsonObject.class);
-        return jsonObject.get(key).getAsString();
-    }
-
 
 
 
@@ -355,7 +344,7 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
                 JestResult result = jestClient.execute(get);
                 if (validateResult(result)){
                     data = result.getSourceAsString();
-                    if (id == null) throw new RuntimeException("This should not ever be null");
+                    if (data == null) throw new RuntimeException("This should not ever be null");
                 } else {
                     Log.e("Get Error Code", ((Integer)result.getResponseCode()).toString());
                     serviceException = new ServiceException("Get failed");
