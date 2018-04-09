@@ -4,7 +4,7 @@
  * You can find a copy of the license in this project. Otherwise, please contact cjmerkos@ualberta.ca
  */
 
-package com.lateral.lateral.service;
+package com.lateral.lateral.helper;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

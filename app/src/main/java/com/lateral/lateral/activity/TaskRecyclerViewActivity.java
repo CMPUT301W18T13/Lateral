@@ -31,7 +31,7 @@ import com.lateral.lateral.R;
 import com.lateral.lateral.dialog.PhotoViewerDialog;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.Task;
-import com.lateral.lateral.service.ItemClickSupport;
+import com.lateral.lateral.helper.ItemClickSupport;
 import com.lateral.lateral.widget.PhotoImageView;
 
 import java.util.ArrayList;

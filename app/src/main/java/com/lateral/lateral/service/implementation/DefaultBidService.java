@@ -43,6 +43,7 @@ public class DefaultBidService extends DefaultBaseService<Bid> implements BidSer
     public ArrayList<Bid> getAllBidsByTaskIDAmountSorted(String taskID) {
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"taskId\": {\"query\" : \"" + taskID + "\"}}}, " +
                 "\"sort\" : [{\"amount\" : { \"order\" : \"asc\"}}]}" ;
+
         Type listType = new TypeToken<ArrayList<Bid>>(){}.getType();
         return gson.fromJson("[" + get(json) + "]", listType);
     }
