@@ -130,7 +130,11 @@ public class NewBidNotificationService extends JobService{
                 numberOfBids = taskBids.size();
 
                 if (numberOfBids - bidsToGrab < 0){
-                    Log.e("Warning", "Index error avoided");
+                    Log.e("Warning", "Index error avoided in NewBidNotificationService" +
+                            "with numberOfBids="+String.valueOf(numberOfBids)+
+                            " and bidsToGrab="+String.valueOf(bidsToGrab));
+                    task.setBidsPendingNotification(0);
+                    taskService.update(task);
                     continue;
                 }
 

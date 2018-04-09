@@ -112,18 +112,37 @@ public class TaskViewActivity extends AppCompatActivity {
     }
 
     private void refresh(){
-        try{
-            task = loadTask();
-        } catch(Exception e){
+
+        try {
+            if ((task = loadTask()) == null){
+                Toast errorToast = Toast.makeText(getApplicationContext(),
+                        "Failed to load task", Toast.LENGTH_SHORT);
+                errorToast.show();
+                setResult(RESULT_CANCELED);
+                finish();
+                return;
+            }
+            refresh(task);
+        } catch (Exception e){
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
             errorToast.show();
+            setResult(RESULT_CANCELED);
+            finish();
+            return;
         }
+    }
 
-        if (task.getLowestBid() == null){
-            currentBid.setText(R.string.task_view_no_bids);
-        } else {
+    private void refresh(Task task){
+        final Bid assignedBid = task.getAssignedBid();
+        final Bid lowestBid = task.getLowestBid();
+        if (assignedBid != null) {
             currentBid.setText(getString(R.string.dollar_amount_display,
-                    String.valueOf(task.getLowestBid().getAmount())));
+                    String.valueOf(assignedBid.getAmount())));
+        } else if (lowestBid != null) {
+            currentBid.setText(getString(R.string.dollar_amount_display,
+                    String.valueOf(lowestBid.getAmount())));
+        } else {
+            currentBid.setText(R.string.task_view_no_bids);
         }
 
         title.setText(task.getTitle());
@@ -173,11 +192,23 @@ public class TaskViewActivity extends AppCompatActivity {
     private Task loadTask(){
         UserService userService = new DefaultUserService();
         Task task = taskService.getById(taskID);
-        task.setRequestingUser(userService.getById(task.getRequestingUserId()));
-        task.setLowestBid(bidService.getLowestBid(task.getId()));
-        return task;
+        if (task == null){
+            setResult(RESULT_CANCELED);
+            finish();
+            return null;
+        } else {
+            task.setRequestingUser(userService.getById(task.getRequestingUserId()));
+            task.setLowestBid(bidService.getLowestBid(task.getId()));
 
+            if (task.getAssignedBidId() != null) {
+                Bid bid = bidService.getById(task.getAssignedBidId());
+                task.setAssignedBid(bid);
+                bid.setBidder(userService.getById(bid.getBidderId()));
+            }
+            return task;
+        }
     }
+
     /**
      * Called when the options menu is created
      * @param menu The menu created
@@ -231,12 +262,33 @@ public class TaskViewActivity extends AppCompatActivity {
      */
     public void onBidButtonClick(View v){
         final BidDialog bidCreationDialog = new BidDialog(TaskViewActivity.this);
+        if ((task = loadTask()) == null){
+            Toast errorToast = Toast.makeText(getApplicationContext(),
+                    "Error, the task may have been deleted", Toast.LENGTH_SHORT);
+            errorToast.show();
+            return;
+        } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
+            refresh(task);
+            Toast errorToast = Toast.makeText(getApplicationContext(),
+                    "The task status changed", Toast.LENGTH_SHORT);
+            errorToast.show();
+            return;
+        }
+
         bidCreationDialog.setCanceledOnTouchOutside(false);
         bidCreationDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
             Bid newBid = bidCreationDialog.getNewBid();
-            if (newBid != null){
+            if ((task = loadTask()) == null) {
+                return;
+            } else if(newBid == null){
+                return;
+            } else if (task.getStatus() == Assigned || task.getStatus() == Done) {
+                Toast errorToast = Toast.makeText(getApplicationContext(),
+                        "Bid not posted. The task status changed", Toast.LENGTH_SHORT);
+                errorToast.show();
+            } else {
                 newBid.setTaskId(taskID);
                 newBid.setBidderId(LOGGED_IN_USER.getId());
 
