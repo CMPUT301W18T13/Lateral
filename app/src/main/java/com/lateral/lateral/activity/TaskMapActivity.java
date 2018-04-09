@@ -23,9 +23,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.lateral.lateral.R;
 
@@ -46,7 +49,8 @@ import static com.lateral.lateral.Constants.USER_FILE_NAME;
 import static com.lateral.lateral.activity.MainActivity.LOGGED_IN_USER;
 
 public class TaskMapActivity extends AppCompatActivity
-        implements OnMapReadyCallback{
+        implements GoogleMap.OnInfoWindowClickListener,
+        OnMapReadyCallback{
 
     private DefaultTaskService defaultTaskService;
     private ArrayList<Task> tasks;
@@ -76,6 +80,7 @@ public class TaskMapActivity extends AppCompatActivity
     @Override
     public void onMapReady(GoogleMap map) {
         mMap = map;
+        mMap.setOnInfoWindowClickListener(this);
         checkAndGrantPermissions();
         getDeviceLocation();
     }
@@ -107,9 +112,11 @@ public class TaskMapActivity extends AppCompatActivity
         Log.i("Size", String.valueOf(tasks.size()));
         for(Task task: tasks){
             LatLng latLng = new LatLng(task.getLat(), task.getLon());
-            mMap.addMarker(new MarkerOptions().position(latLng)
+            Marker marker = mMap.addMarker(new MarkerOptions().position(latLng)
                     .title(task.getTitle())
-                    .snippet(task.getStatus().toString()));
+                    .snippet(task.getStatus().toString())
+                    .icon((BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))));
+            marker.setTag(task);
         }
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(curLoc, 15);
         mMap.animateCamera(cameraUpdate);
@@ -157,5 +164,13 @@ public class TaskMapActivity extends AppCompatActivity
     public void onBackPressed() {
         setResult(RESULT_OK);
         super.onBackPressed();
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Task markerTask = (Task)marker.getTag();
+        Intent taskIntent = new Intent(this, TaskViewActivity.class);
+        taskIntent.putExtra(TaskViewActivity.EXTRA_TASK_ID, markerTask.getId());
+        startActivity(taskIntent);
     }
 }
