@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
@@ -26,7 +25,6 @@ import com.google.gson.JsonSerializer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Type;
 
 
@@ -37,11 +35,12 @@ public class PhotoGallery {
 
     public static final int MAX_PHOTOS = 5;
 
-    private static final int MAX_SERIALIZED_BYTE_SIZE = 2^16;
+    private static final int MAX_SERIALIZED_BYTE_SIZE = 65536;
     private static final int MAX_SERIALIZED_CHAR_SIZE = MAX_SERIALIZED_BYTE_SIZE/2;
     // Calculation source: https://stackoverflow.com/questions/471541
-    private static final int MAX_BYTE_ARRAY_SIZE = (int)(3*((double)MAX_SERIALIZED_CHAR_SIZE/4 - 1));
-    private static final int MAX_PIXEL_COUNT = MAX_BYTE_ARRAY_SIZE/4; // Required: A_8888 Config is used
+    private static final int MAX_BYTE_ARRAY_SIZE = 3*(MAX_SERIALIZED_CHAR_SIZE/4 - 1);
+    private static final int BYTES_PER_PIXEL = 4; // Assuming ARGB_8888 Config is used in Bitmap
+    private static final int MAX_PIXEL_COUNT = MAX_BYTE_ARRAY_SIZE/BYTES_PER_PIXEL;
     /**
      * Generate bitmap from Uri to match DB constraints
      * @param imageData Uri of image data
@@ -55,7 +54,7 @@ public class PhotoGallery {
         int height = bitmap.getHeight();
 
         if ((width*height) >= (double)MAX_PIXEL_COUNT ){
-            double areaScale = (double)MAX_PIXEL_COUNT/(width*height);
+            double areaScale = (double)MAX_PIXEL_COUNT/((double)width*(double)height);
             double lengthScale = Math.sqrt(areaScale);
             bitmap = Bitmap.createScaledBitmap(bitmap,
                     (int)(width*lengthScale),
@@ -64,7 +63,8 @@ public class PhotoGallery {
         }
 
         if (bitmap.getConfig() != Bitmap.Config.ARGB_8888)
-            return bitmap.copy(Bitmap.Config.ARGB_8888, false);
+            bitmap = bitmap.copy(Bitmap.Config.ARGB_8888, false);
+        return bitmap;
     }
 
     private Bitmap[] photoList = new Bitmap[MAX_PHOTOS];
