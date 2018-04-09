@@ -141,7 +141,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try {
             String data = getData.get();
             if (getData.serviceException != null)
-                return null; // TODO: Testingthrow getData.serviceException;
+                // TODO: Temporary, will redo this!!! throw getData.serviceException;
+                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             return gson.fromJson(data, typeArgument);
 
@@ -164,7 +165,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try {
             String data = getData.get();
             if (getData.serviceException != null)
-                return null; // TODO: Testingthrow getData.serviceException;
+                // TODO: Temporary, will redo this!!! throw getData.serviceException;
+                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             return data;
 
@@ -186,7 +188,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             String id = postData.get();
             if (postData.serviceException != null)
-                return; // TODO: Testingthrow postData.serviceException;
+                // TODO: Temporary, will redo this!!! throw postData.serviceException;
+                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
             obj.setId(id);
             setDocId(id);
@@ -209,7 +212,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             updateData.get();
             if (updateData.serviceException != null)
-                return; // TODO: Testing throw updateData.serviceException;
+                // TODO: Temporary, will redo this!!! throw updateData.serviceException;
+                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         } catch(InterruptedException | ExecutionException e){
             throw new RuntimeException(e);
@@ -230,7 +234,8 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             updateData.get();
             if (updateData.serviceException != null)
-                return; // TODO: Testingthrow updateData.serviceException;
+                // TODO: Temporary, will redo this!!! throw updateData.serviceException;
+                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         } catch(InterruptedException | ExecutionException e){
             throw new RuntimeException(e);
@@ -250,12 +255,30 @@ public class DefaultBaseService<T extends BaseEntity> implements BaseService<T> 
         try{
             deleteData.get();
             if (deleteData.serviceException != null)
-                return; // TODO: Testingthrow deleteData.serviceException;
+                // TODO: Temporary, will redo this!!! throw deleteData.serviceException;
+                throw new RuntimeException("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!CHECK LOG FOR ERROR CODE!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         } catch(InterruptedException | ExecutionException e){
             throw new RuntimeException(e);
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * AsyncTask to post an object
