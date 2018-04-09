@@ -1,6 +1,8 @@
 package com.lateral.lateral;
 
 import android.support.test.runner.AndroidJUnit4;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.lateral.lateral.model.Task;
 import com.lateral.lateral.model.TaskStatus;
 
@@ -46,6 +48,16 @@ public class TaskTest {
         Task task = new Task("Test title");
         task.setDescription(description);
         assertEquals(task.getDescription(), description);
+    }
+
+    @Test
+    public void testGeolocation(){
+        LatLng latLng = new LatLng(53.63, -113.63);
+        String address = "55 Test Street";
+        Task task = new Task("Geolocation", "Geolocation test");
+        task.setLocation(latLng.latitude, latLng.longitude, address);
+        assertEquals(latLng.latitude, task.getLat(), 0.001);
+        assertEquals(address, task.getAddress());
     }
 
 }

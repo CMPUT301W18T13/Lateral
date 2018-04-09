@@ -105,15 +105,8 @@ public class PostingTest {
             taskId = task.getId();
             defaultTaskService.delete(taskId);
         }
-
-
     }
 
-//    @Test
-//    public void testNullPost() {
-//        //
-//        //
-//    }
 
 
 
