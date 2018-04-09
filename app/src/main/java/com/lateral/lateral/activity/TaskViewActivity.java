@@ -114,7 +114,7 @@ public class TaskViewActivity extends AppCompatActivity {
 
     private void refresh() {
         try {
-            task = taskService.getById(taskID);
+            task = loadTask();
             refresh(task);
         } catch (Exception e) {
             Toast errorToast = Toast.makeText(this, "Failed to load task", Toast.LENGTH_SHORT);
@@ -124,7 +124,6 @@ public class TaskViewActivity extends AppCompatActivity {
         }
     }
 
-
     private void refresh(Task task) {
 
         if (task.getLowestBidValue() == null) {
@@ -132,26 +131,26 @@ public class TaskViewActivity extends AppCompatActivity {
         } else {
             currentBid.setText(getString(R.string.dollar_amount_display,
                     String.valueOf(task.getLowestBidValue())));
-
-            title.setText(task.getTitle());
-            username.setText(getString(R.string.username_display, task.getRequestingUserUsername()));
-            DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
-            date.setText(df.format(task.getDate()));
-            description.setText(task.getDescription());
-
-            TaskStatus status = task.getStatus();
-            TextView statusTextView = findViewById(R.id.task_view_status);
-            statusTextView.setText(TaskStatus.getFormattedEnum(status));
-
-            if (status == Assigned || status == Done) {
-                bidNowButton.setVisibility(View.GONE);
-            } else {
-                bidNowButton.setVisibility(View.VISIBLE);
-            }
-            setImages();
-
-            invalidateOptionsMenu();
         }
+
+        title.setText(task.getTitle());
+        username.setText(getString(R.string.username_display, task.getRequestingUserUsername()));
+        DateFormat df = new SimpleDateFormat("MMM dd yyyy", Locale.CANADA);
+        date.setText(df.format(task.getDate()));
+        description.setText(task.getDescription());
+
+        TaskStatus status = task.getStatus();
+        TextView statusTextView = findViewById(R.id.task_view_status);
+        statusTextView.setText(TaskStatus.getFormattedEnum(status));
+
+        if (status == Assigned || status == Done) {
+            bidNowButton.setVisibility(View.GONE);
+        } else {
+            bidNowButton.setVisibility(View.VISIBLE);
+        }
+        setImages();
+
+        invalidateOptionsMenu();
     }
 
     @Override
