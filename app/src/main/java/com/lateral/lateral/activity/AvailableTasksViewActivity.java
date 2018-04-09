@@ -136,7 +136,7 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         Class targetClass;
 
 
-        if (clickedTask.getRequestingUserId().equals(LOGGED_IN_USER)) {
+        if (clickedTask.getRequestingUserId().equals(LOGGED_IN_USER.getId())) {
 
             // user clicked on own task
             targetClass = MyTaskViewActivity.class;
@@ -386,7 +386,8 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
         if (resultCode == RESULT_OK && requestCode == VIEW_TASK_REQUEST) {
             //Log.d("RETURNED_FROM_VIEW_TASK", "activity result caught");
             //Log.d("OLDCLICK", "the item the user clicked was: " + getClickedItemPosition());
-//            Task clickedTask = allLocallyStoredTasks.get(getClickedItemPosition());
+            //Task clickedTask = allLocallyStoredTasks.get(getClickedItemPosition());
+//            Task clickedTask = getClickedTask();
 //            int positionInAllLocallyStoredTasks = allLocallyStoredTasks.indexOf(clickedTask);
 //            String clickedTaskID = clickedTask.getId();
 //            clickedTask = defaultTaskService.getTaskByTaskID(clickedTaskID);
@@ -394,7 +395,6 @@ public class AvailableTasksViewActivity extends TaskRecyclerViewActivity impleme
 //            addTask(clickedTask, getClickedItemPosition());
 
             //mAdapter.notifyItemChanged(clickedItemPosition);
-            // TODO --> update task clicked when user returns
             ////refreshLocalArrays(null);
 
             refreshLocalArrays(query);

@@ -56,6 +56,7 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
     static final int VIEW_TASK_REQUEST = 1;
     private int clickedItemPosition = 0;
     private String clickedItemID = "";
+    private Task clickedTask;
 
     private SwipeRefreshLayout mySwipeRefreshLayout;
     private PullRefreshLayout layout;
@@ -135,7 +136,8 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
 
                             clickedItemPosition = position;
 
-                            Task clickedTask = matchingTasks.get(clickedItemPosition);
+                            //Task clickedTask = matchingTasks.get(clickedItemPosition);
+                            clickedTask = matchingTasks.get(clickedItemPosition);
                             clickedItemID = clickedTask.getId();
 
                             Log.d("ITEM CLICKED", "item " + (matchingTasks.get(clickedItemPosition).getId()));
@@ -310,13 +312,17 @@ public abstract class TaskRecyclerViewActivity extends AppCompatActivity {
         }
     }
 
-    public int getClickedItemPosition() {
-        return this.clickedItemPosition;
-    }
-
-    public String getClickedItemID() {
-        return this.clickedItemID;
-    }
+//    public int getClickedItemPosition() {
+//        return this.clickedItemPosition;
+//    }
+//
+//    public String getClickedItemID() {
+//        return this.clickedItemID;
+//    }
+//
+//    public Task getClickedTask() {
+//        return this.clickedTask;
+//    }
 
 
     public void addTask(Task task, int position) {
