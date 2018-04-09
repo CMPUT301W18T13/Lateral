@@ -13,6 +13,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
+import com.lateral.lateral.helper.StringHelper;
 import com.lateral.lateral.model.Bid;
 import com.lateral.lateral.model.PhotoGallery;
 import com.lateral.lateral.model.Task;
@@ -46,6 +47,7 @@ public class DefaultTaskService extends DefaultBaseService<Task> implements Task
      * @return List of tasks matching query
      */
     public ArrayList<Task> getAllTasks(String query){
+        query = StringHelper.makeJsonSafe(query);
         String json = "{\"size\" : " + RECORD_COUNT + ", \"query\": {\"match\": {\"description\": \"" + query + "\"}}}";
         Type listType = new TypeToken<ArrayList<Task>>(){}.getType();
 
